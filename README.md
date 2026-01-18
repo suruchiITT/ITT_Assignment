@@ -1,1 +1,1 @@
-I will includes the weekly assignment.
+It will contain all the weekly assignment.
