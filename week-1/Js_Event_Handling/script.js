@@ -8,10 +8,6 @@ btn.addEventListener("click", function () {
     alert("Button clicked");
 });
 
-btn.addEventListener("dblclick", function () {
-    alert("Button double clicked");
-});
-
 nameBox.addEventListener("keyup", function () {
     document.getElementById("nameResult").innerHTML = nameBox.value;
 });
@@ -49,3 +45,4 @@ form.addEventListener("submit", function (e) {
             "City: " + city;
     }
 });
+
