@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Suruchi Bharti",
+    "designation": "Frontend Developer",
+    "project": "Employee Gallery",
+    "experience": "2 Years",
+    "image": "https://img.freepik.com/free-photo/young-person-intership_23-2149315589.jpg?semt=ais_user_personalization&w=740&q=80"
+  },
+  {
+    "name": "Amit Kumar",
+    "designation": "Backend Developer",
+    "project": "CRM App",
+    "experience": "3 Years",
+    "image": "https://img.freepik.com/free-photo/young-person-intership_23-2149315589.jpg?semt=ais_user_personalization&w=740&q=80"
+  }
+]
