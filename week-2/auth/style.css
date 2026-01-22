@@ -4,7 +4,11 @@
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
-
+.portal{
+    color: green;
+    background-color: #1fa2ac;
+    text-align :center;
+}
 .container {
     width: 100%;
     height: 100vh;
