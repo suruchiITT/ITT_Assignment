@@ -1,16 +1,25 @@
 [
   {
-    "name": "Suruchi Bharti",
+    "name": "Nitisha Vijay",
     "designation": "Frontend Developer",
     "project": "Employee Gallery",
-    "experience": "2 Years",
-    "image": "https://img.freepik.com/free-photo/young-person-intership_23-2149315589.jpg?semt=ais_user_personalization&w=740&q=80"
+    "experience": "1 Years",
+    "image": "https://media.istockphoto.com/id/1354842602/photo/portrait-of-a-young-businesswoman-working-on-a-laptop-in-an-office.jpg?s=612x612&w=0&k=20&c=kfP1g2712RiaxsDriIxFo363ARlaL2D591s-22CnIo8="
   },
+
   {
     "name": "Amit Kumar",
     "designation": "Backend Developer",
     "project": "CRM App",
-    "experience": "3 Years",
+    "experience": "2 Years",
     "image": "https://img.freepik.com/free-photo/young-person-intership_23-2149315589.jpg?semt=ais_user_personalization&w=740&q=80"
+  },
+  {
+    "name": "Ashim Banerjee",
+    "designation": "Backend Developer",
+    "project": "SBD2",
+    "experience": "8 Years",
+    "image": "https://media.istockphoto.com/id/1399565382/photo/young-happy-mixed-race-businessman-standing-with-his-arms-crossed-working-alone-in-an-office.jpg?s=612x612&w=0&k=20&c=buXwOYjA_tjt2O3-kcSKqkTp2lxKWJJ_Ttx2PhYe3VM="
   }
+
 ]

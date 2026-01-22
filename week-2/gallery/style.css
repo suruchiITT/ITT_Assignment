@@ -1,32 +1,52 @@
-body{
-  font-family:Poppins;
-  background:#f2f2f2;
-  text-align:center;
+body {
+  font-family: Poppins;
+  background: #f2f2f2;
+  text-align: center;
 }
 
-.gallery{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin-top:40px;
+.gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
 }
 
-.card{
-  background:white;
-  padding:20px;
-  width:300px;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,.3);
+.card {
+  background: white;
+  padding: 20px;
+  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .3);
 }
 
-.card img{
-  width:100%;
-  height:260px;
-  object-fit:cover;
-  border-radius:10px;
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
-.gallery button{
-  font-size:25px;
-  margin:0 20px;
+.gallery button {
+  font-size: 25px;
+  margin: 0 20px;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user {
+  color: green;
+}
+
+.logout-btn:hover {
+  background: #b02a37;
 }
