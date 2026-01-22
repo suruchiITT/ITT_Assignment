@@ -13,7 +13,6 @@ signInBtn.addEventListener('click', ()=>{
 
     nameField.style.maxHeight ='0';
     title.innerHTML = 'Sign In';
-    text.innerHTML='Lost Password';
     registerBtn.classList.add('disable');
     signInBtn.classList.remove('disable');
     underline.style.transform = 'translateX(35px)';
@@ -25,7 +24,6 @@ registerBtn.addEventListener('click', ()=>{
 
     nameField.style.maxHeight ='60px';
     title.innerHTML = 'Register';
-    text.innerHTML='Password Suggestions';
     signInBtn.classList.add('disable');
     registerBtn.classList.remove('disable');
     underline.style.transform = 'translateX(0)';

@@ -18,10 +18,10 @@
 
 .form-box{
     width: 90%;
-    max-width: 380px;
+    max-width: 350px;
     min-width: 250px;
     background: white;
-    padding: 55px;
+    padding: 30px;
     text-align: center;
     border-radius:10px;
     box-shadow: -2px 2px 15px rgba(0,0 ,0,0.5);
@@ -60,15 +60,8 @@
     margin-left: 15px;
     color:#999;
 }
-form p{
-    text-align: left;
-    font-size:13px;
-}
-form p a{
-    text-decoration:none;
-    margin: 8px;
-    color:green;
-}
+
+
 .btn-field{
     width:100%;
     display: flex;
