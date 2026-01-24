@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="leaderboard">
+    <h3>🏆 Leaderboard</h3>
+    <ul id="leaders"></ul>
+  </div>
+
+  <div class="quiz">
+    <h2 id="qNo"></h2>
+    <h3 id="question"></h3>
+    <div id="options"></div>
+    <p>⏱ Timer: <span id="timer">10</span></p>
+    <button class="next"onclick="next()">Next</button>
+    <h3 id="scoreBox"></h3>
+    <button class="logout"onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<script src="App.js"></script>
+</body>
+</html>
