@@ -1,4 +1,4 @@
-export {};
+export { };
 
 let isLogin: boolean = false;
 
@@ -13,10 +13,23 @@ function toggleForm(): void {
   isLogin = !isLogin;
 
   (document.getElementById("title") as HTMLElement).innerText = isLogin ? "Login" : "Register";
-  toggle.innerText = isLogin ? "Go to Register" : "Already have account? Login";
-
   nameInput.style.display = isLogin ? "none" : "block";
+
+  if (isLogin) {
+
+    toggle.innerHTML = `
+      <span style="color:black">New user? </span>
+      <span style="color:blue; cursor:pointer">Register</span>
+    `;
+  } else {
+
+    toggle.innerHTML = `
+      <span style="color:black">Already user? </span>
+      <span style="color:blue; cursor:pointer">Login</span>
+    `;
+  }
 }
+
 
 function handleAuth(): void {
   let name = nameInput.value;
@@ -27,8 +40,8 @@ function handleAuth(): void {
   let emailRegex = /^\S+@\S+\.\S+$/;
   let passRegex = /^(?=.*[0-9]).{6,}$/;
 
-  if (!emailRegex.test(email)) return void(msg.innerText = "Invalid Email");
-  if (!passRegex.test(password)) return void(msg.innerText = "Password must contain number & 6 chars");
+  if (!emailRegex.test(email)) return void (msg.innerText = "Invalid Email");
+  if (!passRegex.test(password)) return void (msg.innerText = "Password must contain number & 6 chars");
 
   let users: any[] = JSON.parse(localStorage.getItem("users") || "[]");
 

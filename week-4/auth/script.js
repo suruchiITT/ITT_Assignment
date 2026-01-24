@@ -12,24 +12,22 @@ function toggleForm() {
   document.getElementById("title").innerText = isLogin ? "Login" : "Register";
   document.getElementById("name").style.display = isLogin ? "none" : "block";
 
- 
   if (isLogin) {
-    
-    document.getElementById("toggle").innerHTML = `
-      <span style="color:black">Already user? </span>
-      <span style="color:blue; cursor:pointer">Login</span>
-    `;
-  } else {
-  
+   
     document.getElementById("toggle").innerHTML = `
       <span style="color:black">New user? </span>
       <span style="color:blue; cursor:pointer">Register</span>
+    `;
+  } else {
+   
+    document.getElementById("toggle").innerHTML = `
+      <span style="color:black">Already user? </span>
+      <span style="color:blue; cursor:pointer">Login</span>
     `;
   }
 
   clearInputs();
 }
-
 
 function handleAuth() {
   let name = document.getElementById("name").value.trim();
