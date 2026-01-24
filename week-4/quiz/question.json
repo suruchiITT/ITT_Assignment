@@ -1,0 +1,215 @@
+{
+  "quizTitle": "JavaScript Quiz",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is JavaScript?",
+      "options": ["Markup language", "Programming language", "Database", "OS"],
+      "correctAnswer": "Programming language",
+      "level": "easy"
+    },
+    {
+      "id": 2,
+      "question": "Which keyword declares a variable?",
+      "options": ["var", "int", "string", "float"],
+      "correctAnswer": "var",
+      "level": "easy"
+    },
+    {
+      "id": 3,
+      "question": "Which symbol is for comments?",
+      "options": ["//", "<!-- -->", "#", "**"],
+      "correctAnswer": "//",
+      "level": "easy"
+    },
+    {
+      "id": 4,
+      "question": "Which company developed JavaScript?",
+      "options": ["Google", "Microsoft", "Netscape", "Amazon"],
+      "correctAnswer": "Netscape",
+      "level": "easy"
+    },
+    {
+      "id": 5,
+      "question": "Which type is NaN?",
+      "options": ["number", "string", "object", "boolean"],
+      "correctAnswer": "number",
+      "level": "easy"
+    },
+    {
+      "id": 6,
+      "question": "Which method prints in console?",
+      "options": ["console.log()", "print()", "log()", "write()"],
+      "correctAnswer": "console.log()",
+      "level": "easy"
+    },
+    {
+      "id": 7,
+      "question": "Which keyword is block scoped?",
+      "options": ["var", "let", "static", "main"],
+      "correctAnswer": "let",
+      "level": "easy"
+    },
+    {
+      "id": 8,
+      "question": "Which operator checks value and type?",
+      "options": ["==", "=", "===", "!="],
+      "correctAnswer": "===",
+      "level": "medium"
+    },
+    {
+      "id": 9,
+      "question": "Array index starts from?",
+      "options": ["1", "0", "-1", "2"],
+      "correctAnswer": "0",
+      "level": "easy"
+    },
+    {
+      "id": 10,
+      "question": "Which is not a datatype?",
+      "options": ["Number", "Boolean", "Float", "String"],
+      "correctAnswer": "Float",
+      "level": "easy"
+    },
+    {
+      "id": 11,
+      "question": "Which function converts JSON to object?",
+      "options": ["JSON.parse()", "JSON.stringify()", "JSON.object()", "JSON.convert()"],
+      "correctAnswer": "JSON.parse()",
+      "level": "medium"
+    },
+    {
+      "id": 12,
+      "question": "Which method adds element at end?",
+      "options": ["push()", "pop()", "shift()", "unshift()"],
+      "correctAnswer": "push()",
+      "level": "easy"
+    },
+    {
+      "id": 13,
+      "question": "Which removes last element?",
+      "options": ["push()", "shift()", "pop()", "slice()"],
+      "correctAnswer": "pop()",
+      "level": "easy"
+    },
+    {
+      "id": 14,
+      "question": "DOM stands for?",
+      "options": ["Data Object Model", "Document Object Model", "Digital Object Model", "Desktop Object Model"],
+      "correctAnswer": "Document Object Model",
+      "level": "easy"
+    },
+    {
+      "id": 15,
+      "question": "Which selects by id?",
+      "options": ["getElementById()", "queryAll()", "getClass()", "select()"],
+      "correctAnswer": "getElementById()",
+      "level": "easy"
+    },
+    {
+      "id": 16,
+      "question": "Which is asynchronous?",
+      "options": ["setTimeout()", "for loop", "if", "switch"],
+      "correctAnswer": "setTimeout()",
+      "level": "medium"
+    },
+    {
+      "id": 17,
+      "question": "Which keyword defines constant?",
+      "options": ["let", "var", "const", "static"],
+      "correctAnswer": "const",
+      "level": "easy"
+    },
+    {
+      "id": 18,
+      "question": "Which loop runs at least once?",
+      "options": ["for", "while", "do-while", "foreach"],
+      "correctAnswer": "do-while",
+      "level": "medium"
+    },
+    {
+      "id": 19,
+      "question": "Which converts object to JSON?",
+      "options": ["JSON.parse()", "JSON.stringify()", "JSON.convert()", "JSON.make()"],
+      "correctAnswer": "JSON.stringify()",
+      "level": "medium"
+    },
+    {
+      "id": 20,
+      "question": "Which keyword is for function?",
+      "options": ["func", "method", "function", "define"],
+      "correctAnswer": "function",
+      "level": "easy"
+    },
+    {
+      "id": 21,
+      "question": "Which is not loop?",
+      "options": ["for", "map", "while", "do-while"],
+      "correctAnswer": "map",
+      "level": "medium"
+    },
+    {
+      "id": 22,
+      "question": "Which event on button click?",
+      "options": ["onmouseover", "onclick", "onchange", "onload"],
+      "correctAnswer": "onclick",
+      "level": "easy"
+    },
+    {
+      "id": 23,
+      "question": "Which handles errors?",
+      "options": ["try-catch", "if-else", "switch", "loop"],
+      "correctAnswer": "try-catch",
+      "level": "medium"
+    },
+    {
+      "id": 24,
+      "question": "Which is higher order function?",
+      "options": ["map()", "push()", "pop()", "shift()"],
+      "correctAnswer": "map()",
+      "level": "medium"
+    },
+    {
+      "id": 25,
+      "question": "Which stops loop?",
+      "options": ["stop", "exit", "break", "return"],
+      "correctAnswer": "break",
+      "level": "easy"
+    },
+    {
+      "id": 26,
+      "question": "Which keyword skips iteration?",
+      "options": ["break", "pass", "continue", "skip"],
+      "correctAnswer": "continue",
+      "level": "easy"
+    },
+    {
+      "id": 27,
+      "question": "Which creates promise?",
+      "options": ["new Promise()", "Promise()", "makePromise()", "create()"],
+      "correctAnswer": "new Promise()",
+      "level": "medium"
+    },
+    {
+      "id": 28,
+      "question": "Which waits for promise?",
+      "options": ["wait", "async", "await", "pause"],
+      "correctAnswer": "await",
+      "level": "medium"
+    },
+    {
+      "id": 29,
+      "question": "Which keyword makes async?",
+      "options": ["await", "async", "defer", "delay"],
+      "correctAnswer": "async",
+      "level": "medium"
+    },
+    {
+      "id": 30,
+      "question": "Which is closure?",
+      "options": ["Function inside function", "Loop", "Array", "Object"],
+      "correctAnswer": "Function inside function",
+      "level": "advanced"
+    }
+  ]
+}
