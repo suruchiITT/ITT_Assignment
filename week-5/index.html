@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <h1>📝Task Manager</h1>
+
+  <div class="input-box">
+    <input type="text" id="taskInput" placeholder="Enter task title...">
+    <input type="date" id="dateInput">
+
+    <select id="priorityInput">
+      <option value="Low">Low Priority</option>
+      <option value="Medium">Medium Priority</option>
+      <option value="High">High Priority</option>
+    </select>
+
+    <button id="addBtn">Add Task</button>
+  </div>
+
+  <div class="filters">
+    <button data-filter="all">All</button>
+    <button data-filter="completed">Completed</button>
+    <button data-filter="pending">Pending</button>
+    <button id="sortBtn">Sort by Date</button>
+    <input type="text" id="searchInput" placeholder="Search task...">
+
+  </div>
+
+  <ul id="taskList"></ul>
+
+  <div class="stats">
+    <p id="total"></p>
+    <p id="completed"></p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
