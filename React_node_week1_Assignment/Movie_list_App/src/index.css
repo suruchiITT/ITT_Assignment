@@ -6,10 +6,24 @@
 }
 
 body {
-  background: #0f172a;
+   background: #301815;
   color: white;
 }
+.form{
+  width:100%;
+  margin:10px;
+}
+.form input ,button{
+  height: 40px;
+  margin:5px;
+  border:  #301815;
+  border-radius: 10px;
+  text-align:center;
 
+}
+.form button{
+  width:90px;
+}
 .app {
   padding: 30px;
   text-align: center;
@@ -37,12 +51,14 @@ body {
 }
 
 .movie-card {
-  background: #1e293b;
+  background: #5a403d;
   padding: 15px;
   border-radius: 12px;
   transition: 0.3s;
 }
-
+.movie-card button{
+width:80px;
+}
 .movie-card:hover {
   transform: scale(1.05);
 }
