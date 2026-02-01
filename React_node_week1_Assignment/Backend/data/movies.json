@@ -45,7 +45,7 @@
     "title": "Pathaan",
     "year": 2023,
     "rating": 6.7,
-    "genre": "Bollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/arf00BkwvXo0CFKbaD9OpqdE4Nu.jpg"
   },
   {
@@ -53,7 +53,7 @@
     "title": "Oppenheimer",
     "year": 2023,
     "rating": 8.6,
-    "genre": "Hollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg"
   },
   {
@@ -61,7 +61,7 @@
     "title": "Dune Part Two",
     "year": 2024,
     "rating": 8.7,
-    "genre": "Hollywood",
+    "genre": "Sci-Fi",
     "poster": "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg"
   },
   {
@@ -69,7 +69,7 @@
     "title": "John Wick 4",
     "year": 2023,
     "rating": 8.1,
-    "genre": "Hollywood",
+    "genre": "Drama",
     "poster": "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"
   },
   {
@@ -77,7 +77,7 @@
     "title": "Avatar The Way of Water",
     "year": 2022,
     "rating": 7.7,
-    "genre": "Hollywood",
+    "genre": "Sci-Fi",
     "poster": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg"
   },
   {
@@ -85,7 +85,7 @@
     "title": "RRR",
     "year": 2022,
     "rating": 8,
-    "genre": "Tollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg"
   },
   {
@@ -93,7 +93,7 @@
     "title": "Pushpa",
     "year": 2021,
     "rating": 7.6,
-    "genre": "Tollywood",
+    "genre": "Action",
     "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpeSKm6c8m_014QiGaCerN5v2EvWjHwKikzQ&s"
   },
   {
@@ -101,7 +101,7 @@
     "title": "Salaar",
     "year": 2023,
     "rating": 7.5,
-    "genre": "Tollywood",
+    "genre": "Action",
     "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU-FiTz6GfOphGSBbZcWPQRVhe8Tir2SBK4g&s"
   },
   {
@@ -109,7 +109,7 @@
     "title": "Baahubali 2",
     "year": 2017,
     "rating": 8.2,
-    "genre": "Tollywood",
+    "genre": "Romance",
     "poster": "https://image.tmdb.org/t/p/w500/21sC2assImQIYCEDA84Qh9d1RsK.jpg"
   },
   {
@@ -117,7 +117,7 @@
     "title": "KGF Chapter 2",
     "year": 2022,
     "rating": 8.1,
-    "genre": "Tollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg"
   },
   {
@@ -125,7 +125,7 @@
     "title": "The Batman",
     "year": 2022,
     "rating": 8.2,
-    "genre": "Hollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
   },
   {
@@ -133,7 +133,7 @@
     "title": "Spider-Man No Way Home",
     "year": 2021,
     "rating": 8.3,
-    "genre": "Hollywood",
+    "genre": "Sci-Fi",
     "poster": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
   },
   {
@@ -141,7 +141,7 @@
     "title": "Top Gun Maverick",
     "year": 2022,
     "rating": 8.3,
-    "genre": "Hollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg"
   },
   {
@@ -149,7 +149,7 @@
     "title": "Mission Impossible Dead Reckoning",
     "year": 2023,
     "rating": 7.9,
-    "genre": "Hollywood",
+    "genre": "Drama",
     "poster": "https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg"
   },
   {
@@ -157,7 +157,7 @@
     "title": "Black Panther Wakanda Forever",
     "year": 2022,
     "rating": 7.4,
-    "genre": "Hollywood",
+    "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"
   }
 ]
