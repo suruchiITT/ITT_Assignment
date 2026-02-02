@@ -17,7 +17,7 @@ signInBtn.addEventListener('click', () => {
         return;
     }
 
-    let emailVal = document.getElementById("email").value.trim();
+    let emailVal = document.getElementById("email").value.trim().toLowerCase();
     let passVal = document.getElementById("password").value.trim();
 
     if (!emailVal || !passVal) {
@@ -25,10 +25,12 @@ signInBtn.addEventListener('click', () => {
         return;
     }
 
-    let se = localStorage.getItem("email");
-    let sp = localStorage.getItem("password");
+    let users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (emailVal === se && passVal === sp) {
+    let validUser = users.find(u => u.email === emailVal && u.password === passVal);
+
+    if (validUser) {
+        localStorage.setItem("currentUser", JSON.stringify(validUser));
         window.location = "../gallery/index.html";
     } else {
         alert("Invalid Email or Password");
@@ -50,7 +52,7 @@ registerBtn.addEventListener('click', () => {
 
 
     let nameVal = document.getElementById("name").value.trim();
-    let emailVal = document.getElementById("email").value.trim();
+    let emailVal = document.getElementById("email").value.trim().toLowerCase();
     let passVal = document.getElementById("password").value.trim();
 
     if (!nameVal || !emailVal || !passVal) {
@@ -58,11 +60,25 @@ registerBtn.addEventListener('click', () => {
         return;
     }
 
-    localStorage.setItem("name", nameVal);
-    localStorage.setItem("email", emailVal);
-    localStorage.setItem("password", passVal);
+     let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    let userExists = users.find(u => u.email === emailVal);
+
+    if (userExists) {
+        alert("User already registered");
+        return;
+    }
+
+    users.push({
+        name: nameVal,
+        email: emailVal,
+        password: passVal
+    });
+
+    localStorage.setItem("users", JSON.stringify(users));
 
     alert("Registered Successfully. Now Sign In");
+
 
     document.getElementById("name").value = "";
     document.getElementById("email").value = "";

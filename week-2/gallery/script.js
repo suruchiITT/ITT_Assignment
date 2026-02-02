@@ -1,15 +1,29 @@
 let employees = [];
 let index = 0;
 
-let user = localStorage.getItem("name");
-welcomeUser.innerText = "Welcome " + user;
+let welcomeUser = document.getElementById("welcomeUser");
 
-fetch("employees.json")
-  .then(res => res.json())
-  .then(data => {
+let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!currentUser) {
+  window.location.href = "../auth/index.html";
+}
+
+welcomeUser.innerText = "Welcome " + currentUser.name;
+
+async function loadEmployees() {
+  try {
+    let res = await fetch("employees.json");
+    let data = await res.json();
     employees = data;
     showEmployee(0);
-  });
+  } catch (err) {
+    console.log("Error loading employees", err);
+  }
+}
+
+loadEmployees();
+
 
 function showEmployee(i) {
   empImg.src = employees[i].image;
@@ -31,6 +45,9 @@ function prev() {
 
 let logoutBtn = document.getElementById("logoutBtn");
 
+logoutBtn.addEventListener("click", logout);
+
 function logout() {
+  localStorage.removeItem("currentUser");
   window.location.href = "../auth/index.html";
 }
