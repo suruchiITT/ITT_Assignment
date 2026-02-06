@@ -37,9 +37,8 @@
     "year": 2003,
     "rating": 7.1,
     "genre": "Sci-Fi",
-    "poster": "https://play-lh.googleusercontent.com/UU3XwTaeWizrDj4jND3dPSc9mTwQYqf0quS2sV5akoLjF__EQXCoPGIzXdghFw8qKOoKeg=w240-h480-rw"
+    "poster": "https://wallpapercave.com/wp/wp8354641.jpg"
   },
-  
   {
     "id": 7,
     "title": "Pathaan",
@@ -159,5 +158,13 @@
     "rating": 7.4,
     "genre": "Action",
     "poster": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"
+  },
+  {
+    "title": "sd",
+    "year": 2026,
+    "rating": 10,
+    "genre": "nothing",
+    "poster": "dfkdl33",
+    "id": 1770351685234
   }
 ]

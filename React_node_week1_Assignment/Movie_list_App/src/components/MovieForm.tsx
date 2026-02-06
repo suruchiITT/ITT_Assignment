@@ -23,7 +23,7 @@ const MovieForm = ({ onAdd }: { onAdd: (m: Omit<Movie, "id">) => void }) => {
     setMovie({
       title: "",
       year:2026,
-      rating: 5,
+      rating: 10,
       genre: "",
       poster: ""
     });

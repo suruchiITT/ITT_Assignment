@@ -37,11 +37,11 @@ const MovieList = () => {
   };
 
   let filtered = movies
-    .filter(m => m.title.toLowerCase().includes(search.toLowerCase()))
-    .filter(m => genre ? m.genre === genre : true);
+    .filter(moviesElement => moviesElement.title.toLowerCase().includes(search.toLowerCase()))
+    .filter(moviesElement => genre ? moviesElement.genre === genre : true);
 
-  if (sort === "rating") filtered = [...filtered].sort((a, b) => b.rating - a.rating);
-  if (sort === "year") filtered = [...filtered].sort((a, b) => b.year - a.year);
+  if (sort === "rating") filtered = [...filtered].sort((FirstElement, secondElement) => secondElement.rating - FirstElement.rating);
+  if (sort === "year") filtered = [...filtered].sort((FirstElement, secondElement) => secondElement.year - FirstElement.year);
 
   return (
     <>
