@@ -33,7 +33,7 @@ const MovieList = () => {
 
   const deleteMovie = async (id: number) => {
     await fetch(`${API}/${id}`, { method: "DELETE" });
-    setMovies(prev => prev.filter(m => m.id !== id));
+    setMovies(prevUpdatedMovie => prevUpdatedMovie.filter(movieElement => movieElement.id !== id));
   };
 
   let filtered = movies
