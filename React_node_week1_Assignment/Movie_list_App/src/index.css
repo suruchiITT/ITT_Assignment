@@ -13,7 +13,7 @@ body {
   width:100%;
   margin:10px;
 }
-.form input ,button{
+.form input ,select,button{
   height: 40px;
   margin:5px;
   border:  #301815;
