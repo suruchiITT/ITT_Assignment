@@ -1,0 +1,170 @@
+[
+  {
+    "id": 101,
+    "title": "12th Fail",
+    "year": 2023,
+    "rating": 8.7,
+    "genre": "Drama",
+    "poster": "https://cdn.gulte.com/wp-content/uploads/2024/01/12th-fail-1.jpg"
+  },
+  {
+    "id": 102,
+    "title": "Laapataa Ladies",
+    "year": 2024,
+    "rating": 7.8,
+    "genre": "Drama",
+    "poster": "https://upload.wikimedia.org/wikipedia/en/5/52/Laapataa_Ladies_poster.jpg"
+  },
+  {
+    "id": 103,
+    "title": "Homebound",
+    "year": 2025,
+    "rating": 8,
+    "genre": "Drama",
+    "poster": "https://i.ytimg.com/vi/WojNkusud84/maxresdefault.jpg"
+  },
+  {
+    "id": 105,
+    "title": "Major",
+    "year": 2022,
+    "rating": 9,
+    "genre": "Action",
+    "poster": "https://upload.wikimedia.org/wikipedia/en/e/ee/Major_The_Film.jpg"
+  },
+  {
+    "id": 104,
+    "title": "Koi... Mil Gaya",
+    "year": 2003,
+    "rating": 7.1,
+    "genre": "Sci-Fi",
+    "poster": "https://wallpapercave.com/wp/wp8354641.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Pathaan",
+    "year": 2023,
+    "rating": 6.7,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/arf00BkwvXo0CFKbaD9OpqdE4Nu.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Oppenheimer",
+    "year": 2023,
+    "rating": 8.6,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Dune Part Two",
+    "year": 2024,
+    "rating": 8.7,
+    "genre": "Sci-Fi",
+    "poster": "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg"
+  },
+  {
+    "id": 4,
+    "title": "John Wick 4",
+    "year": 2023,
+    "rating": 8.1,
+    "genre": "Drama",
+    "poster": "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Avatar The Way of Water",
+    "year": 2022,
+    "rating": 7.7,
+    "genre": "Sci-Fi",
+    "poster": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg"
+  },
+  {
+    "id": 11,
+    "title": "RRR",
+    "year": 2022,
+    "rating": 8,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg"
+  },
+  {
+    "id": 12,
+    "title": "Pushpa",
+    "year": 2021,
+    "rating": 7.6,
+    "genre": "Action",
+    "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpeSKm6c8m_014QiGaCerN5v2EvWjHwKikzQ&s"
+  },
+  {
+    "id": 13,
+    "title": "Salaar",
+    "year": 2023,
+    "rating": 7.5,
+    "genre": "Action",
+    "poster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU-FiTz6GfOphGSBbZcWPQRVhe8Tir2SBK4g&s"
+  },
+  {
+    "id": 14,
+    "title": "Baahubali 2",
+    "year": 2017,
+    "rating": 8.2,
+    "genre": "Romance",
+    "poster": "https://image.tmdb.org/t/p/w500/21sC2assImQIYCEDA84Qh9d1RsK.jpg"
+  },
+  {
+    "id": 15,
+    "title": "KGF Chapter 2",
+    "year": 2022,
+    "rating": 8.1,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg"
+  },
+  {
+    "id": 16,
+    "title": "The Batman",
+    "year": 2022,
+    "rating": 8.2,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+  },
+  {
+    "id": 17,
+    "title": "Spider-Man No Way Home",
+    "year": 2021,
+    "rating": 8.3,
+    "genre": "Sci-Fi",
+    "poster": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
+  },
+  {
+    "id": 18,
+    "title": "Top Gun Maverick",
+    "year": 2022,
+    "rating": 8.3,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg"
+  },
+  {
+    "id": 19,
+    "title": "Mission Impossible Dead Reckoning",
+    "year": 2023,
+    "rating": 7.9,
+    "genre": "Drama",
+    "poster": "https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg"
+  },
+  {
+    "id": 20,
+    "title": "Black Panther Wakanda Forever",
+    "year": 2022,
+    "rating": 7.4,
+    "genre": "Action",
+    "poster": "https://image.tmdb.org/t/p/w500/sv1xJUazXeYqALzczSZ3O6nkH75.jpg"
+  },
+  {
+    "title": "sd",
+    "year": 2026,
+    "rating": 10,
+    "genre": "nothing",
+    "poster": "dfkdl33",
+    "id": 1770351685234
+  }
+]
