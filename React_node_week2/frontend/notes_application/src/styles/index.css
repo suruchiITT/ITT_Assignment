@@ -1,0 +1,169 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #eef2f7, #dbeafe);
+}
+
+/* ---------- AUTH ---------- */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-form {
+  background: white;
+  padding: 30px;
+  width: 340px;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-form h2 {
+  text-align: center;
+  color: #1e3a8a;
+}
+
+.auth-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.auth-form input:focus {
+  border-color: #2563eb;
+}
+
+.auth-form button {
+  padding: 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.auth-form button:hover {
+  background: #1d4ed8;
+}
+
+/* ---------- ERROR ---------- */
+
+.error-box {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 8px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* ---------- DASHBOARD ---------- */
+
+.dashboard-container {
+  padding: 30px;
+}
+
+.dashboard-container h2 {
+  margin-bottom: 15px;
+  color: #1e3a8a;
+}
+
+/* ---------- FORM ---------- */
+
+.note-form {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.note-form input,
+.note-form textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.note-form button {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.note-form button:hover {
+  background: #059669;
+}
+
+/* ---------- NOTES ---------- */
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.note-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.note-card h3 {
+  margin-bottom: 6px;
+  color: #1e3a8a;
+}
+
+.note-card p {
+  color: #444;
+}
+
+.note-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.note-actions button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.note-actions button:first-child {
+  background: #fbbf24;
+}
+
+.note-actions button:last-child {
+  background: #ef4444;
+  color: white;
+}
+
+/* ---------- LOADER ---------- */
+
+.loader {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #1e3a8a;
+}
