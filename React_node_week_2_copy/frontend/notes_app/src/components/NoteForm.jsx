@@ -25,6 +25,7 @@ const NoteForm = ({ onSave, note }) => {
 
   return (
     <form onSubmit={handleSubmit} className="note-form">
+      <h4>Title</h4>
       <input
         type="text"
         placeholder="Title"

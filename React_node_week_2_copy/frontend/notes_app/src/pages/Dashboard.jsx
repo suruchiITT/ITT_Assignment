@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import NoteForm from '../components/NoteForm'
@@ -8,7 +8,7 @@ import ErrorMessage from '../components/ErrorMessage'
 const Dashboard = () => {
   const [notes, setNotes] = useState([])
   const [error, setError] = useState('')
-  const [editingNote, setEditingNote] = useState(null) 
+  const [editingNote, setEditingNote] = useState(null)
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
 
@@ -65,28 +65,25 @@ const Dashboard = () => {
   }
 
   const handleEditClick = (note) => {
-    setEditingNote(note) 
+    setEditingNote(note)
   }
 
-  
+
   const handleLogout = () => {
     localStorage.removeItem('token')
     navigate('/login')
   }
 
   return (
-    <div className="dashboard" style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-      
-      
+    <div className="dashboard">
       <button
         onClick={handleLogout}
         className="logout-btn"
-        style={{ marginBottom: '1.5rem' }}
       >
         Logout
       </button>
 
-      <h2 style={{ marginBottom: '1rem', color: '#333' }}>Your Notes</h2>
+      <h2>Your Notes</h2>
 
       <NoteForm
         onSave={editingNote ? updateNote : addNote}
@@ -96,20 +93,12 @@ const Dashboard = () => {
 
       <ErrorMessage message={error} />
 
-      <div
-        className="notes-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '1rem',
-          marginTop: '2rem',
-        }}
-      >
+      <div className="notes-grid" >
         {notes.map((note) => (
           <NoteCard
             key={note._id}
             note={note}
-            onUpdate={handleEditClick} 
+            onUpdate={handleEditClick}
             onDelete={deleteNote}
           />
         ))}

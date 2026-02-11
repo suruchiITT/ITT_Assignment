@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 
@@ -27,7 +27,6 @@ const Register = () => {
         return
       }
 
-      
       const loginRes = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,7 +40,7 @@ const Register = () => {
       }
 
       localStorage.setItem('token', loginData.token)
-      navigate('/dashboard') 
+      navigate('/Dashboard') 
     } catch (err) {
       console.error(err)
       setError('Server error')

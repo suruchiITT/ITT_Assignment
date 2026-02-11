@@ -105,15 +105,17 @@ body {
 
 .note-form input,
 .note-form textarea {
-  width: 100%;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-
+.note-form h4{
+  margin-bottom: 0%;
+  color:rgba(10, 124, 255);
+}
 .note-form textarea {
-  resize: vertical;
+ resize: none;
 }
 
 .note-form button {
