@@ -1,0 +1,167 @@
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-container form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.auth-container input {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.auth-container button {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.auth-container span {
+  color: blue;
+  cursor: pointer;
+}
+
+.dashboard {
+  padding: 2rem;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.note-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.note-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.note-card p {
+  margin: 0 0 1rem 0;
+  color: #555;
+}
+
+.note-card button {
+  margin-right: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.note-card button:first-child {
+  background: #2196F3;
+}
+
+.note-card button:last-child {
+  background: #f44336;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.note-form input,
+.note-form textarea {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+.note-form h4{
+  margin-bottom: 0%;
+  color:rgba(10, 124, 255);
+}
+.note-form textarea {
+ resize: none;
+}
+
+.note-form button {
+  width: 100%;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.note-form button.save {
+  background: #4CAF50;
+}
+
+.note-form button.update {
+  background: #2196F3;
+}
+
+.loader {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.dashboard button.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.auth-container button.logout-btn:hover,
+.dashboard button.logout-btn:hover {
+  background-color: #d32f2f;
+}
