@@ -2,20 +2,24 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
 
+import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
+import postRoutes from "./routes/post.routes";
+
 dotenv.config();
 
 const app = express();
 
-app.use(express.json());
-
 connectDB();
 
-app.get("/", (req, res) => {
-    res.send("API running");
-});
+app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
+app.use("/uploads", express.static("uploads"));
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.use("/api", authRoutes);
+app.use("/api", userRoutes);
+app.use("/api", postRoutes);
+
+app.listen(5000, () => {
+    console.log("Server running on port 5000");
 });

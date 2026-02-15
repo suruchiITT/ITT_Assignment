@@ -1,61 +1,55 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IPost extends Document {
+  _id: mongoose.Types.ObjectId;
 
-    _id: mongoose.Types.ObjectId;
+  author: mongoose.Types.ObjectId;
 
-    author: mongoose.Types.ObjectId;
+  title: string;
 
-    title: string;
+  content: string;
 
-    content: string;
+  image?: string | null;
 
-    image?: string | null;
+  createdAt: Date;
 
-    createdAt: Date;
-
-    updatedAt: Date;
+  updatedAt: Date;
 }
 
-
 const PostSchema: Schema<IPost> = new Schema<IPost>(
-
-    {
-        _id: {
-            type: Schema.Types.ObjectId,
-            auto: true
-        },
-
-        author: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true
-        },
-
-        title: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        content: {
-            type: String,
-            required: true
-        },
-
-        image: {
-            type: String,
-            default: null
-        }
-
+  {
+    _id: {
+      type: Schema.Types.ObjectId,
+      auto: true,
     },
 
-    {
-        timestamps: true
-    }
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    content: {
+      type: String,
+      required: true,
+    },
+
+    image: {
+      type: String,
+      default: null,
+    },
+  },
+
+  {
+    timestamps: true,
+  },
 );
-
 
 const Post: Model<IPost> = mongoose.model<IPost>("Post", PostSchema);
 
