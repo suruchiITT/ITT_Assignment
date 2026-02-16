@@ -6,28 +6,35 @@ const getProfile = async (userId: string) => {
 
 };
 
-
 const updateProfile = async (
     userId: string,
     username?: string,
     profilePic?: string
 ) => {
 
+    const update: any = {};
+
+    if (username !== undefined) {
+        update.username = username;
+    }
+
+    if (profilePic !== undefined) {
+        update.profilePic = profilePic;
+    }
+
     return await User.findByIdAndUpdate(
         userId,
-        { username, profilePic },
+        update,
         { new: true }
     );
 
 };
-
 
 const getAllUsers = async () => {
 
     return await User.find().select("-password");
 
 };
-
 
 const followUser = async (currentUserId: string, targetUserId: string) => {
 
@@ -41,6 +48,39 @@ const followUser = async (currentUserId: string, targetUserId: string) => {
 
 };
 
+ export const getFollowing = async (userId: string) => {
+
+    const user =
+    await User.findById(userId)
+    .populate(
+        "following",
+        "_id username email profilePic"
+    );
+
+    if (!user)
+        throw new Error("User not found");
+
+    return user.following;
+
+};
+
+
+
+  export const getFollowers = async (userId: string) => {
+
+    const user =
+    await User.findById(userId)
+    .populate(
+        "followers",
+        "_id username email profilePic"
+    );
+
+    if (!user)
+        throw new Error("User not found");
+
+    return user.followers;
+
+};
 
 const unfollowUser = async (currentUserId: string, targetUserId: string) => {
 
@@ -53,7 +93,6 @@ const unfollowUser = async (currentUserId: string, targetUserId: string) => {
     });
 
 };
-
 
 export {
     getProfile,
