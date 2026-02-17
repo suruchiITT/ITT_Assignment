@@ -34,9 +34,6 @@ const router =
 express.Router();
 
 
-
-// CREATE POST
-
 router.post(
 
     "/posts",
@@ -104,8 +101,6 @@ router.get(
 
 );
 
-// GET FEED
-
 router.get(
 
     "/posts/feed",
@@ -157,7 +152,7 @@ router.get(
 
 
 
-// UPDATE POST
+
 
 router.put(
 
@@ -194,9 +189,6 @@ router.put(
 
 );
 
-
-
-// DELETE POST
 
 router.delete(
 

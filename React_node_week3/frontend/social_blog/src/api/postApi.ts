@@ -1,68 +1,47 @@
-import { fetchClient }
-from "./fetchClient";
+import { fetchClient } from "./fetchClient";
 
-export const fetchFeedApi =
-async (page:number)=>{
-
-  return await fetchClient(
-    `/posts/feed?page=${page}`
-  );
-
+export const fetchFeedApi = async (page: number) => {
+  return await fetchClient(`/posts/feed?page=${page}`);
 };
 
-export const createPostApi =
-async (formData:FormData)=>{
-
+export const createPostApi = async (formData: FormData) => {
   return await fetchClient(
-
     "/posts",
 
     {
-      method:"POST",
-      body:formData
-    }
-
+      method: "POST",
+      body: formData,
+    },
   );
-
 };
 
-export const deletePostApi =
-async (postId:string)=>{
-
+export const deletePostApi = async (postId: string) => {
   return await fetchClient(
-
     `/posts/${postId}`,
 
     {
-      method:"DELETE"
-    }
-
+      method: "DELETE",
+    },
   );
-
 };
 
-export const editPostApi =
-async (
-  postId:string,
-  title:string,
-  content:string
-)=>{
-
+export const editPostApi = async (
+  postId: string,
+  title: string,
+  content: string,
+) => {
   return await fetchClient(
-
     `/posts/${postId}`,
 
     {
-      method:"PATCH",
-      headers:{
-        "Content-Type":"application/json"
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify({
+      body: JSON.stringify({
         title,
-        content
-      })
-    }
-
+        content,
+      }),
+    },
   );
-
 };

@@ -1,13 +1,8 @@
-import {
-  createSlice,
-  createAsyncThunk
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { fetchClient }
-from "../../api/fetchClient";
+import { fetchClient } from "../../api/fetchClient";
 
 export interface User {
-
   _id: string;
 
   username: string;
@@ -19,11 +14,9 @@ export interface User {
   followers: string[];
 
   following: string[];
-
 }
 
 interface UserState {
-
   profile: User | null;
 
   allUsers: User[];
@@ -33,11 +26,9 @@ interface UserState {
   following: User[];
 
   loading: boolean;
-
 }
 
 const initialState: UserState = {
-
   profile: null,
 
   allUsers: [],
@@ -47,246 +38,141 @@ const initialState: UserState = {
   following: [],
 
   loading: false,
-
 };
 
-export const fetchProfile =
-createAsyncThunk(
-
+export const fetchProfile = createAsyncThunk(
   "users/profile",
 
-  async ()=>{
-
-    return await fetchClient(
-      "/profile"
-    );
-
-  }
-
+  async () => {
+    return await fetchClient("/profile");
+  },
 );
 
-export const updateProfile =
-createAsyncThunk(
-
+export const updateProfile = createAsyncThunk(
   "users/updateProfile",
 
-  async (formData: FormData)=>{
-
+  async (formData: FormData) => {
     return await fetchClient(
-
       "/profile",
 
       {
+        method: "PUT",
 
-        method:"PUT",
-
-        body: formData
-
-      }
-
+        body: formData,
+      },
     );
-
-  }
-
+  },
 );
 
-export const fetchUsers =
-createAsyncThunk(
-
+export const fetchUsers = createAsyncThunk(
   "users/allUsers",
 
-  async ()=>{
-
-    return await fetchClient(
-      "/users"
-    );
-
-  }
-
+  async () => {
+    return await fetchClient("/users");
+  },
 );
 
-export const followUser =
-createAsyncThunk(
-
+export const followUser = createAsyncThunk(
   "users/follow",
 
-  async (userId: string)=>{
-
+  async (userId: string) => {
     await fetchClient(
-
       `/follow/${userId}`,
 
       {
-
-        method:"POST"
-
-      }
-
+        method: "POST",
+      },
     );
 
     return userId;
-
-  }
-
+  },
 );
 
-export const unfollowUser =
-createAsyncThunk(
-
+export const unfollowUser = createAsyncThunk(
   "users/unfollow",
 
-  async (userId: string)=>{
-
+  async (userId: string) => {
     await fetchClient(
-
       `/follow/${userId}`,
 
       {
-
-        method:"DELETE"
-
-      }
-
+        method: "DELETE",
+      },
     );
 
     return userId;
-
-  }
-
+  },
 );
-export const fetchUserById =
-createAsyncThunk(
-
+export const fetchUserById = createAsyncThunk(
   "users/fetchUserById",
 
-  async (userId:string)=>{
-
-    const res =
-    await fetchClient(
-      `/users/${userId}`
-    );
+  async (userId: string) => {
+    const res = await fetchClient(`/users/${userId}`);
 
     return res;
-
-  }
-
+  },
 );
 
-
-export const fetchFollowers =
-createAsyncThunk(
-
+export const fetchFollowers = createAsyncThunk(
   "users/fetchFollowers",
 
-  async ()=>{
-
-    return await fetchClient(
-      "/followers"
-    );
-
-  }
-
+  async () => {
+    return await fetchClient("/followers");
+  },
 );
 
-export const fetchFollowing =
-createAsyncThunk(
-
+export const fetchFollowing = createAsyncThunk(
   "users/fetchFollowing",
 
-  async ()=>{
-
-    return await fetchClient(
-      "/following"
-    );
-
-  }
-
+  async () => {
+    return await fetchClient("/following");
+  },
 );
 
-const userSlice =
-createSlice({
-
-  name:"users",
+const userSlice = createSlice({
+  name: "users",
 
   initialState,
 
-  reducers:{},
+  reducers: {},
 
-  extraReducers(builder){
-
+  extraReducers(builder) {
     builder
 
-    .addCase(fetchProfile.fulfilled,
-    (state,action)=>{
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.profile = action.payload;
+      })
 
-      state.profile =
-      action.payload;
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.profile = action.payload.user;
+      })
 
-    })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.allUsers = action.payload;
+      })
 
-    .addCase(updateProfile.fulfilled,
-    (state,action)=>{
+      .addCase(fetchFollowers.fulfilled, (state, action) => {
+        state.followers = action.payload;
+      })
 
-      state.profile =
-      action.payload.user;
+      .addCase(fetchFollowing.fulfilled, (state, action) => {
+        state.following = action.payload;
+      })
 
-    })
+      .addCase(followUser.fulfilled, (state, action) => {
+        if (state.profile) {
+          state.profile.following.push(action.payload);
+        }
+      })
 
-    .addCase(fetchUsers.fulfilled,
-    (state,action)=>{
-
-      state.allUsers =
-      action.payload;
-
-    })
-
-    .addCase(fetchFollowers.fulfilled,
-    (state,action)=>{
-
-      state.followers =
-      action.payload;
-
-    })
-
-    .addCase(fetchFollowing.fulfilled,
-    (state,action)=>{
-
-      state.following =
-      action.payload;
-
-    })
-
-    .addCase(followUser.fulfilled,
-    (state,action)=>{
-
-      if(state.profile){
-
-        state.profile.following.push(
-          action.payload
-        );
-
-      }
-
-    })
-
-    .addCase(unfollowUser.fulfilled,
-    (state,action)=>{
-
-      if(state.profile){
-
-        state.profile.following =
-        state.profile.following.filter(
-
-          id => id !== action.payload
-
-        );
-
-      }
-
-    });
-
-  }
-
+      .addCase(unfollowUser.fulfilled, (state, action) => {
+        if (state.profile) {
+          state.profile.following = state.profile.following.filter(
+            (id) => id !== action.payload,
+          );
+        }
+      });
+  },
 });
 
 export default userSlice.reducer;

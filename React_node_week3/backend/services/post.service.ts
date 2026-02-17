@@ -1,311 +1,166 @@
 import Post from "../models/Post";
 import User from "../models/User";
 
-
-
 const createPost = async (
+  userId: string,
 
-    userId: string,
+  title: string,
 
-    title: string,
+  content: string,
 
-    content: string,
-
-    image?: string
-
+  image?: string,
 ) => {
+  const post = await Post.create({
+    author: userId,
 
-    const post =
-    await Post.create({
+    title,
 
-        author: userId,
+    content,
 
-        title,
+    image,
+  });
 
-        content,
-
-        image
-
-    });
-
-
-
-    return await Post.findById(post._id)
+  return await Post.findById(post._id)
 
     .populate(
+      "author",
 
-        "author",
-
-        "_id username email"
-
+      "_id username email",
     );
-
 };
-
-
-
-
 
 const getFeed = async (
+  userId: string,
 
-    userId: string,
+  page: number = 1,
 
-    page: number = 1,
-
-    limit: number = 10
-
+  limit: number = 10,
 ) => {
+  const user = await User.findById(userId);
 
-    const user =
-    await User.findById(userId);
+  const following = user?.following || [];
 
+  const skip = (page - 1) * limit;
 
+  const query = {
+    author: {
+      $in: [...following, userId],
+    },
+  };
 
-    const following =
-    user?.following || [];
-
-
-
-    const skip =
-    (page - 1) * limit;
-
-
-
-    const query = {
-
-        author: {
-
-            $in: [
-
-                ...following,
-
-                userId
-
-            ]
-
-        }
-
-    };
-
-
-
-    const posts =
-    await Post.find(query)
+  const posts = await Post.find(query)
 
     .populate(
+      "author",
 
-        "author",
-
-        "_id username email"
-
+      "_id username email",
     )
 
     .sort({
-
-        createdAt: -1
-
+      createdAt: -1,
     })
 
     .skip(skip)
 
     .limit(limit);
 
+  const total = await Post.countDocuments(query);
 
+  return {
+    data: posts,
 
-    const total =
-    await Post.countDocuments(query);
+    page,
 
+    limit,
 
+    total,
 
-    return {
-
-        data: posts,
-
-        page,
-
-        limit,
-
-        total,
-
-        totalPages:
-        Math.ceil(total / limit)
-
-    };
-
+    totalPages: Math.ceil(total / limit),
+  };
 };
-
-
-
-
 
 const updatePost = async (
+  postId: string,
 
-    postId: string,
+  userId: string,
 
-    userId: string,
+  title: string,
 
-    title: string,
-
-    content: string
-
+  content: string,
 ) => {
+  const post = await Post.findById(postId);
 
-    const post =
-    await Post.findById(postId);
+  if (!post) throw new Error("Post not found");
 
+  if (post.author.toString() !== userId) {
+    throw new Error("Unauthorized");
+  }
 
+  post.title = title;
 
-    if (!post)
+  post.content = content;
 
-    throw new Error("Post not found");
+  const updated = await post.save();
 
-
-
-    if (
-
-        post.author.toString()
-
-        !==
-
-        userId
-
-    ){
-
-        throw new Error("Unauthorized");
-
-    }
-
-
-
-    post.title = title;
-
-    post.content = content;
-
-
-
-    const updated =
-    await post.save();
-
-
-
-    return await Post.findById(updated._id)
+  return await Post.findById(updated._id)
 
     .populate(
+      "author",
 
-        "author",
-
-        "_id username email"
-
+      "_id username email",
     );
-
 };
 
-
-
 const getFollowingPosts = async (
+  userId: string,
 
-    userId: string,
+  page: number = 1,
 
-    page: number = 1,
-
-    limit: number = 10
-
+  limit: number = 10,
 ) => {
+  const user = await User.findById(userId);
 
-    const user =
-    await User.findById(userId);
+  if (!user) throw new Error("User not found");
 
-    if (!user)
-        throw new Error("User not found");
+  const following = user.following;
 
-    const following =
-    user.following;
+  const skip = (page - 1) * limit;
 
-    const skip =
-    (page - 1) * limit;
-
-    const posts =
-    await Post.find({
-
-        author: { $in: following }
-
-    })
+  const posts = await Post.find({
+    author: { $in: following },
+  })
 
     .populate(
+      "author",
 
-        "author",
-
-        "_id username email profilePic"
-
+      "_id username email profilePic",
     )
 
     .sort({
-
-        createdAt: -1
-
+      createdAt: -1,
     })
 
     .skip(skip)
 
     .limit(limit);
 
-    return posts;
-
+  return posts;
 };
-
 
 const deletePost = async (
+  postId: string,
 
-    postId: string,
-
-    userId: string
-
+  userId: string,
 ) => {
+  const post = await Post.findById(postId);
 
-    const post =
-    await Post.findById(postId);
+  if (!post) throw new Error("Post not found");
 
+  if (post.author.toString() !== userId) {
+    throw new Error("Unauthorized");
+  }
 
-
-    if (!post)
-
-    throw new Error("Post not found");
-
-
-
-    if (
-
-        post.author.toString()
-
-        !==
-
-        userId
-
-    ){
-
-        throw new Error("Unauthorized");
-
-    }
-
-
-
-    await post.deleteOne();
-
+  await post.deleteOne();
 };
 
-
-
-
-
-export {
-
-    createPost,
-
-    getFeed,
-
-    updatePost,
-    getFollowingPosts,
-
-    deletePost
-
-};
+export { createPost, getFeed, updatePost, getFollowingPosts, deletePost };
