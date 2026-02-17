@@ -1,86 +1,57 @@
-import {
-  useState
-} from "react";
+import { useState } from "react";
 
-import {
-  useAppDispatch
-} from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 
-import {
-  createPost
-} from "./PostSlice";
+import { createPost } from "./PostSlice";
 
-import {
+import { Form, Input, Button, Message } from "./styles/PostFormStyles";
 
-  Form,
+export default function PostForm() {
+  const dispatch = useAppDispatch();
 
-  Input,
+  const [title, setTitle] = useState("");
 
-  Button
+  const [content, setContent] = useState("");
 
-} from "./styles/PostFormStyles";
+  const [message, setMessage] = useState("");
 
-export default function PostForm(){
-
-  const dispatch =
-  useAppDispatch();
-
-  const [title,
-  setTitle] =
-  useState("");
-
-  const [content,
-  setContent] =
-  useState("");
-
-  const handleSubmit =
-  async (e:any)=>{
-
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData =
-    new FormData();
+    const formData = new FormData();
 
-    formData.append(
-      "title",
-      title
-    );
+    formData.append("title", title);
 
-    formData.append(
-      "content",
-      content
-    );
+    formData.append("content", content);
 
-    await dispatch(
-      createPost(formData)
-    );
+    dispatch(createPost(formData));
 
+    setTitle("");
+
+    setContent("");
+
+    setMessage("Post created successfully");
   };
 
-  return(
-
+  return (
     <Form onSubmit={handleSubmit}>
+      {message && <Message>{message}</Message>}
 
       <Input
-      placeholder="Title"
-      onChange={(e)=>
-      setTitle(
-      e.target.value)}
+        value={title}
+        type="text"
+        placeholder="Enter title"
+        onChange={(e) => setTitle(e.target.value)}
       />
 
       <Input
-      placeholder="Content"
-      onChange={(e)=>
-      setContent(
-      e.target.value)}
+        value={content}
+        type="text"
+        placeholder="Enter content"
+        onChange={(e) => setContent(e.target.value)}
       />
 
-      <Button>
-        Create Post
-      </Button>
-
+      <Button type="submit">Create Post</Button>
     </Form>
-
   );
-
 }

@@ -4,12 +4,13 @@ const BASE_URL = "http://localhost:5000/api";
 
 export const fetchClient = async (
   endpoint: string,
-  options: RequestInit = {},
+  options: RequestInit = {}
 ) => {
+
   const token = getToken();
 
-  const headers: Record<string, string> = {
-    ...((options.headers as Record<string, string>) || {}),
+  const headers: Record<string,string> = {
+    ...(options.headers as Record<string,string> || {}),
   };
 
   if (!(options.body instanceof FormData)) {
@@ -20,10 +21,13 @@ export const fetchClient = async (
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+  const res = await fetch(
+    `${BASE_URL}${endpoint}`,
+    {
+      ...options,
+      headers,
+    }
+  );
 
   const data = await res.json();
 

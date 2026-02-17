@@ -1,28 +1,28 @@
 import styled from "styled-components";
 
+
+
 export const Form =
 styled.form`
 
-  width:600px;
-
-  margin:20px auto;
-
-  padding:20px;
-
   background:white;
+
+  padding:25px;
 
   border-radius:16px;
 
-  border:1px solid rgba(0,0,0,0.1);
-
   box-shadow:
-  0 8px 25px rgba(0,0,0,0.1);
+  0 8px 25px rgba(0,0,0,0.08);
 
   display:flex;
 
   flex-direction:column;
 
-  gap:12px;
+  gap:15px;
+
+  max-width:600px;
+
+  margin:20px auto;
 
 `;
 
@@ -33,21 +33,21 @@ styled.input`
 
   width:100%;
 
-  height:45px;
+  padding:12px 14px;
 
-  padding:0 12px;
+  border-radius:10px;
 
-  border-radius:8px;
-
-  border:1px solid #ccc;
+  border:1px solid #ddd;
 
   font-size:15px;
 
   outline:none;
 
-  box-sizing:border-box;
+  transition:0.3s;
 
-  transition:0.2s;
+  color:#111;
+
+  background:#fafafa;
 
 
 
@@ -55,8 +55,10 @@ styled.input`
 
     border-color:#7873f5;
 
+    background:white;
+
     box-shadow:
-    0 0 5px rgba(120,115,245,0.3);
+    0 0 0 3px rgba(120,115,245,0.1);
 
   }
 
@@ -69,26 +71,27 @@ styled.button`
 
   width:100%;
 
-  height:45px;
+  padding:12px;
 
-  border-radius:8px;
+  border-radius:10px;
 
   border:none;
 
-  font-size:16px;
+  font-size:15px;
 
   font-weight:600;
 
   cursor:pointer;
 
+  color:white;
+
   background:
+
   linear-gradient(
     135deg,
     #ff6ec4,
     #7873f5
   );
-
-  color:white;
 
   transition:0.3s;
 
@@ -96,11 +99,46 @@ styled.button`
 
   &:hover{
 
-    transform:scale(1.02);
+    transform:translateY(-1px);
 
     box-shadow:
-    0 5px 15px rgba(0,0,0,0.2);
+    0 8px 20px rgba(0,0,0,0.15);
 
   }
+
+
+
+  &:active{
+
+    transform:scale(0.98);
+
+  }
+
+`;
+
+
+
+export const Message =
+styled.div`
+
+  padding:10px 14px;
+
+  border-radius:10px;
+
+  font-weight:500;
+
+  font-size:14px;
+
+  background:
+
+  linear-gradient(
+    135deg,
+    #d4edda,
+    #c3e6cb
+  );
+
+  color:#155724;
+
+  border:1px solid #c3e6cb;
 
 `;

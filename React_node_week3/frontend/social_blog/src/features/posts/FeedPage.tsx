@@ -1,134 +1,52 @@
-import {
-  useEffect
-} from "react";
+import { useEffect } from "react";
 
-import {
-  useAppDispatch,
-  useAppSelector
-} from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
-import {
-  fetchFeed
-} from "./PostSlice";
+import { fetchFeed } from "./PostSlice";
 
-import PostCard
-from "./PostCard";
+import PostCard from "./PostCard";
 
-import type {
-  Post
-} from "../../types/PostTypes";
+import type { Post } from "../../types/PostTypes";
 
-import {
+import { Container, LoadText } from "./styles/FeedStyles";
 
-  Container,
-  LoadText
+export default function FeedPage() {
+  const dispatch = useAppDispatch();
 
-} from "./styles/FeedStyles";
-
-export default function FeedPage(){
-
-  const dispatch=
-  useAppDispatch();
-
-  const {
-
-    posts,
-    page,
-    loading,
-    hasMore
-
-  }=
-
-  useAppSelector(
-    state=>state.posts
+  const { posts, page, loading, hasMore } = useAppSelector(
+    (state) => state.posts,
   );
 
-
-
-  useEffect(()=>{
-
+  useEffect(() => {
     dispatch(fetchFeed(1));
+  }, [dispatch]);
 
-  },[dispatch]);
-
-
-
-  useEffect(()=>{
-
-    const handleScroll=()=>{
-
-      if(
-
-        window.innerHeight+
-        window.scrollY >=
-        document.body.offsetHeight-50
-
-        && !loading
-        && hasMore
-
-      ){
-
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 50 &&
+        !loading &&
+        hasMore
+      ) {
         dispatch(fetchFeed(page));
-
       }
-
     };
 
+    window.addEventListener("scroll", handleScroll);
 
-
-    window.addEventListener(
-      "scroll",
-      handleScroll
-    );
-
-
-
-    return ()=>{
-
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
-
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
     };
+  }, [page, loading, hasMore, dispatch]);
 
-
-
-  },[page,loading,hasMore,dispatch]);
-
-
-
-  return(
-
+  return (
     <Container>
+      {posts.map((post: Post) => (
+        <PostCard key={post._id} post={post} />
+      ))}
 
-      {
-
-        posts.map((post:Post)=>(
-
-          <PostCard
-          key={post._id}
-          post={post}
-          />
-
-        ))
-
-      }
-
-      {
-
-        loading &&
-
-        <LoadText>
-
-          Loading...
-
-        </LoadText>
-
-      }
-
+      {loading && <LoadText>Loading...</LoadText>}
     </Container>
-
   );
-
 }

@@ -2,95 +2,66 @@ import { useState } from "react";
 
 import { useAppDispatch } from "../../app/hooks";
 
-import { createPost }
-from "./PostSlice";
+import { createPost } from "./PostSlice";
 
 import {
-
-Container,
-Card,
-Input,
-Textarea,
-Button
-
+  Container,
+  Card,
+  Input,
+  Textarea,
+  Button,
 } from "./styles/createPostStyles";
 
-export default function CreatePostPage(){
+export default function CreatePostPage() {
+  const dispatch = useAppDispatch();
 
-const dispatch =
-useAppDispatch();
+  const [title, setTitle] = useState("");
 
-const [title,setTitle] =
-useState("");
+  const [content, setContent] = useState("");
 
-const [content,setContent] =
-useState("");
+  const [image, setImage] = useState<File | null>(null);
 
-const [image,setImage] =
-useState<File|null>(null);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleSubmit =
-(e:React.FormEvent)=>{
+    const formData = new FormData();
 
-e.preventDefault();
+    formData.append("title", title);
 
-const formData =
-new FormData();
+    formData.append("content", content);
 
-formData.append("title",title);
+    if (image) {
+      formData.append("image", image);
+    }
 
-formData.append("content",content);
+    dispatch(createPost(formData));
+  };
 
-if(image){
+  return (
+    <Container>
+      <Card>
+        <h2>Create Post</h2>
 
-formData.append("image",image);
+        <form onSubmit={handleSubmit}>
+          <Input
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-}
+          <Textarea
+            placeholder="Content"
+            onChange={(e) => setContent(e.target.value)}
+          />
 
-dispatch(createPost(formData));
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files?.[0] || null)}
+          />
 
-};
-
-return(
-
-<Container>
-
-<Card>
-
-<h2>Create Post</h2>
-
-<form onSubmit={handleSubmit}>
-
-<Input
-placeholder="Title"
-onChange={(e)=>
-setTitle(e.target.value)}
-/>
-
-<Textarea
-placeholder="Content"
-onChange={(e)=>
-setContent(e.target.value)}
-/>
-
-<Input
-type="file"
-accept="image/*"
-onChange={(e)=>
-setImage(
-e.target.files?.[0]||null)}
-/>
-
-<Button>
-Post
-</Button>
-
-</form>
-
-</Card>
-
-</Container>
-
-);
-
+          <Button>Post</Button>
+        </form>
+      </Card>
+    </Container>
+  );
 }

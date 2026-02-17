@@ -43,8 +43,8 @@ router.put("/profile", authenticate, uploadProfilePic.single("profilePic"), asyn
 
 router.get("/users", authenticate, async (req, res) => {
 
-    const users = await getAllUsers();
-
+    const users = await getAllUsers(req,res);
+    
     res.json(users);
 
 });

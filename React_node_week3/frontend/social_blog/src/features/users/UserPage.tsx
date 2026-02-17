@@ -6,28 +6,16 @@ import { fetchUsers } from "./userSlice";
 
 import UserCard from "./UserCard";
 
-import styled from "styled-components";
-
-const Container = styled.div`
-  padding: 20px;
-`;
-
-const Title = styled.h2`
-  margin-bottom: 20px;
-`;
-
-const Grid = styled.div`
-  display: grid;
-
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-
-  gap: 20px;
-`;
+import { Container, Title, Grid } from "./styles/UserPageStyles";
 
 export default function UsersPage() {
   const dispatch = useAppDispatch();
 
-  const users = useAppSelector((state) => state.users.allUsers);
+  const currentUser = useAppSelector((state) => state.users.profile);
+
+  const allUsers = useAppSelector((state) => state.users.allUsers);
+
+  const users = allUsers.filter((user) => user._id !== currentUser?._id);
 
   useEffect(() => {
     dispatch(fetchUsers());

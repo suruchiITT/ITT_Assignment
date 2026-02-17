@@ -22,8 +22,11 @@ const updateProfile = async (
   return await User.findByIdAndUpdate(userId, update, { new: true });
 };
 
-const getAllUsers = async () => {
-  return await User.find().select("-password");
+const getAllUsers = async (req: any, res: any) => {
+  const currentUserId = req.user._id;
+  return await User.find({
+    _id: { $ne: currentUserId },
+  }).select("-password");
 };
 
 const followUser = async (currentUserId: string, targetUserId: string) => {

@@ -4,17 +4,16 @@ export const Container =
 styled.div`
 
   display:flex;
-  height:100vh;
-
   justify-content:center;
   align-items:center;
+
+  min-height:100vh;
 
   background:
   linear-gradient(
     135deg,
     #ff6ec4,
-    #7873f5,
-    #42a5f5
+    #7873f5
   );
 
 `;
@@ -24,24 +23,19 @@ styled.div`
 export const Form =
 styled.form`
 
-  background:rgba(255,255,255,0.15);
+  background:white;
 
-  backdrop-filter:blur(20px);
-
-  padding:40px;
-
-  border-radius:16px;
+  padding:35px;
 
   width:400px;
 
-  border:1px solid rgba(255,255,255,0.3);
+  border-radius:15px;
 
   box-shadow:
-  0 8px 32px rgba(0,0,0,0.2);
+  0 15px 35px rgba(0,0,0,0.2);
 
   display:flex;
   flex-direction:column;
-  gap:15px;
 
 `;
 
@@ -52,9 +46,9 @@ styled.h2`
 
   text-align:center;
 
-  color:white;
+  margin-bottom:20px;
 
-  margin-bottom:10px;
+  color:#333;
 
 `;
 
@@ -65,29 +59,23 @@ styled.input`
 
   width:100%;
 
-  height:45px;
+  padding:12px;
 
-  padding:0 12px;
+  margin-bottom:15px;
 
   border-radius:8px;
 
-  border:1px solid rgba(255,255,255,0.4);
+  border:1px solid #ddd;
 
-  background:rgba(255,255,255,0.2);
-
-  color:white;
-
-  font-size:15px;
+  font-size:14px;
 
   outline:none;
 
-  box-sizing:border-box;
+  transition:0.3s;
 
+  &:focus{
 
-
-  &::placeholder{
-
-    color:#f1f1f1;
+    border-color:#7873f5;
 
   }
 
@@ -100,19 +88,11 @@ styled.button`
 
   width:100%;
 
-  height:45px;
-
-  padding:0 12px;
-
-  border-radius:8px;
+  padding:12px;
 
   border:none;
 
-  font-size:16px;
-
-  font-weight:600;
-
-  cursor:pointer;
+  border-radius:8px;
 
   background:
   linear-gradient(
@@ -123,15 +103,20 @@ styled.button`
 
   color:white;
 
-  box-sizing:border-box;
+  font-weight:600;
+
+  cursor:pointer;
+
+  margin-top:5px;
 
   transition:0.3s;
 
-
-
   &:hover{
 
-    transform:scale(1.02);
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 8px 20px rgba(0,0,0,0.2);
 
   }
 
@@ -142,11 +127,49 @@ styled.button`
 export const LinkText =
 styled.p`
 
+  margin-top:15px;
+
   text-align:center;
 
-  color:white;
+  color:#7873f5;
 
   cursor:pointer;
+
+`;
+
+
+
+export const ErrorMessage =
+styled.div`
+
+  background:#ffe6e6;
+
+  color:#d8000c;
+
+  padding:10px;
+
+  border-radius:8px;
+
+  margin-bottom:10px;
+
+  font-size:14px;
+
+`;
+
+
+
+export const SuccessMessage =
+styled.div`
+
+  background:#e6ffe6;
+
+  color:#2e7d32;
+
+  padding:10px;
+
+  border-radius:8px;
+
+  margin-bottom:10px;
 
   font-size:14px;
 

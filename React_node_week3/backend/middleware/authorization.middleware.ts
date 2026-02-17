@@ -4,9 +4,10 @@ import Post from "../models/Post";
 const authorizePostOwner = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const user = (req as any).user;
+        const user = (req as any).user._id;
 
         const postId = req.params.id;
+        console.log("user id got",user)
 
         const post = await Post.findById(postId).select("author");
 

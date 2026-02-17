@@ -13,7 +13,9 @@ import {
   Title,
   Input,
   Button,
-  LinkText
+  LinkText,
+  ErrorMessage,
+  SuccessMessage
 
 } from "./styles/AuthFormStyles";
 
@@ -23,17 +25,20 @@ export default function RegisterPage(){
 
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [username,setUsername] = useState("");
 
-  const [email, setEmail] = useState("");
+  const [email,setEmail] = useState("");
 
-  const [password, setPassword] = useState("");
+  const [password,setPassword] = useState("");
 
-  const [profilePic, setProfilePic] =
-    useState<File | null>(null);
+  const [profilePic,setProfilePic] =
+  useState<File|null>(null);
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error,setError] = useState("");
+
+  const [success,setSuccess] = useState("");
+
+
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -44,37 +49,54 @@ export default function RegisterPage(){
     setError("");
     setSuccess("");
 
+
+
+    if(!username || !email || !password){
+
+      setError("All fields except profile image are required");
+
+      return;
+
+    }
+
+
+
     const formData = new FormData();
 
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("password", password);
+    formData.append("username",username);
+    formData.append("email",email);
+    formData.append("password",password);
 
     if(profilePic){
 
-      formData.append(
-        "profilePic",
-        profilePic
-      );
+      formData.append("profilePic",profilePic);
 
     }
+
+
 
     const result = await dispatch(
       registerUser(formData)
     );
 
+
+
     if(registerUser.fulfilled.match(result)){
 
-      setSuccess("User created successfully! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      setSuccess("User registered successfully");
 
-    } else if(registerUser.rejected.match(result)){
+      navigate("/login");
 
-      setError(result.payload ? String(result.payload) : "Registration failed");
+    }
+    else{
+
+      setError("User already exists or registration failed");
 
     }
 
   };
+
+
 
   return(
 
@@ -82,12 +104,13 @@ export default function RegisterPage(){
 
       <Form onSubmit={handleSubmit}>
 
-        <Title>
-          Register
-        </Title>
+        <Title>Register</Title>
 
-        {error && <div style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
-        {success && <div style={{color: 'green', marginBottom: '10px'}}>{success}</div>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+
+        {success && <SuccessMessage>{success}</SuccessMessage>}
+
+
 
         <Input
           placeholder="Username"
@@ -97,6 +120,8 @@ export default function RegisterPage(){
           }
         />
 
+
+
         <Input
           placeholder="Email"
           value={email}
@@ -104,6 +129,8 @@ export default function RegisterPage(){
             setEmail(e.target.value)
           }
         />
+
+
 
         <Input
           type="password"
@@ -114,23 +141,28 @@ export default function RegisterPage(){
           }
         />
 
+
+
         <Input
           type="file"
-          onChange={(
-            e: React.ChangeEvent<HTMLInputElement>
-          ) =>
+          onChange={(e)=>
             setProfilePic(
               e.target.files?.[0] || null
             )
           }
         />
 
+
+
         <Button type="submit">
+
           Register
+
         </Button>
 
-        <LinkText
-        onClick={() =>
+
+
+        <LinkText onClick={() =>
           navigate("/login")
         }>
           Already registered? Login

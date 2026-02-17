@@ -1,6 +1,5 @@
 import Post from "../models/Post";
 import User from "../models/User";
-
 const createPost = async (
   userId: string,
 
@@ -152,15 +151,13 @@ const deletePost = async (
 
   userId: string,
 ) => {
-  const post = await Post.findById(postId);
+  console.log("this is post id in backend ", postId);
 
-  if (!post) throw new Error("Post not found");
+  const deletedPost = await Post.findOneAndDelete({
+    _id: postId,
+  });
 
-  if (post.author.toString() !== userId) {
-    throw new Error("Unauthorized");
-  }
-
-  await post.deleteOne();
+  if (!postId) throw new Error("Post not found");
 };
 
 export { createPost, getFeed, updatePost, getFollowingPosts, deletePost };

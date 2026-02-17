@@ -1,23 +1,12 @@
-import {
-  useState
-} from "react";
+import { useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
+import { deletePost, editPost } from "./PostSlice";
+
+import type { Post } from "../../types/PostTypes";
 
 import {
-  useAppDispatch,
-  useAppSelector
-} from "../../app/hooks";
-
-import {
-  deletePost,
-  editPost
-} from "./PostSlice";
-
-import type {
-  Post
-} from "../../types/PostTypes";
-
-import {
-
   Card,
   Author,
   Title,
@@ -26,199 +15,76 @@ import {
   Button,
   EditInput,
   EditTextarea,
-  ButtonRow
-
+  ButtonRow,
 } from "./styles/PostCardStyles";
 
-export default function PostCard({
+export default function PostCard({ post }: { post: Post }) {
+  const dispatch = useAppDispatch();
 
-  post
+  const profile = useAppSelector((state) => state.users.profile);
 
-}:{
+  const isOwner = profile?._id?.toString() === post.author._id?.toString();
 
-  post:Post
+  const [editing, setEditing] = useState(false);
 
-}){
+  const [title, setTitle] = useState(post.title);
 
-  const dispatch=
-  useAppDispatch();
+  const [content, setContent] = useState(post.content);
 
-  const profile=
-  useAppSelector(
-    state=>state.users.profile
-  );
-
-
-
-  const isOwner=
-
-  profile?._id?.toString()
-
-  ===
-
-  post.author._id?.toString();
-
-
-
-  const [editing,setEditing]=
-  useState(false);
-
-  const [title,setTitle]=
-  useState(post.title);
-
-  const [content,setContent]=
-  useState(post.content);
-
-
-
-  const handleSave=()=>{
-
-    dispatch(editPost({
-
-      postId:post._id,
-      title,
-      content
-
-    }));
+  const handleSave = () => {
+    dispatch(
+      editPost({
+        postId: post._id,
+        title,
+        content,
+      }),
+    );
 
     setEditing(false);
-
   };
 
-
-
-  return(
-
+  return (
     <Card>
+      <Author>{post.author.username}</Author>
 
-      <Author>
-
-        {post.author.username}
-
-      </Author>
-
-
-
-      {
-
-        editing ?
-
+      {editing ? (
         <>
-
-          <EditInput
-
-          value={title}
-
-          onChange={(e)=>
-
-          setTitle(e.target.value)}
-
-          />
-
-
+          <EditInput value={title} onChange={(e) => setTitle(e.target.value)} />
 
           <EditTextarea
-
-          value={content}
-
-          onChange={(e)=>
-
-          setContent(e.target.value)}
-
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
-
-
-
         </>
-
-        :
-
+      ) : (
         <>
+          <Title>{post.title}</Title>
 
-          <Title>
-
-            {post.title}
-
-          </Title>
-
-
-
-          <Content>
-
-            {post.content}
-
-          </Content>
-
+          <Content>{post.content}</Content>
         </>
+      )}
 
-      }
+      {post.image && <Image src={`http://localhost:5000/${post.image}`} />}
 
-
-
-      {
-
-        post.image &&
-
-        <Image
-
-        src={`http://localhost:5000/${post.image}`}
-
-        />
-
-      }
-
-
-
-      {
-
-        isOwner &&
-
+      {isOwner && (
         <ButtonRow>
-
-          {
-
-            editing ?
-
-            <Button
-
-            onClick={handleSave}>
-
-              Save
-
-            </Button>
-
-            :
-
-            <Button
-
-            onClick={()=>
-
-            setEditing(true)}>
-
-              Edit
-
-            </Button>
-
-          }
-
-
+          {editing ? (
+            <Button onClick={handleSave}>Save</Button>
+          ) : (
+            <Button onClick={() => setEditing(true)}>Edit</Button>
+          )}
 
           <Button
+            onClick={() => {
+              console.log("Clicked");
 
-          onClick={()=>
-
-          dispatch(deletePost(post._id))}>
-
+              dispatch(deletePost(post._id));
+            }}
+          >
             Delete
-
           </Button>
-
         </ButtonRow>
-
-      }
-
+      )}
     </Card>
-
   );
-
 }

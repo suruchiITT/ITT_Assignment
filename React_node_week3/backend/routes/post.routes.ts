@@ -34,6 +34,9 @@ const router =
 express.Router();
 
 
+
+// CREATE POST
+
 router.post(
 
     "/posts",
@@ -101,6 +104,8 @@ router.get(
 
 );
 
+// GET FEED
+
 router.get(
 
     "/posts/feed",
@@ -152,7 +157,7 @@ router.get(
 
 
 
-
+// UPDATE POST
 
 router.put(
 
@@ -190,21 +195,25 @@ router.put(
 );
 
 
+
+// DELETE POST
+
 router.delete(
 
     "/posts/:id",
 
-    authenticate,
+    // authenticate,
 
-    authorizePostOwner,
+    // authorizePostOwner,
 
     async (req, res) => {
+       console.log("delete called level routes")
 
         await deletePost(
 
             req.params.id as string,
 
-            (req as any).user._id
+            (req as any).user_id
 
         );
 

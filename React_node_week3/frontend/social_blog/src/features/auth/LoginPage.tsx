@@ -13,7 +13,9 @@ import {
   Title,
   Input,
   Button,
-  LinkText
+  LinkText,
+  ErrorMessage,
+  SuccessMessage
 
 } from "./styles/AuthFormStyles";
 
@@ -23,12 +25,15 @@ export default function LoginPage(){
 
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+  const [email,setEmail] = useState("");
 
-  const [password, setPassword] = useState("");
+  const [password,setPassword] = useState("");
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error,setError] = useState("");
+
+  const [success,setSuccess] = useState("");
+
+
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -39,25 +44,40 @@ export default function LoginPage(){
     setError("");
     setSuccess("");
 
+
+
+    if(!email || !password){
+
+      setError("Email and password required");
+
+      return;
+
+    }
+
+
+
     const result = await dispatch(
-      loginUser({
-        email,
-        password
-      })
+      loginUser({email,password})
     );
+
+
 
     if(loginUser.fulfilled.match(result)){
 
-      setSuccess("Login successful! Redirecting...");
-      setTimeout(() => navigate("/"), 1500);
+      setSuccess("Login successful");
 
-    } else if(loginUser.rejected.match(result)){
+      navigate("/");
 
-      setError(result.payload ? String(result.payload) : "Login failed");
+    }
+    else{
+
+      setError("Invalid email or password");
 
     }
 
   };
+
+
 
   return(
 
@@ -65,12 +85,13 @@ export default function LoginPage(){
 
       <Form onSubmit={handleSubmit}>
 
-        <Title>
-          Login
-        </Title>
+        <Title>Login</Title>
 
-        {error && <div style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
-        {success && <div style={{color: 'green', marginBottom: '10px'}}>{success}</div>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+
+        {success && <SuccessMessage>{success}</SuccessMessage>}
+
+
 
         <Input
           placeholder="Email"
@@ -79,6 +100,8 @@ export default function LoginPage(){
             setEmail(e.target.value)
           }
         />
+
+
 
         <Input
           type="password"
@@ -89,15 +112,20 @@ export default function LoginPage(){
           }
         />
 
+
+
         <Button type="submit">
+
           Login
+
         </Button>
 
-        <LinkText
-        onClick={() =>
+
+
+        <LinkText onClick={() =>
           navigate("/register")
         }>
-          New User? Register
+          New user? Register
         </LinkText>
 
       </Form>
