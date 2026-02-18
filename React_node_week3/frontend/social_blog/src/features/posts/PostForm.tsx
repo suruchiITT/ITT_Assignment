@@ -29,7 +29,7 @@ export default function PostForm() {
     setTitle("");
 
     setContent("");
-
+    console.log("title:", title);
     setMessage("Post created successfully");
   };
 

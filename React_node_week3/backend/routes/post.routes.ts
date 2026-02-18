@@ -1,234 +1,129 @@
 import express from "express";
 
-import {
+import { authenticate } from "../middleware/auth.middleware";
 
-    authenticate
+import { authorizePostOwner } from "../middleware/authorization.middleware";
 
-} from "../middleware/auth.middleware";
-
-import {
-
-    authorizePostOwner
-
-} from "../middleware/authorization.middleware";
-
-import upload
-from "../middleware/upload.middleware";
+import upload from "../middleware/upload.middleware";
 
 import {
-
-    createPost,
-
-    getFeed,
-
-    updatePost,
-
-    deletePost,
-    getFollowingPosts
-
+  createPost,
+  getFeed,
+  updatePost,
+  deletePost,
+  getFollowingPosts,
 } from "../services/post.service";
 
-
-
-const router =
-express.Router();
-
-
-
-// CREATE POST
+const router = express.Router();
 
 router.post(
+  "/posts",
 
-    "/posts",
+  authenticate,
 
-    authenticate,
+  upload.single("image"),
 
-    upload.single("image"),
+  async (req, res) => {
+    const post = await createPost(
+      (req as any).user._id,
 
-    async (req, res) => {
+      req.body.title,
 
-        const post =
-        await createPost(
+      req.body.content,
 
-            (req as any).user._id,
+      req.file?.path,
+    );
 
-            req.body.title,
-
-            req.body.content,
-
-            req.file?.path
-
-        );
-
-
-
-        res.json({
-
-            post
-
-        });
-
-    }
-
+    res.json({
+      post,
+    });
+  },
 );
-
 
 router.get(
+  "/posts/following",
 
-    "/posts/following",
+  authenticate,
 
-    authenticate,
+  async (req, res) => {
+    const page = parseInt(req.query.page as string) || 1;
 
-    async (req, res) => {
+    const limit = parseInt(req.query.limit as string) || 10;
 
-        const page =
-        parseInt(req.query.page as string) || 1;
+    const posts = await getFollowingPosts(
+      (req as any).user._id,
 
-        const limit =
-        parseInt(req.query.limit as string) || 10;
+      page,
 
-        const posts =
-        await getFollowingPosts(
+      limit,
+    );
 
-            (req as any).user._id,
-
-            page,
-
-            limit
-
-        );
-
-        res.json(posts);
-
-    }
-
+    res.json(posts);
+  },
 );
-
-// GET FEED
 
 router.get(
+  "/posts/feed",
 
-    "/posts/feed",
+  authenticate,
 
-    authenticate,
+  async (req, res) => {
+    const page = parseInt(req.query.page as string) || 1;
 
-    async (req, res) => {
+    const limit = parseInt(req.query.limit as string) || 10;
 
-        const page =
-        parseInt(
+    const feed = await getFeed(
+      (req as any).user._id,
 
-            req.query.page as string
+      page,
 
-        ) || 1;
+      limit,
+    );
 
-
-
-        const limit =
-        parseInt(
-
-            req.query.limit as string
-
-        ) || 10;
-
-
-
-        const feed =
-        await getFeed(
-
-            (req as any).user._id,
-
-            page,
-
-            limit
-
-        );
-
-
-
-        res.json(
-
-            feed.data
-
-        );
-
-    }
-
+    res.json(feed.data);
+  },
 );
-
-
-
-// UPDATE POST
 
 router.put(
+  "/posts/:id",
 
-    "/posts/:id",
+  authenticate,
 
-    authenticate,
+  authorizePostOwner,
 
-    authorizePostOwner,
+  async (req, res) => {
+    const post = await updatePost(
+      req.params.id as string,
 
-    async (req, res) => {
+      (req as any).user._id,
 
-        const post =
-        await updatePost(
+      req.body.title,
 
-            req.params.id as string,
+      req.body.content,
+    );
 
-            (req as any).user._id,
-
-            req.body.title,
-
-            req.body.content
-
-        );
-
-
-
-        res.json({
-
-            post
-
-        });
-
-    }
-
+    res.json({
+      post,
+    });
+  },
 );
-
-
-
-// DELETE POST
 
 router.delete(
+  "/posts/:id",
 
-    "/posts/:id",
+  async (req, res) => {
+    console.log("delete called level routes");
 
-    // authenticate,
+    await deletePost(
+      req.params.id as string,
 
-    // authorizePostOwner,
+      (req as any).user_id,
+    );
 
-    async (req, res) => {
-       console.log("delete called level routes")
-
-        await deletePost(
-
-            req.params.id as string,
-
-            (req as any).user_id
-
-        );
-
-
-
-        res.json({
-
-            message:"Deleted"
-
-        });
-
-    }
-
+    res.json({
+      message: "Deleted",
+    });
+  },
 );
-
-
 
 export default router;

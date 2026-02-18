@@ -1,28 +1,31 @@
 import styled from "styled-components";
 
-export const Layout =
-styled.div`
-
-  display:flex;
-
+export const PageWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 `;
 
-export const Main =
-styled.div`
+export const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
 
-  flex:1;
+export const SidebarArea = styled.div`
+  width: 240px;
+  background: white;
+  border-right: 1px solid #eee;
+`;
 
-  min-height:100vh;
+export const Main = styled.div`
+  flex: 1;
 
-  padding:20px;
+  padding: 25px;
 
-  background:
-
-  linear-gradient(
+  background: linear-gradient(
     135deg,
     #fafafa,
     #f3f4ff,
     #fdf2f8
   );
-
 `;

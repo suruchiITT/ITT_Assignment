@@ -1,35 +1,44 @@
 import { useEffect } from "react";
-
 import Header from "../components/Header";
-
 import Sidebar from "../components/Sidebar";
-
 import { Outlet } from "react-router-dom";
-
 import { useAppDispatch } from "../app/hooks";
-
 import { fetchProfile } from "../features/users/userSlice";
+import {
+  PageWrapper,
+  ContentWrapper,
+  SidebarArea,
+  Main
+} from "./FeedLayoutStyles";
 
-import { Layout, Main } from "./FeedLayoutStyles";
+export default function FeedLayout(){
 
-export default function FeedLayout() {
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
+  useEffect(()=>{
     dispatch(fetchProfile());
-  }, [dispatch]);
+  },[dispatch]);
 
-  return (
-    <>
+  return(
+
+    <PageWrapper>
+
       <Header />
 
-      <Layout>
-        <Sidebar />
+      <ContentWrapper>
+
+        <SidebarArea>
+          <Sidebar />
+        </SidebarArea>
 
         <Main>
           <Outlet />
         </Main>
-      </Layout>
-    </>
+
+      </ContentWrapper>
+
+    </PageWrapper>
+
   );
+
 }

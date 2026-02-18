@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import { useAppDispatch } from "../../app/hooks";
 
@@ -16,18 +16,17 @@ export default function CreatePostPage() {
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState("");
-
   const [content, setContent] = useState("");
-
   const [image, setImage] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSubmit = (e :any) => {
     e.preventDefault();
 
     const formData = new FormData();
 
     formData.append("title", title);
-
     formData.append("content", content);
 
     if (image) {
@@ -35,6 +34,15 @@ export default function CreatePostPage() {
     }
 
     dispatch(createPost(formData));
+
+    setTitle("");
+    setContent("");
+
+    setImage(null);
+
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
   };
 
   return (
@@ -45,15 +53,18 @@ export default function CreatePostPage() {
         <form onSubmit={handleSubmit}>
           <Input
             placeholder="Title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
 
           <Textarea
             placeholder="Content"
+            value={content}
             onChange={(e) => setContent(e.target.value)}
           />
 
           <Input
+            ref={fileRef}
             type="file"
             accept="image/*"
             onChange={(e) => setImage(e.target.files?.[0] || null)}

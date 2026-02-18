@@ -1,138 +1,96 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import FeedLayout
-from "../layouts/FeedLayout";
+import FeedLayout from "../layouts/FeedLayout";
 
-import FeedPage
-from "../features/posts/FeedPage";
+import FeedPage from "../features/posts/FeedPage";
 
-import ProfilePage
-from "../features/users/ProfilePage";
+import ProfilePage from "../features/users/ProfilePage";
 
-import UsersPage
-from "../features/users/UserPage";
+import UsersPage from "../features/users/UserPage";
 
-import FollowersPage
-from "../features/users/FollowersPage";
+import FollowersPage from "../features/users/FollowersPage";
 
-import FollowingPage
-from "../features/users/FollowingPage";
+import FollowingPage from "../features/users/FollowingPage";
 
-import CreatePostPage
-from "../features/posts/createPostPage";
+import CreatePostPage from "../features/posts/createPostPage";
 
-import LoginPage
-from "../features/auth/LoginPage";
+import LoginPage from "../features/auth/LoginPage";
 
-import RegisterPage
-from "../features/auth/RegisterPage";
+import RegisterPage from "../features/auth/RegisterPage";
 
-import { getToken }
-from "../utils/token";
-import type { JSX } from "react";
 import EditProfileForm from "../features/users/EditProfileForm";
 
-function PrivateRoute({
+import { getToken } from "../utils/token";
 
-  children
+import type { JSX } from "react";
 
-}:{
+function PrivateRoute({ children }: { children: JSX.Element }) {
+  const token = getToken();
 
-  children: JSX.Element
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
 
-}){
-
-  const token =
-  getToken();
-
-  return token
-
-    ? children
-
-    : <Navigate to="/login"/>;
-
+  return children;
 }
 
-export default function AppRoutes(){
+function PublicRoute({ children }: { children: JSX.Element }) {
+  const token = getToken();
 
-  return(
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
 
+  return children;
+}
+
+export default function AppRoutes() {
+  return (
     <BrowserRouter>
-
       <Routes>
-
         <Route
-        path="/login"
-        element={<LoginPage/>}
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
         />
 
         <Route
-        path="/register"
-        element={<RegisterPage/>}
+          path="/register"
+          element={
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          }
         />
 
         <Route
-
-        path="/"
-
-        element={
-
-          <PrivateRoute>
-
-            <FeedLayout/>
-
-          </PrivateRoute>
-
-        }
-
+          path="/"
+          element={
+            <PrivateRoute>
+              <FeedLayout />
+            </PrivateRoute>
+          }
         >
+          <Route index element={<FeedPage />} />
 
-          <Route
-          index
-          element={<FeedPage/>}
-          />
+          <Route path="user/:id" element={<ProfilePage />} />
 
-          <Route
-          path="/user/:id"
-          element={<ProfilePage/>}
-          />
-          <Route
-          path="Editprofile"
-          element={<EditProfileForm/>}
-          />
+          <Route path="editprofile" element={<EditProfileForm />} />
 
+          <Route path="users" element={<UsersPage />} />
 
-          <Route
-          path="users"
-          element={<UsersPage/>}
-          />
+          <Route path="followers" element={<FollowersPage />} />
 
-          <Route
-          path="followers"
-          element={<FollowersPage/>}
-          />
+          <Route path="following" element={<FollowingPage />} />
 
-          <Route
-          path="following"
-          element={<FollowingPage/>}
-          />
-
-          <Route
-          path="create-post"
-          element={<CreatePostPage/>}
-          />
-
+          <Route path="create-post" element={<CreatePostPage />} />
         </Route>
 
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
     </BrowserRouter>
-
   );
-
 }

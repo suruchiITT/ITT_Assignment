@@ -1,45 +1,28 @@
 import styled from "styled-components";
 
-interface MenuItemProps {
-
-  $active?: boolean;
-
-}
-
-export const SidebarContainer =
-styled.div`
-
-  width: 220px;
-
-  height: calc(100vh - 60px);
-
+export const SidebarContainer = styled.div`
+  width: 240px;
+  padding: 20px;
   background: white;
-
-  border-right: 1px solid #ddd;
-
-  padding-top: 20px;
-
+  border-right: 1px solid #eee;
 `;
 
-export const MenuItem =
-styled.div<MenuItemProps>`
+export const ProfileCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+`;
 
-  padding: 15px 20px;
+export const Avatar = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+`;
 
-  cursor: pointer;
-
-  font-weight: 500;
-
-  background: ${({ $active }) =>
-    $active ? "#e7f3ff" : "white"};
-
-  color: ${({ $active }) =>
-    $active ? "#1877f2" : "black"};
-
-  &:hover {
-
-    background: #f0f2f5;
-
-  }
-
+export const Username = styled.div`
+  font-weight: 600;
+  color: #4b4376;
 `;

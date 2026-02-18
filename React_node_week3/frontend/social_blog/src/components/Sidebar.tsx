@@ -1,34 +1,37 @@
-import { SidebarContainer, MenuItem } from "./styles/SidebarStyles";
+import {
+  SidebarContainer,
+  ProfileCard,
+  Avatar,
+  Username
+} from "./styles/SidebarStyles";
+import { useAppSelector } from "../app/hooks";
 
-import { useNavigate, useLocation } from "react-router-dom";
+export default function Sidebar(){
 
-export default function Sidebar() {
-  const navigate = useNavigate();
+  const user = useAppSelector(state=>state.users.profile);
 
-  const location = useLocation();
+  return(
 
-  return (
     <SidebarContainer>
-      <MenuItem
-        $active={location.pathname === "/"}
-        onClick={() => navigate("/")}
-      >
-        Feed
-      </MenuItem>
 
-      <MenuItem
-        $active={location.pathname === "/users"}
-        onClick={() => navigate("/users")}
-      >
-        Users
-      </MenuItem>
+      <ProfileCard>
 
-      <MenuItem
-        $active={location.pathname === "/create-post"}
-        onClick={() => navigate("/create-post")}
-      >
-        Create Post
-      </MenuItem>
+        <Avatar
+          src={
+            user?.profilePic
+            ? user.profilePic
+            : "https://i.pravatar.cc/150"
+          }
+        />
+
+        <Username>
+          {user?.username}
+        </Username>
+
+      </ProfileCard>
+
     </SidebarContainer>
+
   );
+
 }

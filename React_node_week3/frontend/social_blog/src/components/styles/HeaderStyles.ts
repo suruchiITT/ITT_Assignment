@@ -1,129 +1,111 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-export const HeaderContainer =
-styled.div`
-
-  height:60px;
-
-  background:
-
-  linear-gradient(
-    135deg,
-    #ff6ec4,
-    #7873f5,
-    #42a5f5
-  );
-
-  color:white;
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:0 25px;
-
-  box-shadow:
-  0 5px 20px rgba(0,0,0,0.2);
-
+const fadeWord = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
+export const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 14px 28px;
+  background: linear-gradient(135deg,#4b4376,#6c63ff);
+  color: white;
+`;
 
+export const TopRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-export const Title =
-styled.h2`
+export const Logo = styled.div`
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+`;
 
-  cursor:pointer;
+export const NavGroup = styled.div`
+  display: flex;
+  gap: 12px;
+`;
 
-  font-weight:600;
-
-  letter-spacing:0.5px;
-
-  transition:0.3s;
-
-
+export const NavButton = styled.button<{ $active?: boolean }>`
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: ${({ $active }) =>
+    $active ? "white" : "rgba(255,255,255,0.15)"};
+  color: ${({ $active }) =>
+    $active ? "#4b4376" : "white"};
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
 
   &:hover{
-
-    transform:scale(1.05);
-
+    background: white;
+    color: #4b4376;
   }
-
 `;
 
-
-
-export const ButtonGroup =
-styled.div`
-
-  display:flex;
-
-  gap:12px;
-
+export const RightGroup = styled.div`
+  display: flex;
+  gap: 10px;
 `;
 
-
-
-export const HeaderButton =
-styled.button`
-
-  padding:7px 16px;
-
-  border-radius:8px;
-
-  border:none;
-
-  font-weight:500;
-
-  cursor:pointer;
-
-  background:
-  rgba(255,255,255,0.2);
-
-  color:white;
-
-  backdrop-filter:blur(10px);
-
-  transition:0.3s;
-
-
+export const ProfileButton = styled.button`
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
 
   &:hover{
-
-    background:
-    rgba(255,255,255,0.3);
-
-    transform:scale(1.05);
-
+    background: white;
+    color: #4b4376;
   }
-
 `;
 
-
-
-export const LogoutButton =
-styled(HeaderButton)`
-
-  background:
-
-  linear-gradient(
-    135deg,
-    #ff4b2b,
-    #ff416c
-  );
-
-  color:white;
-
-
+export const LogoutButton = styled.button`
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #ff4d4f;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 
   &:hover{
-
-    transform:scale(1.05);
-
-    box-shadow:
-    0 5px 15px rgba(0,0,0,0.3);
-
+    background: black;
   }
+`;
 
+export const WelcomeWrapper = styled.div`
+  margin-top: 10px;
+`;
+
+export const WelcomeText = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+export const SubText = styled.div`
+  font-size: 14px;
+  opacity: 0.9;
+`;
+
+export const Word = styled.span<{ delay:number }>`
+  opacity: 0;
+  display: inline-block;
+  margin-right: 5px;
+  animation: ${fadeWord} 0.5s ease forwards;
+  animation-delay: ${({ delay }) => delay}s;
 `;

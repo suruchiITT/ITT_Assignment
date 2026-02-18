@@ -6,132 +6,110 @@ import { useAppDispatch } from "../../app/hooks";
 
 import { loginUser } from "./authSlice";
 
-import {
+import blog1 from "../../assets/blog1.png";
+import blog2 from "../../assets/blog2.png";
+import blog3 from "../../assets/blog3.png";
 
+import {
   Container,
+  LeftSection,
+  RightSection,
+  Quote,
+  ImageContainer,
+  FloatingImage,
+  FormContainer,
   Form,
   Title,
   Input,
   Button,
   LinkText,
   ErrorMessage,
-  SuccessMessage
-
+  SuccessMessage,
 } from "./styles/AuthFormStyles";
 
-export default function LoginPage(){
-
+export default function LoginPage() {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
-  const [email,setEmail] = useState("");
+  const [email, setEmail] = useState("");
 
-  const [password,setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
 
-  const [success,setSuccess] = useState("");
+  const [success, setSuccess] = useState("");
 
-
-
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     setError("");
+
     setSuccess("");
 
-
-
-    if(!email || !password){
-
+    if (!email || !password) {
       setError("Email and password required");
 
       return;
-
     }
 
+    const result = await dispatch(loginUser({ email, password }));
 
-
-    const result = await dispatch(
-      loginUser({email,password})
-    );
-
-
-
-    if(loginUser.fulfilled.match(result)){
-
+    if (loginUser.fulfilled.match(result)) {
       setSuccess("Login successful");
 
       navigate("/");
-
-    }
-    else{
-
+    } else {
       setError("Invalid email or password");
-
     }
-
   };
 
-
-
-  return(
-
+  return (
     <Container>
+      <LeftSection>
+        <Quote>
+          Your thoughts deserve a place in the world. Start writing.
+        </Quote>
 
-      <Form onSubmit={handleSubmit}>
+        <ImageContainer>
+          <FloatingImage src={blog1} />
 
-        <Title>Login</Title>
+          <FloatingImage src={blog2} />
 
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+          <FloatingImage src={blog3} />
+        </ImageContainer>
+      </LeftSection>
 
-        {success && <SuccessMessage>{success}</SuccessMessage>}
+      <RightSection>
+        <FormContainer>
+          <Title>Log in to Social Blogging</Title>
 
+          {error && <ErrorMessage>{error}</ErrorMessage>}
 
+          {success && <SuccessMessage>{success}</SuccessMessage>}
 
-        <Input
-          placeholder="Email"
-          value={email}
-          onChange={(e)=>
-            setEmail(e.target.value)
-          }
-        />
+          <Form onSubmit={handleSubmit}>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
+            <Button type="submit">Log in</Button>
+          </Form>
 
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e)=>
-            setPassword(e.target.value)
-          }
-        />
-
-
-
-        <Button type="submit">
-
-          Login
-
-        </Button>
-
-
-
-        <LinkText onClick={() =>
-          navigate("/register")
-        }>
-          New user? Register
-        </LinkText>
-
-      </Form>
-
+          <LinkText onClick={() => navigate("/register")}>
+            Create new account
+          </LinkText>
+        </FormContainer>
+      </RightSection>
     </Container>
-
   );
-
 }

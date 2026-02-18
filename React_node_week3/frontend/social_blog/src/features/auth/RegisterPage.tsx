@@ -1,14 +1,14 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import { useAppDispatch } from "../../app/hooks";
-
 import { registerUser } from "./authSlice";
 
 import {
-
-  Container,
+  RegisterContainer,
+  RegisterWrapper,
+  RegisterQuote,
+  Word,
+  RegisterCard,
   Form,
   Title,
   Input,
@@ -16,29 +16,22 @@ import {
   LinkText,
   ErrorMessage,
   SuccessMessage
-
 } from "./styles/AuthFormStyles";
 
 export default function RegisterPage(){
 
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const [username,setUsername] = useState("");
-
   const [email,setEmail] = useState("");
-
   const [password,setPassword] = useState("");
-
-  const [profilePic,setProfilePic] =
-  useState<File|null>(null);
-
+  const [profilePic,setProfilePic] = useState<File|null>(null);
   const [error,setError] = useState("");
-
   const [success,setSuccess] = useState("");
 
-
+  const quote = "Your ideas deserve an audience. Register now.";
+  const words = quote.split(" ");
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -49,17 +42,10 @@ export default function RegisterPage(){
     setError("");
     setSuccess("");
 
-
-
     if(!username || !email || !password){
-
       setError("All fields except profile image are required");
-
       return;
-
     }
-
-
 
     const formData = new FormData();
 
@@ -68,109 +54,89 @@ export default function RegisterPage(){
     formData.append("password",password);
 
     if(profilePic){
-
       formData.append("profilePic",profilePic);
-
     }
 
-
-
-    const result = await dispatch(
-      registerUser(formData)
-    );
-
-
+    const result = await dispatch(registerUser(formData));
 
     if(registerUser.fulfilled.match(result)){
-
       setSuccess("User registered successfully");
-
       navigate("/login");
-
     }
     else{
-
       setError("User already exists or registration failed");
-
     }
 
   };
 
-
-
   return(
 
-    <Container>
+    <RegisterContainer>
 
-      <Form onSubmit={handleSubmit}>
+      <RegisterWrapper>
 
-        <Title>Register</Title>
+        <RegisterQuote>
 
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+          {words.map((word,index)=>(
+            <Word key={index} delay={index * 0.3}>
+              {word}
+            </Word>
+          ))}
 
-        {success && <SuccessMessage>{success}</SuccessMessage>}
+        </RegisterQuote>
 
+        <RegisterCard>
 
+          <Title>
+            Register
+          </Title>
 
-        <Input
-          placeholder="Username"
-          value={username}
-          onChange={(e)=>
-            setUsername(e.target.value)
-          }
-        />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {success && <SuccessMessage>{success}</SuccessMessage>}
 
+          <Form onSubmit={handleSubmit}>
 
+            <Input
+              placeholder="Username"
+              value={username}
+              onChange={(e)=>setUsername(e.target.value)}
+            />
 
-        <Input
-          placeholder="Email"
-          value={email}
-          onChange={(e)=>
-            setEmail(e.target.value)
-          }
-        />
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
+            />
 
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
+            />
 
+            <Input
+              type="file"
+              onChange={(e)=>setProfilePic(
+                e.target.files?.[0] || null
+              )}
+            />
 
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e)=>
-            setPassword(e.target.value)
-          }
-        />
+            <Button type="submit">
+              Register
+            </Button>
+            
+            <LinkText onClick={()=>navigate("/login")}>
+              Already registered? Login
+            </LinkText>
 
+          </Form>
 
+        </RegisterCard>
 
-        <Input
-          type="file"
-          onChange={(e)=>
-            setProfilePic(
-              e.target.files?.[0] || null
-            )
-          }
-        />
+      </RegisterWrapper>
 
-
-
-        <Button type="submit">
-
-          Register
-
-        </Button>
-
-
-
-        <LinkText onClick={() =>
-          navigate("/login")
-        }>
-          Already registered? Login
-        </LinkText>
-
-      </Form>
-
-    </Container>
+    </RegisterContainer>
 
   );
 
