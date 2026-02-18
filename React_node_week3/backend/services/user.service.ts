@@ -4,11 +4,7 @@ const getProfile = async (userId: string) => {
   return await User.findById(userId).select("-password");
 };
 
-const updateProfile = async (
-  userId: string,
-  username?: string,
-  profilePic?: string,
-) => {
+const updateProfile = async ( userId: string, username?: string, profilePic?: string,) => {
   const update: any = {};
 
   if (username !== undefined) {
@@ -22,11 +18,14 @@ const updateProfile = async (
   return await User.findByIdAndUpdate(userId, update, { new: true });
 };
 
-const getAllUsers = async (req: any, res: any) => {
-  const currentUserId = req.user._id;
+const getAllUsers = async (currentUserId: string) => {
   return await User.find({
     _id: { $ne: currentUserId },
   }).select("-password");
+};
+
+const getUserById = async (userId: string) => {
+  return await User.findById(userId).select("-password");
 };
 
 const followUser = async (currentUserId: string, targetUserId: string) => {
@@ -39,28 +38,6 @@ const followUser = async (currentUserId: string, targetUserId: string) => {
   });
 };
 
-export const getFollowing = async (userId: string) => {
-  const user = await User.findById(userId).populate(
-    "following",
-    "_id username email profilePic",
-  );
-
-  if (!user) throw new Error("User not found");
-
-  return user.following;
-};
-
-export const getFollowers = async (userId: string) => {
-  const user = await User.findById(userId).populate(
-    "followers",
-    "_id username email profilePic",
-  );
-
-  if (!user) throw new Error("User not found");
-
-  return user.followers;
-};
-
 const unfollowUser = async (currentUserId: string, targetUserId: string) => {
   await User.findByIdAndUpdate(currentUserId, {
     $pull: { following: targetUserId },
@@ -71,4 +48,39 @@ const unfollowUser = async (currentUserId: string, targetUserId: string) => {
   });
 };
 
-export { getProfile, updateProfile, getAllUsers, followUser, unfollowUser };
+const getFollowing = async (userId: string) => {
+  const user = await User.findById(userId).populate( 
+     "following",
+     "_id username email profilePic",
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.following;
+};
+
+const getFollowers = async (userId: string) => {
+  const user = await User.findById(userId).populate(
+    "followers",
+    "_id username email profilePic",
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.followers;
+};
+
+export {
+  getProfile,
+  updateProfile,
+  getAllUsers,
+  getUserById,
+  followUser,
+  unfollowUser,
+  getFollowing,
+  getFollowers,
+};

@@ -1,163 +1,105 @@
 import Post from "../models/Post";
 import User from "../models/User";
+
 const createPost = async (
   userId: string,
-
   title: string,
-
   content: string,
-
-  image?: string,
+  image?: string
 ) => {
+
   const post = await Post.create({
     author: userId,
-
     title,
-
     content,
-
-    image,
+    image
   });
 
   return await Post.findById(post._id)
-
     .populate(
       "author",
-
-      "_id username email",
+      "_id username email profilePic"
     );
+
 };
 
-const getFeed = async (
-  userId: string,
+const getFeed = async (userId: string) => {
 
-  page: number = 1,
-
-  limit: number = 10,
-) => {
   const user = await User.findById(userId);
 
-  const following = user?.following || [];
+  if (!user) {
+    throw new Error("User not found");
+  }
 
-  const skip = (page - 1) * limit;
-
-  const query = {
-    author: {
-      $in: [...following, userId],
-    },
-  };
-
-  const posts = await Post.find(query)
-
+  const posts = await Post.find({
+    author: { $in: [...user.following, userId] }
+  })
     .populate(
       "author",
-
-      "_id username email",
+      "_id username email profilePic"
     )
+    .sort({ createdAt: -1 });
 
-    .sort({
-      createdAt: -1,
-    })
+  return posts;
 
-    .skip(skip)
+};
 
-    .limit(limit);
+const getPostById = async (postId: string) => {
 
-  const total = await Post.countDocuments(query);
+  const post = await Post.findById(postId)
+    .populate(
+      "author",
+      "_id username email profilePic"
+    );
 
-  return {
-    data: posts,
+  if (!post) {
+    throw new Error("Post not found");
+  }
 
-    page,
+  return post;
 
-    limit,
-
-    total,
-
-    totalPages: Math.ceil(total / limit),
-  };
 };
 
 const updatePost = async (
   postId: string,
-
-  userId: string,
-
   title: string,
-
-  content: string,
+  content: string
 ) => {
-  const post = await Post.findById(postId);
 
-  if (!post) throw new Error("Post not found");
+  const post = await Post.findByIdAndUpdate(
+    postId,
+    {
+      title,
+      content
+    },
+    { new: true }
+  ).populate(
+    "author",
+    "_id username email profilePic"
+  );
 
-  if (post.author.toString() !== userId) {
-    throw new Error("Unauthorized");
+  if (!post) {
+    throw new Error("Post not found");
   }
 
-  post.title = title;
+  return post;
 
-  post.content = content;
-
-  const updated = await post.save();
-
-  return await Post.findById(updated._id)
-
-    .populate(
-      "author",
-
-      "_id username email",
-    );
 };
 
-const getFollowingPosts = async (
-  userId: string,
+const deletePost = async (postId: string) => {
 
-  page: number = 1,
+  const post = await Post.findByIdAndDelete(postId);
 
-  limit: number = 10,
-) => {
-  const user = await User.findById(userId);
+  if (!post) {
+    throw new Error("Post not found");
+  }
 
-  if (!user) throw new Error("User not found");
-
-  const following = user.following;
-
-  const skip = (page - 1) * limit;
-
-  const posts = await Post.find({
-    author: { $in: following },
-  })
-
-    .populate(
-      "author",
-
-      "_id username email profilePic",
-    )
-
-    .sort({
-      createdAt: -1,
-    })
-
-    .skip(skip)
-
-    .limit(limit);
-
-  return posts;
 };
 
-const deletePost = async (
-  postId: string,
-
-  userId: string,
-) => {
-  console.log("this is post id in backend ", postId);
-
-  const deletedPost = await Post.findOneAndDelete({
-    _id: postId,
-  });
-
-  if (!postId) throw new Error("Post not found");
+export {
+  createPost,
+  getFeed,
+  getPostById,
+  updatePost,
+  deletePost
 };
-
-export { createPost, getFeed, updatePost, getFollowingPosts, deletePost };

@@ -63,7 +63,7 @@ const loginUser = async (email: string, password: string) => {
     throw new Error("Invalid credentials");
   }
 
-  const token = generateToken(user._id.toString());
+  const token = generateToken(user._id.toString() as string);
 
   return { user, token };
 };

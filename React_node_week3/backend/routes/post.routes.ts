@@ -1,129 +1,31 @@
 import express from "express";
 
+import upload from "../config/multer";
+
 import { authenticate } from "../middleware/auth.middleware";
 
 import { authorizePostOwner } from "../middleware/authorization.middleware";
 
-import upload from "../middleware/upload.middleware";
-
 import {
-  createPost,
   getFeed,
+  createPost,
+  getPostById,
   updatePost,
-  deletePost,
-  getFollowingPosts,
-} from "../services/post.service";
+  deletePost
+} from "../controllers/post.controller";
 
 const router = express.Router();
 
-router.post(
-  "/posts",
+router.get("/posts/feed", authenticate, getFeed);
 
-  authenticate,
+router.post("/posts", authenticate, upload.single("image"), createPost);
 
-  upload.single("image"),
+router.get("/posts/:id", authenticate, getPostById);
 
-  async (req, res) => {
-    const post = await createPost(
-      (req as any).user._id,
+router.put("/posts/:id", authenticate, authorizePostOwner, updatePost);
 
-      req.body.title,
-
-      req.body.content,
-
-      req.file?.path,
-    );
-
-    res.json({
-      post,
-    });
-  },
-);
-
-router.get(
-  "/posts/following",
-
-  authenticate,
-
-  async (req, res) => {
-    const page = parseInt(req.query.page as string) || 1;
-
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const posts = await getFollowingPosts(
-      (req as any).user._id,
-
-      page,
-
-      limit,
-    );
-
-    res.json(posts);
-  },
-);
-
-router.get(
-  "/posts/feed",
-
-  authenticate,
-
-  async (req, res) => {
-    const page = parseInt(req.query.page as string) || 1;
-
-    const limit = parseInt(req.query.limit as string) || 10;
-
-    const feed = await getFeed(
-      (req as any).user._id,
-
-      page,
-
-      limit,
-    );
-
-    res.json(feed.data);
-  },
-);
-
-router.put(
-  "/posts/:id",
-
-  authenticate,
-
-  authorizePostOwner,
-
-  async (req, res) => {
-    const post = await updatePost(
-      req.params.id as string,
-
-      (req as any).user._id,
-
-      req.body.title,
-
-      req.body.content,
-    );
-
-    res.json({
-      post,
-    });
-  },
-);
-
-router.delete(
-  "/posts/:id",
-
-  async (req, res) => {
-    console.log("delete called level routes");
-
-    await deletePost(
-      req.params.id as string,
-
-      (req as any).user_id,
-    );
-
-    res.json({
-      message: "Deleted",
-    });
-  },
-);
+router.delete("/posts/:id", authenticate, authorizePostOwner, deletePost);
 
 export default router;
+
+
