@@ -11,37 +11,25 @@ styled.div`
 
   padding-top:40px;
 
-  background:
-
-  linear-gradient(
-    135deg,
-    #ff6ec4,
-    #7873f5,
-    #42a5f5
-  );
+  background:white;
 
 `;
-
-
 
 export const Container =
 styled.div`
 
   width:900px;
 
-  background:
-  rgba(255,255,255,0.95);
+  background:white;
 
   border-radius:18px;
 
   padding:20px;
 
   box-shadow:
-  0 15px 40px rgba(0,0,0,0.15);
+  0 10px 30px rgba(0,0,0,0.08);
 
 `;
-
-
 
 export const Header =
 styled.div`
@@ -56,12 +44,11 @@ styled.div`
 
 `;
 
-
-
 export const ProfileImage =
 styled.img`
 
   width:150px;
+
   height:150px;
 
   border-radius:50%;
@@ -76,16 +63,14 @@ styled.img`
 
   linear-gradient(
     135deg,
-    #ff6ec4,
-    #7873f5
+    #4b4376,
+    #6c63ff
   ) border-box;
 
   box-shadow:
-  0 5px 15px rgba(0,0,0,0.2);
+  0 5px 15px rgba(0,0,0,0.15);
 
 `;
-
-
 
 export const UserSection =
 styled.div`
@@ -98,8 +83,6 @@ styled.div`
 
 `;
 
-
-
 export const UsernameRow =
 styled.div`
 
@@ -111,58 +94,56 @@ styled.div`
 
 `;
 
-
-
 export const Username =
 styled.h2`
 
-  font-weight:600;
+  font-weight:700;
 
-  color:black;
+  color:#111827;
 
 `;
-
-
 
 export const EditButton =
 styled.button`
 
-  padding:6px 14px;
+  padding:8px 18px;
 
   border-radius:8px;
 
   border:none;
 
-  font-weight:500;
+  font-weight:600;
 
   cursor:pointer;
 
   background:
-
   linear-gradient(
     135deg,
-    #ff6ec4,
-    #7873f5
+    #4b4376,
+    #6c63ff
   );
 
   color:white;
 
-  transition:0.3s;
-
-
+  transition:0.25s;
 
   &:hover{
 
-    transform:scale(1.05);
+    transform:translateY(-2px);
 
     box-shadow:
-    0 5px 15px rgba(0,0,0,0.2);
+    0 8px 20px rgba(0,0,0,0.15);
+
+    background:
+    linear-gradient(
+      135deg,
+      #3b3360,
+      #5a52d6
+    );
 
   }
 
 `;
-
-
 
 export const StatsRow =
 styled.div`
@@ -173,8 +154,6 @@ styled.div`
 
 `;
 
-
-
 export const Stat =
 styled.div`
 
@@ -182,54 +161,46 @@ styled.div`
 
   font-size:15px;
 
-  color:black;
+  color:#374151;
 
   transition:0.2s;
 
-
-
   &:hover{
 
-    color:#7873f5;
+    color:#6c63ff;
 
   }
 
 `;
 
-
-
 export const Bold =
 styled.span`
 
-  font-weight:600;
+  font-weight:700;
+
+  color:#111827;
 
 `;
-
-
 
 export const Bio =
 styled.div`
 
   margin-top:10px;
 
-  color:#333;
+  color:#4b5563;
 
 `;
-
-
 
 export const Divider =
 styled.hr`
 
   border:none;
 
-  border-top:1px solid rgba(0,0,0,0.1);
+  border-top:1px solid #e5e7eb;
 
   margin-top:20px;
 
 `;
-
-
 
 export const PostGrid =
 styled.div`
@@ -244,8 +215,6 @@ styled.div`
   padding:20px;
 
 `;
-
-
 
 export const PostImage =
 styled.img`
@@ -262,14 +231,12 @@ styled.img`
 
   transition:0.3s;
 
-
-
   &:hover{
 
     transform:scale(1.05);
 
     box-shadow:
-    0 8px 20px rgba(0,0,0,0.3);
+    0 10px 25px rgba(0,0,0,0.18);
 
   }
 

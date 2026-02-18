@@ -1,26 +1,21 @@
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  padding-top: 74px;
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
-  flex: 1;
-`;
-
-export const SidebarArea = styled.div`
-  width: 240px;
-  background: white;
-  border-right: 1px solid #eee;
 `;
 
 export const Main = styled.div`
   flex: 1;
 
+  margin-left: 230px;
+
   padding: 25px;
+
+  min-height: calc(100vh - 74px);
 
   background: linear-gradient(
     135deg,

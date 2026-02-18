@@ -7,26 +7,35 @@ import { createPost } from "./PostSlice";
 import {
   Container,
   Card,
+  HeaderText,
+  Title,
+  SubText,
   Input,
   Textarea,
+  FileInput,
   Button,
 } from "./styles/createPostStyles";
 
 export default function CreatePostPage() {
+
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState("");
+
   const [content, setContent] = useState("");
+
   const [image, setImage] = useState<File | null>(null);
 
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = (e :any) => {
+  const handleSubmit = (e:any) => {
+
     e.preventDefault();
 
     const formData = new FormData();
 
     formData.append("title", title);
+
     formData.append("content", content);
 
     if (image) {
@@ -36,6 +45,7 @@ export default function CreatePostPage() {
     dispatch(createPost(formData));
 
     setTitle("");
+
     setContent("");
 
     setImage(null);
@@ -43,36 +53,60 @@ export default function CreatePostPage() {
     if (fileRef.current) {
       fileRef.current.value = "";
     }
+
   };
 
   return (
+
     <Container>
+
       <Card>
-        <h2>Create Post</h2>
+
+        <HeaderText>
+
+          <Title>
+            Create New Post
+          </Title>
+
+          <SubText>
+            What would you like to share today?
+          </SubText>
+
+        </HeaderText>
 
         <form onSubmit={handleSubmit}>
+
           <Input
-            placeholder="Title"
+            placeholder="Post title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e)=>setTitle(e.target.value)}
           />
 
           <Textarea
-            placeholder="Content"
+            placeholder="Write your thoughts..."
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e)=>setContent(e.target.value)}
           />
 
-          <Input
+          <FileInput
             ref={fileRef}
             type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
+            onChange={(e)=>
+              setImage(e.target.files?.[0] || null)
+            }
           />
 
-          <Button>Post</Button>
+          <Button>
+            Publish Post
+          </Button>
+
         </form>
+
       </Card>
+
     </Container>
+
   );
+
 }

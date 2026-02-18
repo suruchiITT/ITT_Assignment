@@ -1,16 +1,10 @@
 import { useEffect } from "react";
 
-import {
-  useAppDispatch,
-  useAppSelector
-} from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
+import { fetchProfile } from "./userSlice";
 
 import {
-  fetchProfile
-} from "./userSlice";
-
-import {
-
   PageContainer,
   Container,
   Header,
@@ -25,162 +19,78 @@ import {
   Bio,
   Divider,
   PostGrid,
-  PostImage
-
+  PostImage,
 } from "./styles/ProfileStyles";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfilePage(){
+export default function ProfilePage() {
   const navigate = useNavigate();
 
-  const dispatch =
-  useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const profile =
-  useAppSelector(
-    state=>state.users.profile
-  );
+  const profile = useAppSelector((state) => state.users.profile);
 
-  const posts =
-  useAppSelector(
-    state=>state.posts.posts
-  );
+  const posts = useAppSelector((state) => state.posts.posts);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     dispatch(fetchProfile());
+  }, [dispatch]);
 
-  },[dispatch]);
+  if (!profile) return null;
 
-  if(!profile) return null;
+  const imageUrl = profile.profilePic
+    ? `http://localhost:5000/${profile.profilePic}`
+    : "/default-profile.png";
 
-  const imageUrl =
-  profile.profilePic
-
-  ?
-
-  `http://localhost:5000/${profile.profilePic}`
-
-  :
-
-  "/default-profile.png";
-
-  return(
-
+  return (
     <PageContainer>
-
       <Container>
-
         <Header>
-
-          <ProfileImage src={imageUrl}/>
+          <ProfileImage src={imageUrl} />
 
           <UserSection>
-
             <UsernameRow>
+              <Username>{profile.username}</Username>
 
-              <Username>
-
-                {profile.username}
-
-              </Username>
-
-              <EditButton onClick={()=>navigate("/Editprofile")}>
-
+              <EditButton onClick={() => navigate("/Editprofile")}>
                 Edit profile
-
               </EditButton>
-
             </UsernameRow>
 
             <StatsRow>
-
               <Stat>
-
-                <Bold>
-
-                  {posts.length}
-
-                </Bold>
-
-                {" "}posts
-
+                <Bold>{posts.length}</Bold> posts
               </Stat>
 
-              <Stat onClick={() =>navigate("/followers")}>
-
-                <Bold>
-
-                  {profile.followers.length}
-
-                </Bold>
-
-                {" "}followers
-
+              <Stat onClick={() => navigate("/followers")}>
+                <Bold>{profile.followers.length}</Bold> followers
               </Stat>
 
               <Stat onClick={() => navigate("/following")}>
-
-                <Bold>
-
-                  {profile.following.length}
-
-                </Bold>
-
-                {" "}following
-
+                <Bold>{profile.following.length}</Bold> following
               </Stat>
-
             </StatsRow>
 
             <Bio>
-
-              <Bold>
-
-                {profile.username}
-
-              </Bold>
-
-              <div>
-
-                {profile.email}
-
-              </div>
-
+              <Bold>{profile.username}</Bold>
             </Bio>
-
           </UserSection>
-
         </Header>
 
-        <Divider/>
+        <Divider />
 
         <PostGrid>
-
-          {
-
-            posts.map(post=>(
-
-              post.image &&
-
-              <PostImage
-
-                key={post._id}
-
-                src={`http://localhost:5000/${post.image}`}
-
-              />
-
-            ))
-
-          }
-
+          {posts.map(
+            (post) =>
+              post.image && (
+                <PostImage
+                  key={post._id}
+                  src={`http://localhost:5000/${post.image}`}
+                />
+              ),
+          )}
         </PostGrid>
-
       </Container>
-
     </PageContainer>
-
   );
-
 }

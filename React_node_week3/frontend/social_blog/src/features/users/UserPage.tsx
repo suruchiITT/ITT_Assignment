@@ -23,7 +23,7 @@ export default function UsersPage() {
 
   return (
     <Container>
-      <Title>Users</Title>
+      <Title>Discover and connect with new people  </Title>
 
       <Grid>
         {users.map((user) => (

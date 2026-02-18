@@ -1,144 +1,97 @@
 import styled from "styled-components";
 
+export const Form = styled.form`
+  background: white;
 
+  padding: 25px;
 
-export const Form =
-styled.form`
+  border-radius: 16px;
 
-  background:white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 
-  padding:25px;
+  display: flex;
 
-  border-radius:16px;
+  flex-direction: column;
 
-  box-shadow:
-  0 8px 25px rgba(0,0,0,0.08);
+  gap: 15px;
 
-  display:flex;
+  max-width: 600px;
 
-  flex-direction:column;
-
-  gap:15px;
-
-  max-width:600px;
-
-  margin:20px auto;
-
+  margin: 20px auto;
 `;
 
+export const Input = styled.input`
+  width: 100%;
 
+  padding: 12px 14px;
 
-export const Input =
-styled.input`
+  border-radius: 10px;
 
-  width:100%;
+  border: 1px solid #ddd;
 
-  padding:12px 14px;
+  font-size: 15px;
 
-  border-radius:10px;
+  outline: none;
 
-  border:1px solid #ddd;
+  transition: 0.3s;
 
-  font-size:15px;
+  color: #111;
 
-  outline:none;
+  background: #fafafa;
 
-  transition:0.3s;
+  &:focus {
+    border-color: #7873f5;
 
-  color:#111;
+    background: white;
 
-  background:#fafafa;
-
-
-
-  &:focus{
-
-    border-color:#7873f5;
-
-    background:white;
-
-    box-shadow:
-    0 0 0 3px rgba(120,115,245,0.1);
-
+    box-shadow: 0 0 0 3px rgba(120, 115, 245, 0.1);
   }
-
 `;
 
+export const Button = styled.button`
+  width: 100%;
 
+  padding: 12px;
 
-export const Button =
-styled.button`
+  border-radius: 10px;
 
-  width:100%;
+  border: none;
 
-  padding:12px;
+  font-size: 15px;
 
-  border-radius:10px;
+  font-weight: 600;
 
-  border:none;
+  cursor: pointer;
 
-  font-size:15px;
+  color: white;
 
-  font-weight:600;
+  background: linear-gradient(135deg, #ff6ec4, #7873f5);
 
-  cursor:pointer;
+  transition: 0.3s;
 
-  color:white;
+  &:hover {
+    transform: translateY(-1px);
 
-  background:
-
-  linear-gradient(
-    135deg,
-    #ff6ec4,
-    #7873f5
-  );
-
-  transition:0.3s;
-
-
-
-  &:hover{
-
-    transform:translateY(-1px);
-
-    box-shadow:
-    0 8px 20px rgba(0,0,0,0.15);
-
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
 
-
-
-  &:active{
-
-    transform:scale(0.98);
-
+  &:active {
+    transform: scale(0.98);
   }
-
 `;
 
+export const Message = styled.div`
+  padding: 10px 14px;
 
+  border-radius: 10px;
 
-export const Message =
-styled.div`
+  font-weight: 500;
 
-  padding:10px 14px;
+  font-size: 14px;
 
-  border-radius:10px;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
 
-  font-weight:500;
+  color: #155724;
 
-  font-size:14px;
-
-  background:
-
-  linear-gradient(
-    135deg,
-    #d4edda,
-    #c3e6cb
-  );
-
-  color:#155724;
-
-  border:1px solid #c3e6cb;
-
+  border: 1px solid #c3e6cb;
 `;

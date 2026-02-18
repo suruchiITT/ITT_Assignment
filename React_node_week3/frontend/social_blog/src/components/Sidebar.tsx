@@ -1,34 +1,23 @@
 import {
   SidebarContainer,
-  ProfileCard,
-  Avatar,
-  Username
+  ProfileButton
 } from "./styles/SidebarStyles";
-import { useAppSelector } from "../app/hooks";
+
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar(){
 
-  const user = useAppSelector(state=>state.users.profile);
+  const navigate = useNavigate();
 
   return(
 
     <SidebarContainer>
 
-      <ProfileCard>
-
-        <Avatar
-          src={
-            user?.profilePic
-            ? user.profilePic
-            : "https://i.pravatar.cc/150"
-          }
-        />
-
-        <Username>
-          {user?.username}
-        </Username>
-
-      </ProfileCard>
+      <ProfileButton
+        onClick={()=>navigate("/user/me")}
+      >
+        Profile
+      </ProfileButton>
 
     </SidebarContainer>
 

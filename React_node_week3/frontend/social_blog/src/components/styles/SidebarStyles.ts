@@ -1,28 +1,47 @@
 import styled from "styled-components";
 
 export const SidebarContainer = styled.div`
-  width: 240px;
-  padding: 20px;
+  position: fixed;
+
+  top: 74px;
+
+  left: 0;
+
+  width: 230px;
+
+  height: calc(100vh - 74px);
+
   background: white;
+
   border-right: 1px solid #eee;
+
+  padding: 20px;
+
+  z-index: 900;
 `;
 
-export const ProfileCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 25px;
-`;
+export const ProfileButton = styled.button`
+  width: 100%;
 
-export const Avatar = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  object-fit: cover;
-`;
+  padding: 12px;
 
-export const Username = styled.div`
+  border: none;
+
+  border-radius: 10px;
+
   font-weight: 600;
-  color: #4b4376;
+
+  cursor: pointer;
+
+  background: linear-gradient(
+    135deg,
+    #4b4376,
+    #6c63ff
+  );
+
+  color: white;
+
+  &:hover{
+    background: black;
+  }
 `;

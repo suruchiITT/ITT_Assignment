@@ -11,40 +11,28 @@ styled.div`
 
   min-height:100vh;
 
-  background:
-
-  linear-gradient(
-    135deg,
-    #ff6ec4,
-    #7873f5,
-    #42a5f5
-  );
+  background:white;
 
 `;
-
-
 
 export const Card =
 styled.div`
 
   width:500px;
 
-  background:
-  rgba(255,255,255,0.95);
+  background:white;
 
   padding:35px;
 
   border-radius:18px;
 
   box-shadow:
-  0 15px 40px rgba(0,0,0,0.15);
+  0 10px 30px rgba(0,0,0,0.08);
 
   border:
-  1px solid rgba(0,0,0,0.08);
+  1px solid #e5e7eb;
 
 `;
-
-
 
 export const Header =
 styled.div`
@@ -59,8 +47,6 @@ styled.div`
 
 `;
 
-
-
 export const ProfileImageWrapper =
 styled.label`
 
@@ -70,12 +56,11 @@ styled.label`
 
 `;
 
-
-
 export const ProfileImage =
 styled.img`
 
   width:120px;
+
   height:120px;
 
   border-radius:50%;
@@ -90,13 +75,11 @@ styled.img`
 
   linear-gradient(
     135deg,
-    #ff6ec4,
-    #7873f5
+    #4b4376,
+    #6c63ff
   ) border-box;
 
 `;
-
-
 
 export const CameraOverlay =
 styled.div`
@@ -135,33 +118,27 @@ styled.div`
 
 `;
 
-
-
 export const Username =
 styled.h2`
 
   margin:0;
 
-  font-weight:600;
+  font-weight:700;
 
-  color:#222;
+  color:#111827;
 
 `;
-
-
 
 export const Email =
 styled.p`
 
   margin:5px 0;
 
-  color:#666;
+  color:#6b7280;
 
   font-size:14px;
 
 `;
-
-
 
 export const Form =
 styled.form`
@@ -174,18 +151,14 @@ styled.form`
 
 `;
 
-
-
 export const Label =
 styled.label`
 
-  font-weight:500;
+  font-weight:600;
 
-  color:#333;
+  color:#374151;
 
 `;
-
-
 
 export const Input =
 styled.input`
@@ -194,7 +167,7 @@ styled.input`
 
   padding:0 12px;
 
-  border:1px solid #ddd;
+  border:1px solid #e5e7eb;
 
   border-radius:10px;
 
@@ -204,20 +177,16 @@ styled.input`
 
   transition:0.2s;
 
-
-
   &:focus{
 
-    border-color:#7873f5;
+    border-color:#6c63ff;
 
     box-shadow:
-    0 0 5px rgba(120,115,245,0.3);
+    0 0 0 3px rgba(108,99,255,0.15);
 
   }
 
 `;
-
-
 
 export const SaveButton =
 styled.button`
@@ -240,20 +209,26 @@ styled.button`
 
   linear-gradient(
     135deg,
-    #ff6ec4,
-    #7873f5
+    #4b4376,
+    #6c63ff
   );
 
-  transition:0.3s;
-
-
+  transition:0.25s;
 
   &:hover{
 
-    transform:scale(1.03);
+    transform:translateY(-2px);
+
+    background:
+
+    linear-gradient(
+      135deg,
+      #3b3360,
+      #5a52d6
+    );
 
     box-shadow:
-    0 8px 20px rgba(0,0,0,0.2);
+    0 8px 20px rgba(0,0,0,0.15);
 
   }
 
