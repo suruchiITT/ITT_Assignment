@@ -4,7 +4,11 @@ const getProfile = async (userId: string) => {
   return await User.findById(userId).select("-password");
 };
 
-const updateProfile = async ( userId: string, username?: string, profilePic?: string,) => {
+const updateProfile = async (
+  userId: string,
+  username?: string,
+  profilePic?: string,
+) => {
   const update: any = {};
 
   if (username !== undefined) {
@@ -49,9 +53,9 @@ const unfollowUser = async (currentUserId: string, targetUserId: string) => {
 };
 
 const getFollowing = async (userId: string) => {
-  const user = await User.findById(userId).populate( 
-     "following",
-     "_id username email profilePic",
+  const user = await User.findById(userId).populate(
+    "following",
+    "_id username email profilePic",
   );
 
   if (!user) {

@@ -7,16 +7,14 @@ export const authenticate = async (req: any, res: any, next: any) => {
 
     if (!token) return res.status(401).json({ message: "No token" });
 
-    const decoded: any = verifyToken(token);
+    const currentUser: any = verifyToken(token);
 
-    const user = await User.findById(decoded.userId);
+    if (!currentUser) return res.status(401).json({ message: "Invalid token" });
 
-    if (!user) return res.status(401).json({ message: "Invalid token" });
-
-    req.user = user;
+    req.user = currentUser;
 
     next();
-  } catch {
+  } catch (error){
     res.status(401).json({ message: "Unauthorized" });
   }
 };

@@ -41,7 +41,7 @@ const registerUser = async (
     profilePic,
   });
 
-  const token = generateToken(user._id.toString());
+  const token = generateToken(user._id.toString(),);
 
   return { user, token };
 };

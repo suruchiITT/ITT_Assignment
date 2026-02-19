@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IPost extends Document {
-
   _id: mongoose.Types.ObjectId;
 
   author: mongoose.Types.ObjectId;
@@ -24,82 +23,43 @@ export interface IPost extends Document {
   createdAt: Date;
 
   updatedAt: Date;
-
 }
 
 const PostSchema: Schema<IPost> = new Schema<IPost>(
   {
-
     _id: {
       type: Schema.Types.ObjectId,
-      auto: true
+      auto: true,
     },
 
     author: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+      ref: "Users",
+      required: true,
     },
 
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
     content: {
       type: String,
-      required: true
+      required: true,
     },
 
     image: {
       type: String,
-      default: null
+      default: null,
     },
-
-    likes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-      }
-    ],
-
-    comments: [
-      {
-        _id: {
-          type: Schema.Types.ObjectId,
-          auto: true
-        },
-
-        user: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-          required: true
-        },
-
-        text: {
-          type: String,
-          required: true
-        },
-
-        createdAt: {
-          type: Date,
-          default: Date.now
-        }
-      }
-    ]
-
   },
 
   {
-    timestamps: true
-  }
-
+    timestamps: true,
+  },
 );
 
-const Post: Model<IPost> = mongoose.model<IPost>(
-  "Post",
-  PostSchema
-);
+const Posts: Model<IPost> = mongoose.model<IPost>("Posts", PostSchema);
 
-export default Post;
+export default Posts;

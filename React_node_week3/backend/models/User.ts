@@ -55,14 +55,14 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
     following: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Users",
       },
     ],
 
     followers: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Users",
       },
     ],
   },
@@ -72,6 +72,6 @@ const UserSchema: Schema<IUser> = new Schema<IUser>(
   },
 );
 
-const User: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
+const Users: Model<IUser> = mongoose.model<IUser>("Users", UserSchema);
 
-export default User;
+export default Users;

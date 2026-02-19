@@ -7,11 +7,11 @@ import { authenticate } from "../middleware/auth.middleware";
 import { authorizePostOwner } from "../middleware/authorization.middleware";
 
 import {
-  getFeed,
   createPost,
+  getFeed,
   getPostById,
   updatePost,
-  deletePost
+  deletePost,
 } from "../controllers/post.controller";
 
 const router = express.Router();
@@ -27,5 +27,3 @@ router.put("/posts/:id", authenticate, authorizePostOwner, updatePost);
 router.delete("/posts/:id", authenticate, authorizePostOwner, deletePost);
 
 export default router;
-
-
