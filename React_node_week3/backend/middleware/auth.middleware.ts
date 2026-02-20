@@ -1,22 +1,40 @@
 import { verifyToken } from "../utils/jwt";
 import User from "../models/User";
+import NodeCache from "node-cache";
+
+const userCache = new NodeCache({ stdTTL: 3600 });
 
 export const authenticate = async (req: any, res: any, next: any) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
 
-    if (!token) return res.status(401).json({ message: "No token" });
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "Authentication token not provided" });
+    }
 
     const currentUser: any = verifyToken(token);
 
-    if (!currentUser) return res.status(401).json({ message: "Invalid token" });
+    let user = userCache.get(currentUser.userId);
 
-    req.user = currentUser;
+    if (!user) {
+      user = await User.findById(currentUser.userId);
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "User not found or token invalid" });
+      }
+
+      userCache.set(currentUser.userId, user);
+    }
+
+    req.user = user;
 
     next();
-  } catch (error){
-    res.status(401).json({ message: "Unauthorized" });
+  } catch {
+    return res.status(401).json({ message: "Unauthorized access" });
   }
 };
-
-

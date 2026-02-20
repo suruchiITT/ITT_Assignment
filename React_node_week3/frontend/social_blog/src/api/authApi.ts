@@ -1,54 +1,23 @@
-import { fetchClient }
-from "./fetchClient";
+import { fetchClient } from "./fetchClient";
 
-export const loginApi = async (
+export const loginApi = async (data: any) => {
 
-  email: string,
+const res = await fetchClient("/login", {
+method: "POST",
+body: JSON.stringify(data)
+});
 
-  password: string
-
-)=>{
-
-  return await fetchClient(
-
-    "/login",
-
-    {
-
-      method:"POST",
-
-      body: JSON.stringify({
-
-        email,
-
-        password
-
-      })
-
-    }
-
-  );
+return res.data;
 
 };
 
-export const registerApi = async (
+export const registerApi = async (formData: FormData) => {
 
-  formData: FormData
+const res = await fetchClient("/register", {
+method: "POST",
+body: formData
+});
 
-)=>{
-
-  return await fetchClient(
-
-    "/register",
-
-    {
-
-      method:"POST",
-
-      body: formData
-
-    }
-
-  );
+return res.data;
 
 };

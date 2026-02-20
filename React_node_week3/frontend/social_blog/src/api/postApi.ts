@@ -1,54 +1,54 @@
-
 import { fetchClient } from "./fetchClient";
 
 export const fetchFeedApi = async (page: number) => {
-  return await fetchClient(
-    `/posts/feed?page=${page}`
-  );
+  return await fetchClient(`/posts/feed?page=${page}`);
+};
+
+export const fetchPostApi = async (id: string) => {
+  return await fetchClient(`/posts/${id}`);
 };
 
 export const createPostApi = async (formData: FormData) => {
-  return await fetchClient(
-    "/posts",
-    {
-      method: "POST",
-      body: formData
-    }
-  );
+  return await fetchClient("/posts", {
+    method: "POST",
+    body: formData
+  });
 };
 
-export const deletePostApi = async (postId: string) => {
-
-  console.log("deletePostApi called");
-  console.log("Post ID:", postId);
-
-  return await fetchClient(
-    `/posts/${postId}`,
-    {
-      method: "DELETE"
-    }
-  );
-
+export const deletePostApi = async (id: string) => {
+  return await fetchClient(`/posts/${id}`, {
+    method: "DELETE"
+  });
 };
 
-export const editPostApi = async (
-  postId: string,
-  title: string,
-  content: string
+export const likePostApi = async (id: string) => {
+  return await fetchClient(`/posts/${id}/like`, {
+    method: "POST"
+  });
+};
+
+export const unlikePostApi = async (id: string) => {
+  return await fetchClient(`/posts/${id}/like`, {
+    method: "DELETE"
+  });
+};
+
+export const addCommentApi = async (
+  id: string,
+  text: string
 ) => {
+  return await fetchClient(`/posts/${id}/comments`, {
+    method: "POST",
+    body: JSON.stringify({ text })
+  });
+};
 
+export const deleteCommentApi = async (
+  postId: string,
+  commentId: string
+) => {
   return await fetchClient(
-    `/posts/${postId}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title,
-        content
-      })
-    }
+    `/posts/${postId}/comments/${commentId}`,
+    { method: "DELETE" }
   );
-
 };

@@ -12,8 +12,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.1.18",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.9.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-icons-kit": "^2.0.0",
     "react-intersection-observer": "^10.0.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.0",

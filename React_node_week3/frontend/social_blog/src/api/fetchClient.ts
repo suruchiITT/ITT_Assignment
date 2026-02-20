@@ -1,6 +1,5 @@
 import { getToken } from "../utils/token";
-
-const BASE_URL = "http://localhost:5000/api";
+import { BASE_URL } from "../utils/constants";
 
 export const fetchClient = async (
   endpoint: string,
@@ -9,31 +8,23 @@ export const fetchClient = async (
 
   const token = getToken();
 
-  const headers: Record<string,string> = {
-    ...(options.headers as Record<string,string> || {}),
+  const headers: any = {
+    ...(options.body instanceof FormData
+      ? {}
+      : { "Content-Type": "application/json" }),
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...options.headers
   };
 
-  if (!(options.body instanceof FormData)) {
-    headers["Content-Type"] = "application/json";
+  const response = await fetch(`${BASE_URL}/api${endpoint}`, {
+    ...options,
+    headers
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message);
   }
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const res = await fetch(
-    `${BASE_URL}${endpoint}`,
-    {
-      ...options,
-      headers,
-    }
-  );
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message);
-  }
-
-  return data;
+  return response.json();
 };

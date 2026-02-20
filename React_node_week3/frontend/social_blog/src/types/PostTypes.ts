@@ -1,21 +1,23 @@
-export interface Post {
-
+export interface Comment {
   _id: string;
-
-  title: string;
-
-  content: string;
-
-  image?: string;
-
-  author: {
-
+  user: {
     _id: string;
-
     username: string;
-
+    profilePic?: string;
   };
+  text: string;
+}
 
-  createdAt: string;
-
+export interface Post {
+  _id: string;
+  author: {
+    _id: string;
+    username: string;
+    profilePic?: string;
+  };
+  title: string;
+  content: string;
+  image?: string;
+  likes: string[];
+  comments: Comment[];
 }
