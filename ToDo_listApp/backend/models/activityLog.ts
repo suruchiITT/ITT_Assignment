@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export interface IActivityLog extends Document {
   id: string;
-  post?: mongoose.Types.ObjectId;
+  task?: mongoose.Types.ObjectId;
   action: "CREATE_TASK" | "UPDATE_TASK" | "DELETE_TASK" | "CHANGE_STATUS";
   description: string;
   createdAt: Date;
@@ -18,9 +18,9 @@ const activityLogSchema: Schema<IActivityLog> = new Schema(
       default: uuidv4(),
     },
 
-    post: {
+    task: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Posts",
+      ref: "Tasks",
     },
 
     action: {
