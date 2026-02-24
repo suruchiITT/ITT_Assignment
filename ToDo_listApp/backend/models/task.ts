@@ -1,65 +1,54 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import { TASK_PRIORITY, TASK_STATUS } from "../constants/taskConstants";
 
 export interface ITask extends Document {
   id: string;
   title: string;
   description?: string;
-  priority: "Low" | "Medium" | "High";
-  status: "Todo" | "In Progress" | "Done";
-  dueDate?: Date;
+  priority: (typeof TASK_PRIORITY)[keyof typeof TASK_PRIORITY];
+  status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
+  dueDate: Date;
   user: mongoose.Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
-const taskSchema: Schema<ITask> = new Schema(
+const taskSchema = new Schema(
   {
-     id: {
+    id: {
       type: String,
       unique: true,
-      default: uuidv4(), 
+      default: uuidv4,
     },
-    
     title: {
       type: String,
       required: true,
       trim: true,
     },
-
     description: {
       type: String,
       trim: true,
     },
-
     priority: {
       type: String,
-      enum: ["Low", "Medium", "High"],
-      default: "Medium",
+      enum: Object.values(TASK_PRIORITY),
+      default: TASK_PRIORITY.MEDIUM,
     },
-
     status: {
       type: String,
-      enum: ["Todo", "In Progress", "Done"],
-      default: "Todo",
+      enum: Object.values(TASK_STATUS),
+      default: TASK_STATUS.TODO,
     },
-
     dueDate: {
       type: Date,
-      required:true
+      required: true,
     },
-
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",  
+      ref: "Users",
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Tasks = mongoose.model<ITask>("Tasks", taskSchema);
-
-export default Tasks;
+export default mongoose.model<ITask>("Tasks", taskSchema);
