@@ -15,12 +15,13 @@ const userSchema: Schema<IUser> = new Schema(
     id: {
       type: String,
       unique: true,
-      default: uuidv4(), 
+      default: () => uuidv4(),
     },
 
     name: {
       type: String,
       required: true, 
+      trim: true,
     },
 
     email: {
