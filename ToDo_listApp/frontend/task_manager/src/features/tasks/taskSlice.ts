@@ -36,7 +36,7 @@ export const deleteTask = createAsyncThunk(
   "tasks/delete",
   async (id: string) => {
     await apiRequest(`/tasks/${id}`, "DELETE");
-    return id; // Return the ID of the deleted task
+    return id;
   },
 );
 

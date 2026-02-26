@@ -22,8 +22,11 @@ import type { DragEndEvent } from "@dnd-kit/core";
 import {
   sortableKeyboardCoordinates,
   useSortable,
+  SortableContext,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import ActivityLog from "../components/ActivityLog";
 import {
   DashboardContainer,
   Header,
@@ -40,13 +43,25 @@ import {
   Modal,
   Input,
   Select,
-  ModalButton,
   FilterBar,
-  FilterSelect,
-  FilterInput,
+  TaskTitle,
+  ColumnHeader,
+  ModalTitle,
+  InputGroup,
+  Label,
+  TextArea,
+  ButtonRow,
+  PrimaryButton,
+  DangerButton,
+  GhostButton,
+  FilterItem,
+  MainLayout,
+  ContentArea,
+  ActivitySidebar,
+  SidebarHeader,
+  SidebarTitle,
 } from "../styles/DashboardStyles";
 
-// Define an interface for the task to provide better type safety
 interface ITask {
   _id: string;
   title: string;
@@ -56,19 +71,28 @@ interface ITask {
   dueDate: string;
 }
 
-// Custom Draggable Task Card Component
-function DraggableTaskCard({ task, onClick, onStatusChange }: { task: ITask; onClick: (task: ITask) => void; onStatusChange: (id: string, status: string) => void }) {
+function DraggableTaskCard({
+  task,
+  onClick,
+  onStatusChange,
+}: {
+  task: ITask;
+  onClick: (task: ITask) => void;
+  onStatusChange: (id: string, status: string) => void;
+}) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id: task._id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
@@ -79,33 +103,56 @@ function DraggableTaskCard({ task, onClick, onStatusChange }: { task: ITask; onC
       {...listeners}
       onClick={() => onClick(task)}
     >
-      <strong>{task.title}</strong>
-      <p>{task.description}</p>
+      <TaskTitle>{task.title}</TaskTitle>
       <PriorityTag priority={task.priority}>{task.priority}</PriorityTag>
-      <StatusSelect
-        value={task.status}
-        onChange={(e) => onStatusChange(task._id, e.target.value)}
-        onClick={(e) => e.stopPropagation()} // Prevent card click when changing status
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <option value="Todo">Todo</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Done">Done</option>
-      </StatusSelect>
+        <StatusSelect
+          value={task.status}
+          onChange={(e) => onStatusChange(task._id, e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <option value="Todo">Todo</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </StatusSelect>
+      </div>
     </TaskCard>
   );
 }
 
-// Custom Droppable Column Component
-function DroppableColumn({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+function DroppableColumn({
+  id,
+  title,
+  children,
+  onAddCard,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+  onAddCard: () => void;
+}) {
   const { setNodeRef } = useDroppable({ id });
+
   return (
     <Column ref={setNodeRef}>
-      <ColumnTitle>{title}</ColumnTitle>
-      {children}
+      <ColumnHeader>
+        <ColumnTitle>{title}</ColumnTitle>
+      </ColumnHeader>
+      <div style={{ flex: 1, overflowY: "auto", minHeight: "10px" }}>
+        {children}
+      </div>
+      <AddTaskButton onClick={onAddCard}>
+        <span>+</span> Add a card
+      </AddTaskButton>
     </Column>
   );
 }
-
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
@@ -119,27 +166,26 @@ export default function DashboardPage() {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // New state for edit modal
-  const [selectedTask, setSelectedTask] = useState<ITask | null>(null); // New state for selected task
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showActivity, setShowActivity] = useState(true);
+  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
 
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
-    priority: "Medium",
+    priority: "Medium" as "Low" | "Medium" | "High",
     dueDate: "",
   });
 
   useEffect(() => {
     applyFilters();
-  }, []);
+  }, [filters]);
 
   const applyFilters = () => {
     let query = "?";
-
     if (filters.priority) query += `priority=${filters.priority}&`;
     if (filters.status) query += `status=${filters.status}&`;
     if (filters.dueDate) query += `dueDate=${filters.dueDate}&`;
-
     dispatch(fetchTasks(query));
   };
 
@@ -153,10 +199,7 @@ export default function DashboardPage() {
   };
 
   const handleCreateTask = async () => {
-    if (!newTask.title.trim()) {
-      alert("Task title cannot be empty.");
-      return;
-    }
+    if (!newTask.title.trim()) return;
     await dispatch(createTask(newTask));
     setShowModal(false);
     setNewTask({
@@ -167,24 +210,21 @@ export default function DashboardPage() {
     });
   };
 
-  // New functions for editing and deleting tasks
   const handleCardClick = (task: ITask) => {
-    setSelectedTask({ ...task, dueDate: task.dueDate.split('T')[0] }); // Format date for input type="date"
+    setSelectedTask({ ...task, dueDate: task.dueDate.split("T")[0] });
     setShowEditModal(true);
   };
 
   const handleUpdateTask = async () => {
-    if (!selectedTask?.title?.trim()) {
-      alert("Task title cannot be empty.");
-      return;
-    }
-    await dispatch(updateTask({ id: selectedTask._id, data: selectedTask }));
+    if (!selectedTask?.title?.trim()) return;
+    const { _id, user, createdAt, updatedAt, __v, id, ...updateData } = selectedTask as any;
+    await dispatch(updateTask({ id: _id, data: updateData }));
     setShowEditModal(false);
     setSelectedTask(null);
   };
 
   const handleDeleteTask = async () => {
-    if (selectedTask && window.confirm("Are you sure you want to delete this task?")) {
+    if (selectedTask && window.confirm("Delete this task?")) {
       await dispatch(deleteTask(selectedTask._id));
       setShowEditModal(false);
       setSelectedTask(null);
@@ -192,7 +232,11 @@ export default function DashboardPage() {
   };
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -200,14 +244,27 @@ export default function DashboardPage() {
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    if (!over) return;
 
-    if (!over || active.id === over.id) return;
+    const activeId = active.id as string;
+    const overId = over.id as string;
 
-    const activeTask = tasks.find(task => task._id === active.id);
-    const newStatus = over.id as ITask['status']; // The droppable ID is the status
+    const activeTask = tasks.find((t) => t._id === activeId);
+    if (!activeTask) return;
 
-    if (activeTask && activeTask.status !== newStatus) {
-      dispatch(changeStatus({ id: activeTask._id, status: newStatus }));
+    let newStatus: string | null = null;
+
+    if (["Todo", "In Progress", "Done"].includes(overId)) {
+      newStatus = overId;
+    } else {
+      const overTask = tasks.find((t) => t._id === overId);
+      if (overTask && overTask.status !== activeTask.status) {
+        newStatus = overTask.status;
+      }
+    }
+
+    if (newStatus && newStatus !== activeTask.status) {
+      dispatch(changeStatus({ id: activeId, status: newStatus }));
     }
   };
 
@@ -215,146 +272,251 @@ export default function DashboardPage() {
   const progress = tasks.filter((t) => t.status === "In Progress");
   const done = tasks.filter((t) => t.status === "Done");
 
-  const renderColumn = (title: string, data: ITask[], statusId: string) => (
-    <DroppableColumn id={statusId} title={title}>
-      {data.map((task: ITask) => (
-        <DraggableTaskCard
-          key={task._id}
-          task={task}
-          onClick={handleCardClick}
-          onStatusChange={handleStatusChange}
-        />
-      ))}
-    </DroppableColumn>
-  );
-
   return (
     <DashboardContainer>
       <Header>
-        <Title>Smart Task Manager</Title>
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        <Title>Tasks Board</Title>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <LogoutButton onClick={() => setShowActivity(!showActivity)}>
+            {showActivity ? "Hide Activity" : "Show Activity"}
+          </LogoutButton>
+          <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        </div>
       </Header>
 
-      <FilterBar>
-        <FilterSelect
-          onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-        >
-          <option value="">All Priority</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </FilterSelect>
+      <MainLayout>
+        <ContentArea>
+          <FilterBar>
+            <FilterItem>
+              <Label style={{ color: "white" }}>Priority:</Label>
+              <Select
+                style={{ padding: "2px", fontSize: "12px" }}
+                onChange={(e) =>
+                  setFilters({ ...filters, priority: e.target.value })
+                }
+              >
+                <option value="">All</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </Select>
+            </FilterItem>
 
-        <FilterSelect
-          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-        >
-          <option value="">All Status</option>
-          <option value="Todo">Todo</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Done">Done</option>
-        </FilterSelect>
+            <FilterItem>
+              <Label style={{ color: "white" }}>Date:</Label>
+              <Input
+                type="date"
+                style={{ padding: "2px", fontSize: "12px" }}
+                onChange={(e) =>
+                  setFilters({ ...filters, dueDate: e.target.value })
+                }
+              />
+            </FilterItem>
+          </FilterBar>
 
-        <FilterInput
-          type="date"
-          onChange={(e) => setFilters({ ...filters, dueDate: e.target.value })}
-        />
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragEnd={onDragEnd}
+          >
+            <Board>
+              <SortableContext
+                items={todo.map((t) => t._id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <DroppableColumn
+                  id="Todo"
+                  title="To Do"
+                  onAddCard={() => setShowModal(true)}
+                >
+                  {todo.map((task: ITask) => (
+                    <DraggableTaskCard
+                      key={task._id}
+                      task={task}
+                      onClick={handleCardClick}
+                      onStatusChange={handleStatusChange}
+                    />
+                  ))}
+                </DroppableColumn>
+              </SortableContext>
 
-        <ModalButton onClick={applyFilters}>Apply Filters</ModalButton>
-        <AddTaskButton onClick={() => setShowModal(true)}>Add New Task</AddTaskButton>
-      </FilterBar>
+              <SortableContext
+                items={progress.map((t) => t._id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <DroppableColumn
+                  id="In Progress"
+                  title="In Progress"
+                  onAddCard={() => setShowModal(true)}
+                >
+                  {progress.map((task: ITask) => (
+                    <DraggableTaskCard
+                      key={task._id}
+                      task={task}
+                      onClick={handleCardClick}
+                      onStatusChange={handleStatusChange}
+                    />
+                  ))}
+                </DroppableColumn>
+              </SortableContext>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragEnd={onDragEnd}
-      >
-        <Board>
-          {renderColumn("Todo", todo, "Todo")}
-          {renderColumn("In Progress", progress, "In Progress")}
-          {renderColumn("Done", done, "Done")}
-        </Board>
-      </DndContext>
+              <SortableContext
+                items={done.map((t) => t._id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <DroppableColumn
+                  id="Done"
+                  title="Done"
+                  onAddCard={() => setShowModal(true)}
+                >
+                  {done.map((task: ITask) => (
+                    <DraggableTaskCard
+                      key={task._id}
+                      task={task}
+                      onClick={handleCardClick}
+                      onStatusChange={handleStatusChange}
+                    />
+                  ))}
+                </DroppableColumn>
+              </SortableContext>
+            </Board>
+          </DndContext>
+        </ContentArea>
+
+        <ActivitySidebar show={showActivity}>
+          <SidebarHeader>
+            <SidebarTitle>Activity Log</SidebarTitle>
+            <GhostButton
+              onClick={() => setShowActivity(false)}
+              style={{ padding: "4px" }}
+            >
+              ✕
+            </GhostButton>
+          </SidebarHeader>
+          <div style={{ flex: 1, overflowY: "auto" }}>
+            <ActivityLog />
+          </div>
+        </ActivitySidebar>
+      </MainLayout>
 
       {showModal && (
-        <ModalOverlay>
-          <Modal>
-            <h2>Create New Task</h2>
-            <Input
-              placeholder="Title"
-              value={newTask.title}
-              onChange={(e) =>
-                setNewTask({ ...newTask, title: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Description"
-              value={newTask.description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, description: e.target.value })
-              }
-            />
-            <Select
-              value={newTask.priority}
-              onChange={(e) =>
-                setNewTask({ ...newTask, priority: e.target.value })
-              }
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </Select>
-            <Input
-              type="date"
-              value={newTask.dueDate}
-              onChange={(e) =>
-                setNewTask({ ...newTask, dueDate: e.target.value })
-              }
-            />
-            <ModalButton onClick={handleCreateTask}>Create Task</ModalButton>
-            <ModalButton onClick={() => setShowModal(false)}>Cancel</ModalButton>
+        <ModalOverlay onClick={() => setShowModal(false)}>
+          <Modal onClick={(e) => e.stopPropagation()}>
+            <ModalTitle>Create Card</ModalTitle>
+            <InputGroup>
+              <Label>Title</Label>
+              <Input
+                autoFocus
+                value={newTask.title}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, title: e.target.value })
+                }
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Description</Label>
+              <TextArea
+                value={newTask.description}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, description: e.target.value })
+                }
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Priority</Label>
+              <Select
+                value={newTask.priority}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, priority: e.target.value as any })
+                }
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </Select>
+            </InputGroup>
+            <InputGroup>
+              <Label>Due Date</Label>
+              <Input
+                type="date"
+                value={newTask.dueDate}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, dueDate: e.target.value })
+                }
+              />
+            </InputGroup>
+            <ButtonRow>
+              <GhostButton onClick={() => setShowModal(false)}>
+                Cancel
+              </GhostButton>
+              <PrimaryButton onClick={handleCreateTask}>Add Card</PrimaryButton>
+            </ButtonRow>
           </Modal>
         </ModalOverlay>
       )}
 
-      {/* Edit Task Modal */}
       {showEditModal && selectedTask && (
-        <ModalOverlay>
-          <Modal>
-            <h2>Edit Task</h2>
-            <Input
-              placeholder="Title"
-              value={selectedTask.title}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, title: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Description"
-              value={selectedTask.description}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, description: e.target.value })
-              }
-            />
-            <Select
-              value={selectedTask.priority}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, priority: e.target.value as ITask['priority'] })
-              }
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </Select>
-            <Input
-              type="date"
-              value={selectedTask.dueDate}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, dueDate: e.target.value })
-              }
-            />
-            <ModalButton onClick={handleUpdateTask}>Save Changes</ModalButton>
-            <ModalButton onClick={handleDeleteTask} style={{ background: "#ef4444" }}>Delete Task</ModalButton>
-            <ModalButton onClick={() => setShowEditModal(false)}>Cancel</ModalButton>
+        <ModalOverlay onClick={() => setShowEditModal(false)}>
+          <Modal onClick={(e) => e.stopPropagation()}>
+            <ModalTitle>Edit Card</ModalTitle>
+            <InputGroup>
+              <Label>Title</Label>
+              <Input
+                value={selectedTask.title}
+                onChange={(e) =>
+                  setSelectedTask({ ...selectedTask, title: e.target.value })
+                }
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Description</Label>
+              <TextArea
+                value={selectedTask.description}
+                onChange={(e) =>
+                  setSelectedTask({
+                    ...selectedTask,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Priority</Label>
+              <Select
+                value={selectedTask.priority}
+                onChange={(e) =>
+                  setSelectedTask({
+                    ...selectedTask,
+                    priority: e.target.value as any,
+                  })
+                }
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </Select>
+            </InputGroup>
+            <InputGroup>
+              <Label>Due Date</Label>
+              <Input
+                type="date"
+                value={selectedTask.dueDate}
+                onChange={(e) =>
+                  setSelectedTask({ ...selectedTask, dueDate: e.target.value })
+                }
+              />
+            </InputGroup>
+            <ButtonRow>
+              <DangerButton onClick={handleDeleteTask}>
+                Delete Card
+              </DangerButton>
+              <GhostButton onClick={() => setShowEditModal(false)}>
+                Cancel
+              </GhostButton>
+              <PrimaryButton onClick={handleUpdateTask}>
+                Save Changes
+              </PrimaryButton>
+            </ButtonRow>
           </Modal>
         </ModalOverlay>
       )}
