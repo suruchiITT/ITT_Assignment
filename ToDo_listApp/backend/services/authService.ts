@@ -2,7 +2,7 @@ import Users from "../models/user";
 import { hashPassword, comparePassword } from "../utils/bcryptUtils";
 import { generateToken } from "../utils/jwtUtils";
 
-export const signupService = async (
+export const registerService = async (
   name: string,
   email: string,
   password: string,

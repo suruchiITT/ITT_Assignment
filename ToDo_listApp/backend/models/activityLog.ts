@@ -16,7 +16,7 @@ const activityLogSchema = new Schema(
     id: {
       type: String,
       unique: true,
-      default: uuidv4,
+      default: () => uuidv4(),
     },
     task: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
-
+import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import taskRoutes from "./routes/taskRoutes";
 import activityRoutes from "./routes/activityRoutes";
@@ -13,8 +13,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-
 connectDB();
+app.use(cors());
 
 app.use("/api", authRoutes);
 app.use("/api", taskRoutes);
