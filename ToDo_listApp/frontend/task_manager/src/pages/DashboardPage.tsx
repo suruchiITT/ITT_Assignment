@@ -16,50 +16,37 @@ import {
   useSensors,
   PointerSensor,
   KeyboardSensor,
-  useDroppable,
 } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
   sortableKeyboardCoordinates,
-  useSortable,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import ActivityLog from "../components/ActivityLog";
+import TaskCard from "../components/TaskCard";
+import TaskColumn from "../components/TaskColumn";
+import TaskModal from "../components/TaskModal";
+import Pagination from "../components/Pagination";
 import {
   DashboardContainer,
   Header,
   Title,
   LogoutButton,
   Board,
-  Column,
-  ColumnTitle,
-  TaskCard,
-  PriorityTag,
-  StatusSelect,
-  AddTaskButton,
-  ModalOverlay,
-  Modal,
-  Input,
-  Select,
   FilterBar,
-  TaskTitle,
-  ColumnHeader,
-  ModalTitle,
-  InputGroup,
-  Label,
-  TextArea,
-  ButtonRow,
-  PrimaryButton,
-  DangerButton,
-  GhostButton,
   FilterItem,
   MainLayout,
   ContentArea,
   ActivitySidebar,
   SidebarHeader,
   SidebarTitle,
+  SidebarContent,
+  HeaderActions,
+  WhiteLabel,
+  SmallInput,
+  SmallSelect,
+  CloseSidebarButton,
 } from "../styles/DashboardStyles";
 
 interface ITask {
@@ -71,88 +58,7 @@ interface ITask {
   dueDate: string;
 }
 
-function DraggableTaskCard({
-  task,
-  onClick,
-  onStatusChange,
-}: {
-  task: ITask;
-  onClick: (task: ITask) => void;
-  onStatusChange: (id: string, status: string) => void;
-}) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: task._id });
-
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <TaskCard
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      onClick={() => onClick(task)}
-    >
-      <TaskTitle>{task.title}</TaskTitle>
-      <PriorityTag priority={task.priority}>{task.priority}</PriorityTag>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <StatusSelect
-          value={task.status}
-          onChange={(e) => onStatusChange(task._id, e.target.value)}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <option value="Todo">Todo</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Done">Done</option>
-        </StatusSelect>
-      </div>
-    </TaskCard>
-  );
-}
-
-function DroppableColumn({
-  id,
-  title,
-  children,
-  onAddCard,
-}: {
-  id: string;
-  title: string;
-  children: React.ReactNode;
-  onAddCard: () => void;
-}) {
-  const { setNodeRef } = useDroppable({ id });
-
-  return (
-    <Column ref={setNodeRef}>
-      <ColumnHeader>
-        <ColumnTitle>{title}</ColumnTitle>
-      </ColumnHeader>
-      <div style={{ flex: 1, overflowY: "auto", minHeight: "10px" }}>
-        {children}
-      </div>
-      <AddTaskButton onClick={onAddCard}>
-        <span>+</span> Add a card
-      </AddTaskButton>
-    </Column>
-  );
-}
+const ITEMS_PER_PAGE = 5;
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
@@ -165,17 +71,15 @@ export default function DashboardPage() {
     dueDate: "",
   });
 
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showActivity, setShowActivity] = useState(true);
+  const [showActivity, setShowActivity] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [activeColumn, setActiveColumn] = useState<string>("Todo");
 
-  const [newTask, setNewTask] = useState({
-    title: "",
-    description: "",
-    priority: "Medium" as "Low" | "Medium" | "High",
-    dueDate: "",
-  });
+  const [todoPage, setTodoPage] = useState(1);
+  const [progressPage, setProgressPage] = useState(1);
+  const [donePage, setDonePage] = useState(1);
 
   useEffect(() => {
     applyFilters();
@@ -198,33 +102,29 @@ export default function DashboardPage() {
     dispatch(changeStatus({ id, status }));
   };
 
-  const handleCreateTask = async () => {
-    if (!newTask.title.trim()) return;
-    await dispatch(createTask(newTask));
-    setShowModal(false);
-    setNewTask({
-      title: "",
-      description: "",
-      priority: "Medium",
-      dueDate: "",
-    });
+  const handleCreateTask = async (data: any) => {
+    await dispatch(createTask({ ...data, status: activeColumn }));
+    setShowCreateModal(false);
+    if (activeColumn === "Todo") setTodoPage(1);
+    if (activeColumn === "In Progress") setProgressPage(1);
+    if (activeColumn === "Done") setDonePage(1);
   };
 
   const handleCardClick = (task: ITask) => {
-    setSelectedTask({ ...task, dueDate: task.dueDate.split("T")[0] });
+    setSelectedTask(task);
     setShowEditModal(true);
   };
 
-  const handleUpdateTask = async () => {
-    if (!selectedTask?.title?.trim()) return;
-    const { _id, user, createdAt, updatedAt, __v, id, ...updateData } = selectedTask as any;
-    await dispatch(updateTask({ id: _id, data: updateData }));
-    setShowEditModal(false);
-    setSelectedTask(null);
+  const handleUpdateTask = async (data: any) => {
+    if (selectedTask) {
+      await dispatch(updateTask({ id: selectedTask._id, data }));
+      setShowEditModal(false);
+      setSelectedTask(null);
+    }
   };
 
   const handleDeleteTask = async () => {
-    if (selectedTask && window.confirm("Delete this task?")) {
+    if (selectedTask && window.confirm("Are you sure you want to delete this card?")) {
       await dispatch(deleteTask(selectedTask._id));
       setShowEditModal(false);
       setSelectedTask(null);
@@ -268,29 +168,34 @@ export default function DashboardPage() {
     }
   };
 
-  const todo = tasks.filter((t) => t.status === "Todo");
-  const progress = tasks.filter((t) => t.status === "In Progress");
-  const done = tasks.filter((t) => t.status === "Done");
+  const todoTasks = tasks.filter((t) => t.status === "Todo");
+  const progressTasks = tasks.filter((t) => t.status === "In Progress");
+  const doneTasks = tasks.filter((t) => t.status === "Done");
+
+  const paginate = (items: any[], page: number) => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    return items.slice(start, start + ITEMS_PER_PAGE);
+  };
 
   return (
     <DashboardContainer>
       <Header>
-        <Title>Tasks Board</Title>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <Title>Task Manager</Title>
+        <HeaderActions>
           <LogoutButton onClick={() => setShowActivity(!showActivity)}>
             {showActivity ? "Hide Activity" : "Show Activity"}
           </LogoutButton>
           <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-        </div>
+        </HeaderActions>
       </Header>
 
       <MainLayout>
         <ContentArea>
           <FilterBar>
             <FilterItem>
-              <Label style={{ color: "white" }}>Priority:</Label>
-              <Select
-                style={{ padding: "2px", fontSize: "12px" }}
+              <WhiteLabel>Priority:</WhiteLabel>
+              <SmallSelect
+                value={filters.priority}
                 onChange={(e) =>
                   setFilters({ ...filters, priority: e.target.value })
                 }
@@ -299,14 +204,29 @@ export default function DashboardPage() {
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
-              </Select>
+              </SmallSelect>
             </FilterItem>
 
             <FilterItem>
-              <Label style={{ color: "white" }}>Date:</Label>
-              <Input
+              <WhiteLabel>Status:</WhiteLabel>
+              <SmallSelect
+                value={filters.status}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value })
+                }
+              >
+                <option value="">All</option>
+                <option value="Todo">Todo</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </SmallSelect>
+            </FilterItem>
+
+            <FilterItem>
+              <WhiteLabel>Due Date:</WhiteLabel>
+              <SmallInput
                 type="date"
-                style={{ padding: "2px", fontSize: "12px" }}
+                value={filters.dueDate}
                 onChange={(e) =>
                   setFilters({ ...filters, dueDate: e.target.value })
                 }
@@ -320,65 +240,95 @@ export default function DashboardPage() {
             onDragEnd={onDragEnd}
           >
             <Board>
-              <SortableContext
-                items={todo.map((t) => t._id)}
-                strategy={verticalListSortingStrategy}
+              <TaskColumn
+                id="Todo"
+                title="TO DO"
+                onAddCard={() => {
+                  setActiveColumn("Todo");
+                  setShowCreateModal(true);
+                }}
+                footer={
+                  <Pagination
+                    currentPage={todoPage}
+                    totalPages={Math.ceil(todoTasks.length / ITEMS_PER_PAGE)}
+                    onPageChange={setTodoPage}
+                  />
+                }
               >
-                <DroppableColumn
-                  id="Todo"
-                  title="To Do"
-                  onAddCard={() => setShowModal(true)}
+                <SortableContext
+                  items={todoTasks.map((t) => t._id)}
+                  strategy={verticalListSortingStrategy}
                 >
-                  {todo.map((task: ITask) => (
-                    <DraggableTaskCard
+                  {paginate(todoTasks, todoPage).map((task: ITask) => (
+                    <TaskCard
                       key={task._id}
                       task={task}
                       onClick={handleCardClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
-                </DroppableColumn>
-              </SortableContext>
+                </SortableContext>
+              </TaskColumn>
 
-              <SortableContext
-                items={progress.map((t) => t._id)}
-                strategy={verticalListSortingStrategy}
+              <TaskColumn
+                id="In Progress"
+                title="IN PROGRESS"
+                onAddCard={() => {
+                  setActiveColumn("In Progress");
+                  setShowCreateModal(true);
+                }}
+                footer={
+                  <Pagination
+                    currentPage={progressPage}
+                    totalPages={Math.ceil(progressTasks.length / ITEMS_PER_PAGE)}
+                    onPageChange={setProgressPage}
+                  />
+                }
               >
-                <DroppableColumn
-                  id="In Progress"
-                  title="In Progress"
-                  onAddCard={() => setShowModal(true)}
+                <SortableContext
+                  items={progressTasks.map((t) => t._id)}
+                  strategy={verticalListSortingStrategy}
                 >
-                  {progress.map((task: ITask) => (
-                    <DraggableTaskCard
+                  {paginate(progressTasks, progressPage).map((task: ITask) => (
+                    <TaskCard
                       key={task._id}
                       task={task}
                       onClick={handleCardClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
-                </DroppableColumn>
-              </SortableContext>
+                </SortableContext>
+              </TaskColumn>
 
-              <SortableContext
-                items={done.map((t) => t._id)}
-                strategy={verticalListSortingStrategy}
+              <TaskColumn
+                id="Done"
+                title="DONE"
+                onAddCard={() => {
+                  setActiveColumn("Done");
+                  setShowCreateModal(true);
+                }}
+                footer={
+                  <Pagination
+                    currentPage={donePage}
+                    totalPages={Math.ceil(doneTasks.length / ITEMS_PER_PAGE)}
+                    onPageChange={setDonePage}
+                  />
+                }
               >
-                <DroppableColumn
-                  id="Done"
-                  title="Done"
-                  onAddCard={() => setShowModal(true)}
+                <SortableContext
+                  items={doneTasks.map((t) => t._id)}
+                  strategy={verticalListSortingStrategy}
                 >
-                  {done.map((task: ITask) => (
-                    <DraggableTaskCard
+                  {paginate(doneTasks, donePage).map((task: ITask) => (
+                    <TaskCard
                       key={task._id}
                       task={task}
                       onClick={handleCardClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
-                </DroppableColumn>
-              </SortableContext>
+                </SortableContext>
+              </TaskColumn>
             </Board>
           </DndContext>
         </ContentArea>
@@ -386,140 +336,36 @@ export default function DashboardPage() {
         <ActivitySidebar show={showActivity}>
           <SidebarHeader>
             <SidebarTitle>Activity Log</SidebarTitle>
-            <GhostButton
-              onClick={() => setShowActivity(false)}
-              style={{ padding: "4px" }}
-            >
+            <CloseSidebarButton onClick={() => setShowActivity(false)}>
               ✕
-            </GhostButton>
+            </CloseSidebarButton>
           </SidebarHeader>
-          <div style={{ flex: 1, overflowY: "auto" }}>
+          <SidebarContent>
             <ActivityLog />
-          </div>
+          </SidebarContent>
         </ActivitySidebar>
       </MainLayout>
 
-      {showModal && (
-        <ModalOverlay onClick={() => setShowModal(false)}>
-          <Modal onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Create Card</ModalTitle>
-            <InputGroup>
-              <Label>Title</Label>
-              <Input
-                autoFocus
-                value={newTask.title}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, title: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup>
-              <Label>Description</Label>
-              <TextArea
-                value={newTask.description}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, description: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup>
-              <Label>Priority</Label>
-              <Select
-                value={newTask.priority}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, priority: e.target.value as any })
-                }
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </Select>
-            </InputGroup>
-            <InputGroup>
-              <Label>Due Date</Label>
-              <Input
-                type="date"
-                value={newTask.dueDate}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, dueDate: e.target.value })
-                }
-              />
-            </InputGroup>
-            <ButtonRow>
-              <GhostButton onClick={() => setShowModal(false)}>
-                Cancel
-              </GhostButton>
-              <PrimaryButton onClick={handleCreateTask}>Add Card</PrimaryButton>
-            </ButtonRow>
-          </Modal>
-        </ModalOverlay>
-      )}
+      <TaskModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSave={handleCreateTask}
+        title="Create Card"
+        submitText="Add Card"
+      />
 
-      {showEditModal && selectedTask && (
-        <ModalOverlay onClick={() => setShowEditModal(false)}>
-          <Modal onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>Edit Card</ModalTitle>
-            <InputGroup>
-              <Label>Title</Label>
-              <Input
-                value={selectedTask.title}
-                onChange={(e) =>
-                  setSelectedTask({ ...selectedTask, title: e.target.value })
-                }
-              />
-            </InputGroup>
-            <InputGroup>
-              <Label>Description</Label>
-              <TextArea
-                value={selectedTask.description}
-                onChange={(e) =>
-                  setSelectedTask({
-                    ...selectedTask,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </InputGroup>
-            <InputGroup>
-              <Label>Priority</Label>
-              <Select
-                value={selectedTask.priority}
-                onChange={(e) =>
-                  setSelectedTask({
-                    ...selectedTask,
-                    priority: e.target.value as any,
-                  })
-                }
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </Select>
-            </InputGroup>
-            <InputGroup>
-              <Label>Due Date</Label>
-              <Input
-                type="date"
-                value={selectedTask.dueDate}
-                onChange={(e) =>
-                  setSelectedTask({ ...selectedTask, dueDate: e.target.value })
-                }
-              />
-            </InputGroup>
-            <ButtonRow>
-              <DangerButton onClick={handleDeleteTask}>
-                Delete Card
-              </DangerButton>
-              <GhostButton onClick={() => setShowEditModal(false)}>
-                Cancel
-              </GhostButton>
-              <PrimaryButton onClick={handleUpdateTask}>
-                Save Changes
-              </PrimaryButton>
-            </ButtonRow>
-          </Modal>
-        </ModalOverlay>
-      )}
+      <TaskModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedTask(null);
+        }}
+        onSave={handleUpdateTask}
+        onDelete={handleDeleteTask}
+        title="Edit Card"
+        submitText="Save Changes"
+        initialData={selectedTask}
+      />
     </DashboardContainer>
   );
 }

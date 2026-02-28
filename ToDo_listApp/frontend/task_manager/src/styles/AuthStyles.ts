@@ -64,3 +64,10 @@ export const SwitchText = styled.p`
     }
   }
 `;
+
+export const ErrorMessage = styled.p`
+  color: #eb5a46;
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+`;

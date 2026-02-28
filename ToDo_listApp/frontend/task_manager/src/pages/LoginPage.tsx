@@ -9,6 +9,7 @@ import {
   Input,
   Button,
   SwitchText,
+  ErrorMessage,
 } from "../styles/AuthStyles";
 
 export default function LoginPage() {
@@ -58,7 +59,7 @@ export default function LoginPage() {
           {loading ? "Loading..." : "Login"}
         </Button>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <SwitchText>
           New User? <Link to="/register">Register</Link>
