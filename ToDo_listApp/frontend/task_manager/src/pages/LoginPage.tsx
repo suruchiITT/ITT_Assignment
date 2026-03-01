@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { loginUser } from "../features/auth/authSlice";
+import { loginUser, clearError } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AuthContainer,
@@ -15,9 +15,7 @@ import {
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, loading, error } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, loading, error } = useAppSelector((state) => state.auth);
 
   const [form, setForm] = useState({
     email: "",
@@ -25,8 +23,10 @@ export default function LoginPage() {
   });
 
   useEffect(() => {
+    dispatch(clearError());
+
     if (user) navigate("/dashboard");
-  }, [user]);
+  }, [user, navigate, dispatch]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -41,23 +41,17 @@ export default function LoginPage() {
         <Input
           placeholder="Email"
           value={form.email}
-          onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
 
         <Input
           type="password"
           placeholder="Password"
           value={form.password}
-          onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
-        <Button type="submit">
-          {loading ? "Loading..." : "Login"}
-        </Button>
+        <Button type="submit">{loading ? "Loading..." : "Login"}</Button>
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
 

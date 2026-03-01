@@ -11,6 +11,9 @@ export const registerService = async (
     throw { statusCode: 400, message: "All fields are required" };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  email = email.toLowerCase().trim();
+  
   if (!emailRegex.test(email))
     throw { statusCode: 400, message: "Invalid email format" };
 
@@ -22,8 +25,6 @@ export const registerService = async (
       message:
         "Password must be at least 6 characters at least 1 letter and 1 special character",
     };
-
-  email = email.toLowerCase().trim();
 
   const existingUser = await Users.findOne({ email });
   if (existingUser)

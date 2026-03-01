@@ -80,7 +80,7 @@ export const TextArea = styled.textarea`
   background: #fff;
   font-size: 14px;
   min-height: 100px;
-  resize: vertical;
+  resize: none;
   box-sizing: border-box;
   box-shadow: inset 0 0 0 2px #dfe1e6;
   transition: box-shadow 0.2s;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { registerUser } from "../features/auth/authSlice";
+import { registerUser, clearError } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import {
   AuthContainer,
@@ -23,14 +23,28 @@ export default function RegisterPage() {
     password: "",
   });
 
-  useEffect(() => {
-    if (user) navigate("/dashboard");
-  }, [user]);
+  const [localError, setLocalError] = useState("");
 
-  const handleSubmit = async (e: any) => {
+  useEffect(() => {
+    dispatch(clearError());
+    if (user) navigate("/dashboard");
+  }, [user, navigate, dispatch]);
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    await dispatch(registerUser(form));
-    navigate("/login");
+    setLocalError("");
+
+    if (!form.name || !form.email || !form.password) {
+      setLocalError("Please fill all fields");
+      return;
+    }
+
+    try {
+      await dispatch(registerUser(form)).unwrap();
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -57,9 +71,12 @@ export default function RegisterPage() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
-        <Button type="submit">{loading ? "Loading..." : "Register"}</Button>
-
+        {localError && <ErrorMessage>{localError}</ErrorMessage>}
         {error && <ErrorMessage>{error}</ErrorMessage>}
+
+        <Button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Register"}{" "}
+        </Button>
 
         <SwitchText>
           Already have account? <Link to="/login">Login</Link>
