@@ -6,17 +6,24 @@ import {
   ColumnTitle,
   TaskListArea,
   AddTaskButton,
+  PlusIcon,
 } from "../styles/TaskColumnStyles";
 
 interface TaskColumnProps {
   id: string;
   title: string;
   children: React.ReactNode;
-  footer?: React.ReactNode;
   onAddCard: () => void;
+  footer?: React.ReactNode;
 }
 
-const TaskColumn: React.FC<TaskColumnProps> = ({ id, title, children, footer, onAddCard }) => {
+const TaskColumn: React.FC<TaskColumnProps> = ({
+  id,
+  title,
+  children,
+  onAddCard,
+  footer,
+}) => {
   const { setNodeRef } = useDroppable({ id });
 
   return (
@@ -24,13 +31,11 @@ const TaskColumn: React.FC<TaskColumnProps> = ({ id, title, children, footer, on
       <ColumnHeader>
         <ColumnTitle>{title}</ColumnTitle>
       </ColumnHeader>
-      <TaskListArea>
-        {children}
-      </TaskListArea>
-      {footer}
+      <TaskListArea>{children}</TaskListArea>
       <AddTaskButton onClick={onAddCard}>
-        <span style={{ fontSize: "20px", fontWeight: "300" }}>+</span> Add a card
+        <PlusIcon>+</PlusIcon> Add a card
       </AddTaskButton>
+      {footer}
     </ColumnWrapper>
   );
 };

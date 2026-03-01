@@ -66,3 +66,10 @@ export const DueDateLabel = styled.div`
   align-items: center;
   gap: 4px;
 `;
+
+export const BadgeContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+`;

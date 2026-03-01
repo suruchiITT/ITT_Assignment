@@ -159,6 +159,17 @@ export const GhostButton = styled.button`
   }
 `;
 
+export const CloseButton = styled(GhostButton)`
+  font-size: 20px;
+  padding: 4px 8px;
+`;
+
+export const ModalGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+`;
+
 export const ErrorMessage = styled.span`
   color: #eb5a46;
   font-size: 12px;

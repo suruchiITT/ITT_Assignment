@@ -8,20 +8,18 @@ import {
   CardFooter,
   StatusSelect,
   DueDateLabel,
+  BadgeContainer,
 } from "../styles/TaskCardStyles";
 
-interface ITask {
-  _id: string;
-  title: string;
-  description: string;
-  priority: "Low" | "Medium" | "High";
-  status: "Todo" | "In Progress" | "Done";
-  dueDate: string;
-}
-
 interface TaskCardProps {
-  task: ITask;
-  onClick: (task: ITask) => void;
+  task: {
+    _id: string;
+    title: string;
+    priority: "Low" | "Medium" | "High";
+    status: string;
+    dueDate?: string;
+  };
+  onClick: (task: any) => void;
   onStatusChange: (id: string, status: string) => void;
 }
 
@@ -39,12 +37,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, onStatusChange }) =>
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 1,
   };
 
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return null;
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.stopPropagation();
+    onStatusChange(task._id, e.target.value);
   };
 
   return (
@@ -56,20 +54,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, onStatusChange }) =>
       onClick={() => onClick(task)}
     >
       <TaskTitle>{task.title}</TaskTitle>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", alignItems: "center" }}>
+
+      <BadgeContainer>
         <PriorityTag priority={task.priority}>{task.priority}</PriorityTag>
         {task.dueDate && (
           <DueDateLabel>
-            🕒 {formatDate(task.dueDate)}
+            📅 {new Date(task.dueDate).toLocaleDateString()}
           </DueDateLabel>
         )}
-      </div>
+      </BadgeContainer>
+
       <CardFooter>
-        <StatusSelect
-          value={task.status}
-          onChange={(e) => onStatusChange(task._id, e.target.value)}
-          onClick={(e) => e.stopPropagation()}
-        >
+        <StatusSelect value={task.status} onChange={handleStatusChange}>
           <option value="Todo">Todo</option>
           <option value="In Progress">In Progress</option>
           <option value="Done">Done</option>

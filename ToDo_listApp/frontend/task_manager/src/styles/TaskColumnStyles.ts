@@ -32,11 +32,9 @@ export const TaskListArea = styled.div`
   min-height: 10px;
   padding-right: 2px;
   
-  /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
   }
-  /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;
   scrollbar-width: none;
 `;
@@ -60,4 +58,9 @@ export const AddTaskButton = styled.button`
     background: rgba(9, 30, 66, 0.08);
     color: #172b4d;
   }
+`;
+
+export const PlusIcon = styled.span`
+  font-size: 20px;
+  font-weight: 300;
 `;

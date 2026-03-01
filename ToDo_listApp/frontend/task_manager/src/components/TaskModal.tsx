@@ -14,6 +14,8 @@ import {
   PrimaryButton,
   DangerButton,
   GhostButton,
+  CloseButton,
+  ModalGrid,
   ErrorMessage,
 } from "../styles/TaskModalStyles";
 
@@ -77,13 +79,17 @@ const TaskModal: React.FC<TaskModalProps> = ({
   if (!isOpen) return null;
 
   const validate = () => {
+    const selectedDate = new Date(formData.dueDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const newErrors = {
       title: !formData.title.trim() ? "Add title for title" : "",
-      description: !formData.description.trim()
-        ? "Add description for description"
-        : "",
+      description: !formData.description.trim() ? "Add description for description" : "",
       priority: !formData.priority ? "Add priority for priority" : "",
-      dueDate: !formData.dueDate ? "Add due date for due date" : "",
+      dueDate: !formData.dueDate 
+        ? "Add due date for due date" 
+        : (selectedDate < today ? "Due date cannot be in the past" : ""),
     };
     setErrors(newErrors);
     return !Object.values(newErrors).some((err) => err !== "");
@@ -108,12 +114,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <ModalTitle>{title}</ModalTitle>
-          <GhostButton
-            onClick={onClose}
-            style={{ fontSize: "20px", padding: "4px 8px" }}
-          >
-            ✕
-          </GhostButton>
+          <CloseButton onClick={onClose}>✕</CloseButton>
         </ModalHeader>
         <form onSubmit={handleSubmit}>
           <ModalBody>
@@ -131,62 +132,42 @@ const TaskModal: React.FC<TaskModalProps> = ({
               <Label>Description</Label>
               <TextArea
                 value={formData.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
+                onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Add a more detailed description..."
               />
-              {errors.description && (
-                <ErrorMessage>{errors.description}</ErrorMessage>
-              )}
+              {errors.description && <ErrorMessage>{errors.description}</ErrorMessage>}
             </InputGroup>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "16px",
-              }}
-            >
+            <ModalGrid>
               <InputGroup>
                 <Label>Priority</Label>
                 <Select
                   value={formData.priority}
-                  onChange={(e) =>
-                    handleInputChange("priority", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange("priority", e.target.value)}
                 >
                   <option value="Low">Low</option>
                   <option value="Medium">Medium</option>
                   <option value="High">High</option>
                 </Select>
-                {errors.priority && (
-                  <ErrorMessage>{errors.priority}</ErrorMessage>
-                )}
+                {errors.priority && <ErrorMessage>{errors.priority}</ErrorMessage>}
               </InputGroup>
               <InputGroup>
                 <Label>Due Date</Label>
                 <Input
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
-                  onKeyDown={(e) => e.preventDefault()}
                   value={formData.dueDate}
                   onChange={(e) => handleInputChange("dueDate", e.target.value)}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
-                {errors.dueDate && (
-                  <ErrorMessage>{errors.dueDate}</ErrorMessage>
-                )}
+                {errors.dueDate && <ErrorMessage>{errors.dueDate}</ErrorMessage>}
               </InputGroup>
-            </div>
+            </ModalGrid>
           </ModalBody>
           <ButtonRow>
             {onDelete && (
-              <DangerButton type="button" onClick={onDelete}>
-                Delete
-              </DangerButton>
+              <DangerButton type="button" onClick={onDelete}>Delete</DangerButton>
             )}
-            <GhostButton type="button" onClick={onClose}>
-              Cancel
-            </GhostButton>
+            <GhostButton type="button" onClick={onClose}>Cancel</GhostButton>
             <PrimaryButton type="submit">{submitText}</PrimaryButton>
           </ButtonRow>
         </form>
