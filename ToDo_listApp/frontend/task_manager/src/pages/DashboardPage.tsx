@@ -7,6 +7,7 @@ import {
   updateTask,
   deleteTask,
 } from "../features/tasks/taskSlice";
+import { fetchActivities } from "../features/activity/activitySlice";
 import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,6 +28,7 @@ import ActivityLog from "../components/ActivityLog";
 import TaskCard from "../components/TaskCard";
 import TaskColumn from "../components/TaskColumn";
 import TaskModal from "../components/TaskModal";
+import TaskDetailsModal from "../components/TaskDetailsModal";
 import Pagination from "../components/Pagination";
 import {
   DashboardContainer,
@@ -73,6 +75,7 @@ export default function DashboardPage() {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [activeColumn, setActiveColumn] = useState<string>("Todo");
@@ -83,6 +86,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     applyFilters();
+    dispatch(fetchActivities(1)); // Initial fetch of activities
   }, [filters]);
 
   const applyFilters = () => {
@@ -98,19 +102,26 @@ export default function DashboardPage() {
     navigate("/login");
   };
 
-  const handleStatusChange = (id: string, status: string) => {
-    dispatch(changeStatus({ id, status }));
+  const handleStatusChange = async (id: string, status: string) => {
+    await dispatch(changeStatus({ id, status }));
+    dispatch(fetchActivities(1)); // Refresh logs immediately
   };
 
   const handleCreateTask = async (data: any) => {
     await dispatch(createTask({ ...data, status: activeColumn }));
+    dispatch(fetchActivities(1)); // Refresh logs immediately
     setShowCreateModal(false);
     if (activeColumn === "Todo") setTodoPage(1);
     if (activeColumn === "In Progress") setProgressPage(1);
     if (activeColumn === "Done") setDonePage(1);
   };
 
-  const handleCardClick = (task: ITask) => {
+  const handleDetailsClick = (task: ITask) => {
+    setSelectedTask(task);
+    setShowDetailsModal(true);
+  };
+
+  const handleEditClick = (task: ITask) => {
     setSelectedTask(task);
     setShowEditModal(true);
   };
@@ -118,6 +129,7 @@ export default function DashboardPage() {
   const handleUpdateTask = async (data: any) => {
     if (selectedTask) {
       await dispatch(updateTask({ id: selectedTask._id, data }));
+      dispatch(fetchActivities(1)); // Refresh logs after update
       setShowEditModal(false);
       setSelectedTask(null);
     }
@@ -182,9 +194,6 @@ export default function DashboardPage() {
       <Header>
         <Title>Task Manager</Title>
         <HeaderActions>
-          <LogoutButton onClick={() => setShowActivity(!showActivity)}>
-            {showActivity ? "Hide Activity" : "Show Activity"}
-          </LogoutButton>
           <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
         </HeaderActions>
       </Header>
@@ -263,7 +272,8 @@ export default function DashboardPage() {
                     <TaskCard
                       key={task._id}
                       task={task}
-                      onClick={handleCardClick}
+                      onDetailsClick={handleDetailsClick}
+                      onEditClick={handleEditClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
@@ -293,7 +303,8 @@ export default function DashboardPage() {
                     <TaskCard
                       key={task._id}
                       task={task}
-                      onClick={handleCardClick}
+                      onDetailsClick={handleDetailsClick}
+                      onEditClick={handleEditClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
@@ -323,7 +334,8 @@ export default function DashboardPage() {
                     <TaskCard
                       key={task._id}
                       task={task}
-                      onClick={handleCardClick}
+                      onDetailsClick={handleDetailsClick}
+                      onEditClick={handleEditClick}
                       onStatusChange={handleStatusChange}
                     />
                   ))}
@@ -366,6 +378,16 @@ export default function DashboardPage() {
         submitText="Save Changes"
         initialData={selectedTask}
       />
+
+      {showDetailsModal && selectedTask && (
+        <TaskDetailsModal
+          task={selectedTask}
+          onClose={() => {
+            setShowDetailsModal(false);
+            setSelectedTask(null);
+          }}
+        />
+      )}
     </DashboardContainer>
   );
 }
