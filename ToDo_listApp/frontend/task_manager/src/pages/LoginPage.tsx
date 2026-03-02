@@ -24,7 +24,6 @@ export default function LoginPage() {
 
   useEffect(() => {
     dispatch(clearError());
-
     if (user) navigate("/dashboard");
   }, [user, navigate, dispatch]);
 

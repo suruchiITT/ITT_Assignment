@@ -5,7 +5,7 @@ import { ACTIVITY_ACTIONS } from "../constants/activityConstants";
 export const createActivityLog = async (
   taskId: string,
   action: string,
-  message: string
+  message: string,
 ) => {
   await ActivityLog.create({
     task: taskId,
@@ -14,10 +14,7 @@ export const createActivityLog = async (
   });
 };
 
-export const getActivityLogsService = async (
-  userId: string,
-  query: any
-) => {
+export const getActivityLogsService = async (userId: string, query: any) => {
   const { page = 1, limit = 10 } = query;
 
   const userTasks = await Tasks.find({ user: userId }).select("_id");
