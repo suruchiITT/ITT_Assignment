@@ -29,7 +29,7 @@ export const ColumnTitle = styled.h3`
 export const TaskListArea = styled.div`
   flex: 1;
   overflow-y: auto;
-  min-height: 10px;
+  min-height: 150px;
   padding-right: 2px;
   
   &::-webkit-scrollbar {

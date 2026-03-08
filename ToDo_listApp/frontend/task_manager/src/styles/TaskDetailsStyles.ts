@@ -79,7 +79,7 @@ export const SectionLabel = styled.div`
   gap: 8px;
 `;
 
-export const DescriptionText = styled.div`
+export const DescriptionText = styled.div<{ maxHeight?: string }>`
   font-size: 14px;
   color: #172b4d;
   line-height: 1.5;
@@ -88,7 +88,49 @@ export const DescriptionText = styled.div`
   border-radius: 3px;
   border: 1px solid #dfe1e6;
   white-space: pre-wrap;
-  min-height: 60px;
+  word-break: break-word;
+  max-height: ${(props) => props.maxHeight || "200px"};
+  overflow-y: auto;
+
+  /* Custom Scrollbar for Description Area */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f4f5f7;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #c1c7d0;
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a5adba;
+  }
+`;
+
+export const ShowMoreButton = styled.button`
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: #0052cc;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 0;
+  margin-top: 4px;
+  display: inline-block;
+  &:hover {
+    text-decoration: underline;
+    color: #0065ff;
+  }
+  &:active {
+    background: none;
+    border: none;
+  }
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const MetaInfoBar = styled.div`
@@ -155,4 +197,19 @@ export const EmptyActivity = styled.div`
   color: #5e6c84;
   font-size: 14px;
   padding: 8px 0;
+`;
+
+export const StatusValue = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: #42526e;
+`;
+
+export const DueDateValue = styled.div`
+  font-size: 14px;
+  color: #172b4d;
+`;
+
+export const ModalPaginationWrapper = styled.div`
+  margin-top: 20px;
 `;

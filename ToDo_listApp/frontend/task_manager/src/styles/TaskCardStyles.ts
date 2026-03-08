@@ -1,15 +1,25 @@
 import styled from "styled-components";
 
-export const TaskCardWrapper = styled.div`
+export const TaskCardWrapper = styled.div<{ 
+  transform?: string; 
+  transition?: string; 
+  opacity?: number; 
+  zIndex?: number;
+  cursor?: string;
+}>`
   background: white;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 8px;
   box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-  cursor: pointer;
+  cursor: ${(props) => props.cursor || "pointer"};
   border: 1px solid #dfe1e6;
   position: relative;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: ${(props) => props.transition || "background 0.2s, box-shadow 0.2s"};
+  transform: ${(props) => props.transform};
+  opacity: ${(props) => props.opacity ?? 1};
+  z-index: ${(props) => props.zIndex ?? 1};
+  touch-action: none;
   &:hover {
     background: #f4f5f7;
     box-shadow: 0 1px 2px rgba(9, 30, 66, 0.5);
@@ -31,6 +41,7 @@ export const DragHandle = styled.div`
   border-radius: 3px;
   display: flex;
   align-items: center;
+  touch-action: none;
   &:hover {
     background: #ebecf0;
   }

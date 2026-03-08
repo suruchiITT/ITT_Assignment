@@ -1,4 +1,16 @@
 import styled from "styled-components";
+import { defaultDropAnimationSideEffects } from "@dnd-kit/core";
+import type { DropAnimation } from "@dnd-kit/core";
+
+export const dropAnimation: DropAnimation = {
+  sideEffects: defaultDropAnimationSideEffects({
+    styles: {
+      active: {
+        opacity: "0.5",
+      },
+    },
+  }),
+};
 
 export const DashboardContainer = styled.div`
   height: 100vh;
@@ -96,7 +108,7 @@ export const LogoutButton = styled.button`
 export const Board = styled.div`
   display: flex;
   gap: 12px;
-  align-items: flex-start;
+  align-items: stretch;
   padding-bottom: 10px;
   flex: 1;
 `;

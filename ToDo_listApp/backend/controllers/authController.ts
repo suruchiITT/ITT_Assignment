@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { registerService, loginService,  } from "../services/authService";
+import { registerService, loginService } from "../services/authService";
 
 export const register = async (
   req: Request,

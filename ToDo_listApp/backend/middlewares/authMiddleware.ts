@@ -15,6 +15,7 @@ export const authMiddleware = async (
       message: "Token missing",
     });
 
+    
   try {
     const currentUser = verifyToken(token);
 

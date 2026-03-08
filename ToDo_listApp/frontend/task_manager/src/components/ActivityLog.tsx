@@ -25,10 +25,11 @@ const ActivityLog: React.FC = () => {
   const totalPages = Math.ceil(logs.length / LOGS_PER_PAGE);
   const paginatedLogs = logs.slice(
     (currentPage - 1) * LOGS_PER_PAGE,
-    currentPage * LOGS_PER_PAGE
+    currentPage * LOGS_PER_PAGE,
   );
 
-  if (loading && logs.length === 0) return <LogContainer>Loading logs...</LogContainer>;
+  if (loading && logs.length === 0)
+    return <LogContainer>Loading logs...</LogContainer>;
 
   return (
     <LogContainer>
@@ -40,7 +41,8 @@ const ActivityLog: React.FC = () => {
             {paginatedLogs.map((log: any) => (
               <LogItem key={log._id}>
                 <div>
-                  <LogTaskTitle>{log.task?.title || "Task"}</LogTaskTitle>: {log.message}
+                  <LogTaskTitle>{log.task?.title || "Task"}</LogTaskTitle>:{" "}
+                  {log.message}
                 </div>
                 <Time>{new Date(log.createdAt).toLocaleString()}</Time>
               </LogItem>

@@ -9,3 +9,4 @@ export const getActivityLogs = async (req: any, res: Response) => {
     data: logs,
   });
 };
+

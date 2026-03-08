@@ -21,6 +21,10 @@ import {
   ActivityTime,
   AvatarPlaceholder,
   EmptyActivity,
+  ShowMoreButton,
+  StatusValue,
+  DueDateValue,
+  ModalPaginationWrapper,
 } from "../styles/TaskDetailsStyles";
 import { PriorityTag } from "../styles/TaskCardStyles";
 import Pagination from "./Pagination";
@@ -31,20 +35,18 @@ interface TaskDetailsModalProps {
 }
 
 const LOGS_PER_PAGE = 5;
+const DESCRIPTION_LIMIT = 200;
 
 const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) => {
   const dispatch = useAppDispatch();
   const { logs } = useAppSelector((state: any) => state.activity);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
 
   useEffect(() => {
-    // Fetch logs when modal opens to ensure we have the latest
     dispatch(fetchActivities(1));
   }, [dispatch, task._id]);
 
-  // Filter logs for this specific task
-  // The backend usually stores taskId as an ID or an object. 
-  // We'll check both for robustness.
   const taskLogs = logs.filter((log: any) => 
     (log.task?._id === task._id) || (log.task === task._id)
   );
@@ -56,6 +58,13 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
   );
 
   if (!task) return null;
+
+  const description = task.description || "No description provided.";
+  const isDescriptionLong = description.length > DESCRIPTION_LIMIT;
+  const displayedDescription = 
+    isDescExpanded || !isDescriptionLong 
+      ? description 
+      : `${description.substring(0, DESCRIPTION_LIMIT)}...`;
 
   return (
     <DetailsOverlay onClick={onClose}>
@@ -69,9 +78,9 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
           <MetaInfoBar>
             <MetaItem>
               <SectionLabel>Status</SectionLabel>
-              <div style={{ fontSize: "14px", fontWeight: "600", color: "#42526e" }}>
+              <StatusValue>
                 {task.status}
-              </div>
+              </StatusValue>
             </MetaItem>
             <MetaItem>
               <SectionLabel>Priority</SectionLabel>
@@ -79,16 +88,23 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
             </MetaItem>
             <MetaItem>
               <SectionLabel>Due Date</SectionLabel>
-              <div style={{ fontSize: "14px", color: "#172b4d" }}>
+              <DueDateValue>
                 📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No date"}
-              </div>
+              </DueDateValue>
             </MetaItem>
           </MetaInfoBar>
 
           <Section>
             <SectionLabel>📝 Description</SectionLabel>
-            <DescriptionText>
-              {task.description || "No description provided."}
+            <DescriptionText maxHeight={isDescExpanded ? "300px" : "120px"}>
+              {displayedDescription}
+              {isDescriptionLong && (
+                <div>
+                  <ShowMoreButton onClick={() => setIsDescExpanded(!isDescExpanded)}>
+                    {isDescExpanded ? "Show less" : "Show more..."}
+                  </ShowMoreButton>
+                </div>
+              )}
             </DescriptionText>
           </Section>
 
@@ -117,13 +133,13 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
             </ActivityList>
             
             {totalPages > 1 && (
-              <div style={{ marginTop: "20px" }}>
+              <ModalPaginationWrapper>
                 <Pagination 
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={setCurrentPage}
                 />
-              </div>
+              </ModalPaginationWrapper>
             )}
           </ActivitySection>
         </DetailsBody>

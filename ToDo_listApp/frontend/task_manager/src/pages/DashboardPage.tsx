@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import {
   fetchTasks,
@@ -17,8 +17,9 @@ import {
   useSensors,
   PointerSensor,
   KeyboardSensor,
+  DragOverlay,
 } from "@dnd-kit/core";
-import type { DragEndEvent } from "@dnd-kit/core";
+import type { DragEndEvent, DragStartEvent, DragOverEvent } from "@dnd-kit/core";
 import {
   sortableKeyboardCoordinates,
   SortableContext,
@@ -49,6 +50,7 @@ import {
   SmallInput,
   SmallSelect,
   CloseSidebarButton,
+  dropAnimation,
 } from "../styles/DashboardStyles";
 
 interface ITask {
@@ -79,6 +81,7 @@ export default function DashboardPage() {
   const [showActivity, setShowActivity] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [activeColumn, setActiveColumn] = useState<string>("Todo");
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const [todoPage, setTodoPage] = useState(1);
   const [progressPage, setProgressPage] = useState(1);
@@ -86,7 +89,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     applyFilters();
-    dispatch(fetchActivities(1)); // Initial fetch of activities
+    dispatch(fetchActivities(1));
   }, [filters]);
 
   const applyFilters = () => {
@@ -104,12 +107,12 @@ export default function DashboardPage() {
 
   const handleStatusChange = async (id: string, status: string) => {
     await dispatch(changeStatus({ id, status }));
-    dispatch(fetchActivities(1)); // Refresh logs immediately
+    dispatch(fetchActivities(1));
   };
 
   const handleCreateTask = async (data: any) => {
     await dispatch(createTask({ ...data, status: activeColumn }));
-    dispatch(fetchActivities(1)); // Refresh logs immediately
+    dispatch(fetchActivities(1));
     setShowCreateModal(false);
     if (activeColumn === "Todo") setTodoPage(1);
     if (activeColumn === "In Progress") setProgressPage(1);
@@ -129,7 +132,7 @@ export default function DashboardPage() {
   const handleUpdateTask = async (data: any) => {
     if (selectedTask) {
       await dispatch(updateTask({ id: selectedTask._id, data }));
-      dispatch(fetchActivities(1)); // Refresh logs after update
+      dispatch(fetchActivities(1));
       setShowEditModal(false);
       setSelectedTask(null);
     }
@@ -151,11 +154,26 @@ export default function DashboardPage() {
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
+    })
   );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id as string;
+
+    const activeTask = tasks.find((t) => t._id === activeId);
+    if (!activeTask) return;
+  };
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveId(null);
     if (!over) return;
 
     const activeId = active.id as string;
@@ -170,7 +188,7 @@ export default function DashboardPage() {
       newStatus = overId;
     } else {
       const overTask = tasks.find((t) => t._id === overId);
-      if (overTask && overTask.status !== activeTask.status) {
+      if (overTask) {
         newStatus = overTask.status;
       }
     }
@@ -179,6 +197,8 @@ export default function DashboardPage() {
       dispatch(changeStatus({ id: activeId, status: newStatus }));
     }
   };
+
+  const activeTask = activeId ? tasks.find((t) => t._id === activeId) : null;
 
   const todoTasks = tasks.filter((t) => t.status === "Todo");
   const progressTasks = tasks.filter((t) => t.status === "In Progress");
@@ -246,6 +266,8 @@ export default function DashboardPage() {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
             onDragEnd={onDragEnd}
           >
             <Board>
@@ -342,6 +364,17 @@ export default function DashboardPage() {
                 </SortableContext>
               </TaskColumn>
             </Board>
+            <DragOverlay dropAnimation={dropAnimation}>
+              {activeId && activeTask ? (
+                <TaskCard
+                  task={activeTask}
+                  onDetailsClick={() => {}}
+                  onEditClick={() => {}}
+                  onStatusChange={() => {}}
+                  isOverlay={true}
+                />
+              ) : null}
+            </DragOverlay>
           </DndContext>
         </ContentArea>
 
