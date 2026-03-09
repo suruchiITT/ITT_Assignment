@@ -1,10 +1,20 @@
 import Tasks, { ITask } from "../models/task";
+import { createActivityLog } from "./activityService";
+import { ACTIVITY_ACTIONS } from "../constants/activityConstants";
 
 export const createTaskService = async (
   data: Partial<ITask>,
   userId: string,
 ) => {
   const task = await Tasks.create({ ...data, user: userId });
+
+  await createActivityLog(
+    task._id.toString(),
+    userId,
+    ACTIVITY_ACTIONS.CREATE_TASK,
+    `Created task: "${task.title}"`
+  );
+
   return task;
 };
 
@@ -36,19 +46,47 @@ export const updateTaskService = async (
   data: Partial<ITask>,
   userId: string,
 ) => {
+  const oldTask = await Tasks.findOne({ _id: id, user: userId });
+  if (!oldTask) throw { statusCode: 404, message: "Task not found" };
+
   const task = await Tasks.findOneAndUpdate({ _id: id, user: userId }, data, {
     new: true,
   });
-  if (!task) throw { statusCode: 404, message: "Task not found" };
+
+  if (task) {
+    if (data.title && data.title !== oldTask.title) {
+      await createActivityLog(id, userId, ACTIVITY_ACTIONS.UPDATE_TASK, `Title changed to "${data.title}"`);
+    }
+    if (data.description !== undefined && data.description !== oldTask.description) {
+      await createActivityLog(id, userId, ACTIVITY_ACTIONS.UPDATE_TASK, `Description updated`);
+    }
+    if (data.status && data.status !== oldTask.status) {
+      await createActivityLog(id, userId, ACTIVITY_ACTIONS.UPDATE_TASK, `Status changed from ${oldTask.status} to ${data.status}`);
+    }
+    if (data.priority && data.priority !== oldTask.priority) {
+      await createActivityLog(id, userId, ACTIVITY_ACTIONS.UPDATE_TASK, `Priority changed to ${data.priority}`);
+    }
+    if (data.dueDate && data.dueDate.toString() !== oldTask.dueDate.toString()) {
+      await createActivityLog(id, userId, ACTIVITY_ACTIONS.UPDATE_TASK, `Due date changed`);
+    }
+  }
+
   return task;
 };
 
 export const deleteTaskService = async (id: string, userId: string) => {
-  const task = await Tasks.findOneAndDelete({
-    _id: id,
-    user: userId,
-  });
+  const task = await Tasks.findOne({ _id: id, user: userId });
   if (!task) throw { statusCode: 404, message: "Task not found" };
+
+  const taskTitle = task.title;
+  await Tasks.deleteOne({ _id: id, user: userId });
+
+  await createActivityLog(
+    id,
+    userId,
+    ACTIVITY_ACTIONS.DELETE_TASK,
+    `Deleted task: "${taskTitle}"`
+  );
 };
 
 export const changeStatusService = async (
@@ -56,11 +94,23 @@ export const changeStatusService = async (
   status: string,
   userId: string,
 ) => {
+  const oldTask = await Tasks.findOne({ _id: id, user: userId });
+  if (!oldTask) throw { statusCode: 404, message: "Task not found" };
+
   const task = await Tasks.findOneAndUpdate(
     { _id: id, user: userId },
     { status },
     { new: true },
   );
-  if (!task) throw { statusCode: 404, message: "Task not found" };
+
+  if (task) {
+    await createActivityLog(
+      id,
+      userId,
+      ACTIVITY_ACTIONS.UPDATE_TASK,
+      `Status changed from ${oldTask.status} to ${status}`
+    );
+  }
+
   return task;
 };

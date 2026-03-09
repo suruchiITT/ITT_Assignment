@@ -23,7 +23,7 @@ export const DashboardContainer = styled.div`
 
 export const MainLayout = styled.div`
   display: flex;
-  flex: 1;
+  height: calc(100vh - 44px);
   overflow: hidden;
 `;
 
@@ -76,6 +76,8 @@ export const Header = styled.div`
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(4px);
   color: white;
+  height: 44px;
+  box-sizing: border-box;
 `;
 
 export const HeaderActions = styled.div`

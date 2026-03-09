@@ -33,7 +33,43 @@ export const LogItem = styled.div`
 
 export const LogTaskTitle = styled.span`
   font-weight: 600;
+  color: #172b4d;
+`;
+
+export const UserName = styled.span`
+  font-weight: 700;
   color: #0079bf;
+  font-size: 14px;
+`;
+
+export const DotSeparator = styled.span`
+  margin: 0 4px;
+  color: #6b778c;
+`;
+
+export const ColonSeparator = styled.span`
+  margin: 0 4px;
+`;
+
+export const MessageText = styled.span`
+  color: #172b4d;
+`;
+
+export const LogContent = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.5;
+`;
+
+export const Separator = styled.span`
+  margin: 0 4px;
+  color: #6b778c;
+`;
+
+export const Colon = styled.span`
+  margin: 0 4px;
 `;
 
 export const Time = styled.div`

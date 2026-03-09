@@ -7,7 +7,8 @@ import { fetchActivities } from "../features/activity/activitySlice";
 import {
   TaskCardWrapper,
   TaskTitle,
-  PriorityTag,
+  ShowMoreButton,
+  PrioritySelect,
   CardFooter,
   StatusSelect,
   DueDateLabel,
@@ -57,11 +58,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
     onStatusChange(task._id, e.target.value);
   };
 
-  const handlePriorityToggle = (e: React.MouseEvent) => {
+  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.stopPropagation();
-    const priorities: ("Low" | "Medium" | "High")[] = ["Low", "Medium", "High"];
-    const currentIndex = priorities.indexOf(task.priority as any);
-    const nextPriority = priorities[(currentIndex + 1) % priorities.length];
+    const nextPriority = e.target.value as "Low" | "Medium" | "High";
 
     const updatedData = {
       title: task.title,
@@ -137,13 +136,17 @@ const TaskCard: React.FC<TaskCardProps> = ({
       </CardHeader>
 
       <BadgeContainer>
-        <PriorityTag
+        <PrioritySelect
           priority={task.priority}
-          onClick={handlePriorityToggle}
-          title="Click to change priority"
+          value={task.priority}
+          onChange={handlePriorityChange}
+          onClick={(e) => e.stopPropagation()}
+          title="Change priority"
         >
-          {task.priority}
-        </PriorityTag>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </PrioritySelect>
 
         {isEditingDate ? (
           <InlineDateInput

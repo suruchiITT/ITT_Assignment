@@ -16,7 +16,7 @@ const initialState: ActivityState = {
 export const fetchActivities = createAsyncThunk(
   "activity/fetch",
   async (page: number = 1) => {
-    return await apiRequest(`/activities?page=${page}&limit=10`);
+    return await apiRequest(`/activities?page=${page}&limit=${10}`);
   },
 );
 

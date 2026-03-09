@@ -18,6 +18,8 @@ import {
   ActivityItem,
   ActivityContent,
   ActivityText,
+  ActivityUserName,
+  ActivityMessage,
   ActivityTime,
   AvatarPlaceholder,
   EmptyActivity,
@@ -35,21 +37,22 @@ interface TaskDetailsModalProps {
 }
 
 const LOGS_PER_PAGE = 5;
-const DESCRIPTION_LIMIT = 200;
 
 const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) => {
   const dispatch = useAppDispatch();
   const { logs } = useAppSelector((state: any) => state.activity);
+  const { user: authUser } = useAppSelector((state: any) => state.auth);
   const [currentPage, setCurrentPage] = useState(1);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
 
   useEffect(() => {
     dispatch(fetchActivities(1));
-  }, [dispatch, task._id]);
+  }, [dispatch, task?._id]);
 
-  const taskLogs = logs.filter((log: any) => 
-    (log.task?._id === task._id) || (log.task === task._id)
-  );
+  const taskLogs = (logs || []).filter((log: any) => {
+    const logId = log.task?._id || log.task;
+    return logId?.toString() === task?._id?.toString();
+  });
 
   const totalPages = Math.ceil(taskLogs.length / LOGS_PER_PAGE);
   const paginatedLogs = taskLogs.slice(
@@ -60,11 +63,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
   if (!task) return null;
 
   const description = task.description || "No description provided.";
-  const isDescriptionLong = description.length > DESCRIPTION_LIMIT;
-  const displayedDescription = 
-    isDescExpanded || !isDescriptionLong 
-      ? description 
-      : `${description.substring(0, DESCRIPTION_LIMIT)}...`;
+  const isDescriptionLong = description.length > 200;
+  const displayedDescription = isDescExpanded || !isDescriptionLong ? description : `${description.substring(0, 200)}...`;
 
   return (
     <DetailsOverlay onClick={onClose}>
@@ -73,14 +73,11 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
           <DetailsTitle>{task.title}</DetailsTitle>
           <CloseButton onClick={onClose}>✕</CloseButton>
         </DetailsHeader>
-
         <DetailsBody>
           <MetaInfoBar>
             <MetaItem>
               <SectionLabel>Status</SectionLabel>
-              <StatusValue>
-                {task.status}
-              </StatusValue>
+              <StatusValue>{task.status}</StatusValue>
             </MetaItem>
             <MetaItem>
               <SectionLabel>Priority</SectionLabel>
@@ -88,12 +85,9 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
             </MetaItem>
             <MetaItem>
               <SectionLabel>Due Date</SectionLabel>
-              <DueDateValue>
-                📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No date"}
-              </DueDateValue>
+              <DueDateValue>📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "No date"}</DueDateValue>
             </MetaItem>
           </MetaInfoBar>
-
           <Section>
             <SectionLabel>📝 Description</SectionLabel>
             <DescriptionText maxHeight={isDescExpanded ? "300px" : "120px"}>
@@ -107,38 +101,31 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ task, onClose }) =>
               )}
             </DescriptionText>
           </Section>
-
           <ActivitySection>
             <SectionLabel>🕒 Recent Activity</SectionLabel>
             <ActivityList>
               {paginatedLogs.length === 0 ? (
                 <EmptyActivity>No activity recorded for this task yet.</EmptyActivity>
               ) : (
-                paginatedLogs.map((log: any) => (
-                  <ActivityItem key={log._id}>
-                    <AvatarPlaceholder>
-                      {log.user?.name?.charAt(0).toUpperCase() || "U"}
-                    </AvatarPlaceholder>
-                    <ActivityContent>
-                      <ActivityText>
-                        <strong>{log.user?.name || "Someone"}</strong> {log.message}
-                      </ActivityText>
-                      <ActivityTime>
-                        {new Date(log.createdAt).toLocaleString()}
-                      </ActivityTime>
-                    </ActivityContent>
-                  </ActivityItem>
-                ))
+                paginatedLogs.map((log: any) => {
+                  const userName = log.user?.name || authUser?.name || "User";
+                  return (
+                    <ActivityItem key={log._id}>
+                      <AvatarPlaceholder>{userName.charAt(0).toUpperCase()}</AvatarPlaceholder>
+                      <ActivityContent>
+                        <ActivityText>
+                          <ActivityUserName>{userName}</ActivityUserName> <ActivityMessage>{log.message}</ActivityMessage>
+                        </ActivityText>
+                        <ActivityTime>{new Date(log.createdAt).toLocaleString()}</ActivityTime>
+                      </ActivityContent>
+                    </ActivityItem>
+                  );
+                })
               )}
             </ActivityList>
-            
             {totalPages > 1 && (
               <ModalPaginationWrapper>
-                <Pagination 
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
               </ModalPaginationWrapper>
             )}
           </ActivitySection>

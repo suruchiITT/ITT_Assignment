@@ -186,6 +186,15 @@ export const ActivityText = styled.div`
   color: #172b4d;
 `;
 
+export const ActivityUserName = styled.strong`
+  color: #0079bf;
+  font-weight: 700;
+`;
+
+export const ActivityMessage = styled.span`
+  color: #172b4d;
+`;
+
 export const ActivityTime = styled.div`
   font-size: 12px;
   color: #5e6c84;

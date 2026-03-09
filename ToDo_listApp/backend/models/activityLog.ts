@@ -5,6 +5,7 @@ import { ACTIVITY_ACTIONS } from "../constants/activityConstants";
 export interface IActivityLog extends Document {
   id: string;
   task: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
   action: (typeof ACTIVITY_ACTIONS)[keyof typeof ACTIVITY_ACTIONS];
   message: string;
   createdAt: Date;
@@ -19,8 +20,13 @@ const activityLogSchema = new Schema(
       default: () => uuidv4(),
     },
     task: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Tasks",
+      required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
       required: true,
     },
     action: {

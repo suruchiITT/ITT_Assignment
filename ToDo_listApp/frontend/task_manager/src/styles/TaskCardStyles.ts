@@ -70,9 +70,47 @@ export const TaskTitle = styled.div`
   font-size: 14px;
   color: #172b4d;
   margin-bottom: 8px;
-  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
   line-height: 1.4;
   flex: 1;
+  min-width: 0;
+`;
+
+export const ShowMoreButton = styled.button`
+  background: none;
+  border: none;
+  color: #0079bf;
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  margin-left: 4px;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const PrioritySelect = styled.select<{ priority: string }>`
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: white;
+  border: none;
+  background: ${(props) =>
+    props.priority === "High"
+      ? "#eb5a46"
+      : props.priority === "Medium"
+      ? "#f2d600"
+      : "#61bd4f"};
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  option {
+    background: white;
+    color: #172b4d;
+  }
 `;
 
 export const PriorityTag = styled.span<{ priority: string }>`
