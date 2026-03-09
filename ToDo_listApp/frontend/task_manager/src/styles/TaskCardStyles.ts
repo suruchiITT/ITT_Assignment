@@ -8,22 +8,27 @@ export const TaskCardWrapper = styled.div<{
   cursor?: string;
 }>`
   background: white;
-  padding: 10px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   cursor: ${(props) => props.cursor || "pointer"};
   border: 1px solid #dfe1e6;
   position: relative;
-  transition: ${(props) => props.transition || "background 0.2s, box-shadow 0.2s"};
+  transition: ${(props) => props.transition || "background 0.2s, box-shadow 0.2s, border-color 0.2s"};
   transform: ${(props) => props.transform};
   opacity: ${(props) => props.opacity ?? 1};
   z-index: ${(props) => props.zIndex ?? 1};
   touch-action: none;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100px;
+  
   &:hover {
-    background: #f4f5f7;
-    box-shadow: 0 1px 2px rgba(9, 30, 66, 0.5);
-    border-color: #ebecf0;
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    border-color: #c1c7d0;
   }
 `;
 
@@ -31,7 +36,8 @@ export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
+  margin-bottom: 8px;
 `;
 
 export const DragHandle = styled.div`
@@ -42,8 +48,12 @@ export const DragHandle = styled.div`
   display: flex;
   align-items: center;
   touch-action: none;
+  font-size: 16px;
+  opacity: 0.5;
+  
   &:hover {
     background: #ebecf0;
+    opacity: 1;
   }
 `;
 
@@ -52,13 +62,14 @@ export const EditIcon = styled.button`
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #5e6c84;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.6;
   transition: opacity 0.2s, background 0.2s;
+  
   &:hover {
     background: #ebecf0;
     opacity: 1;
@@ -69,12 +80,12 @@ export const EditIcon = styled.button`
 export const TaskTitle = styled.div`
   font-size: 14px;
   color: #172b4d;
-  margin-bottom: 8px;
+  font-weight: 500;
+  line-height: 1.5;
+  flex: 1;
   word-break: break-word;
   white-space: pre-wrap;
-  line-height: 1.4;
-  flex: 1;
-  min-width: 0;
+  margin-bottom: 8px;
 `;
 
 export const ShowMoreButton = styled.button`
@@ -91,12 +102,13 @@ export const ShowMoreButton = styled.button`
 `;
 
 export const PrioritySelect = styled.select<{ priority: string }>`
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 4px;
-  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
   color: white;
   border: none;
+  text-transform: uppercase;
   background: ${(props) =>
     props.priority === "High"
       ? "#eb5a46"
@@ -104,21 +116,23 @@ export const PrioritySelect = styled.select<{ priority: string }>`
       ? "#f2d600"
       : "#61bd4f"};
   cursor: pointer;
-  &:focus {
-    outline: none;
-  }
+  height: 20px;
+  outline: none;
+  
   option {
     background: white;
     color: #172b4d;
+    text-transform: none;
   }
 `;
 
 export const PriorityTag = styled.span<{ priority: string }>`
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
   color: white;
+  text-transform: uppercase;
   background: ${(props) =>
     props.priority === "High"
       ? "#eb5a46"
@@ -126,20 +140,6 @@ export const PriorityTag = styled.span<{ priority: string }>`
       ? "#f2d600"
       : "#61bd4f"};
   display: inline-block;
-  cursor: pointer;
-`;
-
-export const InlineSelect = styled.select`
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 4px;
-  border-radius: 2px;
-  border: 1px solid #dfe1e6;
-  background: white;
-  cursor: pointer;
-  &:focus {
-    outline: 2px solid #0079bf;
-  }
 `;
 
 export const CardFooter = styled.div`
@@ -147,24 +147,28 @@ export const CardFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #f4f5f7;
 `;
 
 export const StatusSelect = styled.select`
-  padding: 4px 6px;
-  font-size: 11px;
+  padding: 2px 4px;
+  font-size: 10px;
   border-radius: 3px;
   border: 1px solid #dfe1e6;
   background: #ebecf0;
   color: #172b4d;
   cursor: pointer;
   font-weight: 600;
+  height: 24px;
+  
   &:hover {
     background: #dfe1e6;
   }
 `;
 
 export const DueDateLabel = styled.div`
-  font-size: 11px;
+  font-size: 10px;
   color: #5e6c84;
   display: flex;
   align-items: center;
@@ -172,17 +176,22 @@ export const DueDateLabel = styled.div`
   padding: 2px 4px;
   border-radius: 3px;
   cursor: pointer;
+  background: #f4f5f7;
+  
   &:hover {
     background: #ebecf0;
+    color: #172b4d;
   }
 `;
 
 export const InlineDateInput = styled.input`
-  font-size: 11px;
-  padding: 2px;
-  border: 1px solid #dfe1e6;
+  font-size: 10px;
+  padding: 1px 2px;
+  border: 1px solid #0079bf;
   border-radius: 3px;
   color: #172b4d;
+  height: 20px;
+  outline: none;
 `;
 
 export const BadgeContainer = styled.div`

@@ -2,35 +2,38 @@ import styled from "styled-components";
 
 export const ColumnWrapper = styled.div`
   background: #ebecf0;
-  width: 272px;
-  max-height: calc(100vh - 120px);
+  flex: 1;
+  height: 100%;
   border-radius: 3px;
   padding: 8px;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  min-width: 0;
+  overflow: hidden;
 `;
 
 export const ColumnHeader = styled.div`
-  padding: 6px 8px 10px 12px;
+  padding: 6px 8px 10px 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 `;
 
 export const ColumnTitle = styled.h3`
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: #172b4d;
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 `;
 
 export const TaskListArea = styled.div`
   flex: 1;
   overflow-y: auto;
-  min-height: 150px;
-  padding-right: 2px;
+  padding: 2px 4px;
   
   &::-webkit-scrollbar {
     display: none;
@@ -53,7 +56,7 @@ export const AddTaskButton = styled.button`
   align-items: center;
   gap: 8px;
   margin-top: 8px;
-  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
   &:hover {
     background: rgba(9, 30, 66, 0.08);
     color: #172b4d;

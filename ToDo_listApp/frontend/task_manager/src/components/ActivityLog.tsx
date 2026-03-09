@@ -50,9 +50,9 @@ const ActivityLog: React.FC = () => {
                 <LogItem key={log._id}>
                   <LogContent>
                     <UserName>{name}</UserName>
-                    <DotSeparator>•</DotSeparator>
+                    <DotSeparator> • </DotSeparator>
                     <LogTaskTitle>{log.task?.title || "Task"}</LogTaskTitle>
-                    <ColonSeparator>:</ColonSeparator>
+                    <ColonSeparator>: </ColonSeparator>
                     <MessageText>{log.message}</MessageText>
                   </LogContent>
                   <Time>{new Date(log.createdAt).toLocaleString()}</Time>

@@ -42,6 +42,10 @@ export const DetailsTitle = styled.h2`
   margin: 0;
   font-weight: 600;
   flex: 1;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  white-space: pre-wrap;
+  line-height: 1.3;
 `;
 
 export const CloseButton = styled.button`
@@ -88,11 +92,11 @@ export const DescriptionText = styled.div<{ maxHeight?: string }>`
   border-radius: 3px;
   border: 1px solid #dfe1e6;
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-all;
   max-height: ${(props) => props.maxHeight || "200px"};
   overflow-y: auto;
 
-  /* Custom Scrollbar for Description Area */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -121,15 +125,8 @@ export const ShowMoreButton = styled.button`
   margin-top: 4px;
   display: inline-block;
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
     color: #0065ff;
-  }
-  &:active {
-    background: none;
-    border: none;
-  }
-  &:focus {
-    outline: none;
   }
 `;
 
@@ -184,6 +181,8 @@ export const ActivityContent = styled.div`
 export const ActivityText = styled.div`
   font-size: 14px;
   color: #172b4d;
+  overflow-wrap: anywhere;
+  word-break: break-all;
 `;
 
 export const ActivityUserName = styled.strong`

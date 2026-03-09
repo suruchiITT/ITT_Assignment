@@ -90,6 +90,9 @@ export default function DashboardPage() {
   useEffect(() => {
     applyFilters();
     dispatch(fetchActivities(1));
+    setTodoPage(1);
+    setProgressPage(1);
+    setDonePage(1);
   }, [filters]);
 
   const applyFilters = () => {

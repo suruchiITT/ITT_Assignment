@@ -24,16 +24,21 @@ export const LogListArea = styled.div`
 
 export const LogItem = styled.div`
   background: white;
-  padding: 8px;
+  padding: 10px;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
   font-size: 14px;
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 export const LogTaskTitle = styled.span`
   font-weight: 600;
   color: #172b4d;
+  overflow-wrap: anywhere;
+  word-break: break-all;
 `;
 
 export const UserName = styled.span`
@@ -43,23 +48,20 @@ export const UserName = styled.span`
 `;
 
 export const DotSeparator = styled.span`
-  margin: 0 4px;
   color: #6b778c;
 `;
 
 export const ColonSeparator = styled.span`
-  margin: 0 4px;
 `;
 
 export const MessageText = styled.span`
   color: #172b4d;
+  overflow-wrap: anywhere;
+  word-break: break-all;
 `;
 
 export const LogContent = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
+  display: block;
   line-height: 1.5;
 `;
 
@@ -73,9 +75,8 @@ export const Colon = styled.span`
 `;
 
 export const Time = styled.div`
-  font-size: 12px;
+  font-size: 11px;
   color: #5e6c84;
-  margin-top: 4px;
 `;
 
 export const EmptyLog = styled.div`

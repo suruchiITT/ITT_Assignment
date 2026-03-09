@@ -127,7 +127,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     >
       <CardHeader>
         <DragHandle onClick={(e) => e.stopPropagation()}>
-          ⠿
+          📝
         </DragHandle>
         <TaskTitle>{task.title}</TaskTitle>
         <EditIcon onClick={handleEdit} title="Edit Task">
