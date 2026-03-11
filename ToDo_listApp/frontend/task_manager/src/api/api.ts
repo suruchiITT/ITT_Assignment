@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:5000/api";
+  // const BASE_URL = "http://172.23.0.159:5000/api";
+ const BASE_URL = "http://localhost:5000/api";
 
 export const apiRequest = async (
   endpoint: string,

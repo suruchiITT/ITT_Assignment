@@ -17,7 +17,7 @@ import {
 
 const router = Router();
 
-router.use(authMiddleware); 
+router.use(authMiddleware);
 
 router.post("/tasks", validateMiddleware(createTaskValidation), createTask);
 

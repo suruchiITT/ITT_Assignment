@@ -74,7 +74,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
       updateTask({
         id: task._id,
         data: updatedData,
-      })
+      }),
     ).then(() => {
       dispatch(fetchActivities(1));
     });
@@ -99,7 +99,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
       updateTask({
         id: task._id,
         data: updatedData,
-      })
+      }),
     ).then(() => {
       dispatch(fetchActivities(1));
     });
@@ -126,9 +126,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
       onClick={() => onDetailsClick(task)}
     >
       <CardHeader>
-        <DragHandle onClick={(e) => e.stopPropagation()}>
-          📝
-        </DragHandle>
+        <DragHandle onClick={(e) => e.stopPropagation()}>📝</DragHandle>
         <TaskTitle>{task.title}</TaskTitle>
         <EditIcon onClick={handleEdit} title="Edit Task">
           ✏️
@@ -174,13 +172,20 @@ const TaskCard: React.FC<TaskCardProps> = ({
             }}
             title="Click to change date"
           >
-            📅 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "Set date"}
+            📅{" "}
+            {task.dueDate
+              ? new Date(task.dueDate).toLocaleDateString()
+              : "Set date"}
           </DueDateLabel>
         )}
       </BadgeContainer>
 
       <CardFooter>
-        <StatusSelect value={task.status} onChange={handleStatusChange} onClick={(e) => e.stopPropagation()}>
+        <StatusSelect
+          value={task.status}
+          onChange={handleStatusChange}
+          onClick={(e) => e.stopPropagation()}
+        >
           <option value="Todo">Todo</option>
           <option value="In Progress">In Progress</option>
           <option value="Done">Done</option>

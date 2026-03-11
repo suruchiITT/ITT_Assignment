@@ -115,8 +115,6 @@ export const DescriptionText = styled.div<{ maxHeight?: string }>`
 export const ShowMoreButton = styled.button`
   background: none;
   border: none;
-  outline: none;
-  box-shadow: none;
   color: #0052cc;
   cursor: pointer;
   font-size: 13px;
@@ -124,9 +122,25 @@ export const ShowMoreButton = styled.button`
   padding: 4px 0;
   margin-top: 4px;
   display: inline-block;
+
   &:hover {
     text-decoration: none;
     color: #0065ff;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:active {
+    outline: none;
+    box-shadow: none;
   }
 `;
 

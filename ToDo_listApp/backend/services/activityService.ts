@@ -33,12 +33,12 @@ export const getActivityLogsService = async (userId: string, query: any) => {
       .populate({
         path: "user",
         model: "Users",
-        select: "name"
+        select: "name",
       })
       .populate({
         path: "task",
         model: "Tasks",
-        select: "title"
+        select: "title",
       })
       .sort({ createdAt: -1 })
       .skip((Number(page) - 1) * Number(limit))
