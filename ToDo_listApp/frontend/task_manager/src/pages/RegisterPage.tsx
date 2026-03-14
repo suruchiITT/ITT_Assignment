@@ -75,7 +75,7 @@ export default function RegisterPage() {
         {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <Button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Register"}{" "}
+          {loading ? "Loading..." : "Register"}
         </Button>
 
         <SwitchText>

@@ -79,9 +79,16 @@ const TaskModal: React.FC<TaskModalProps> = ({
   if (!isOpen) return null;
 
   const validate = () => {
-    const selectedDate = new Date(formData.dueDate);
+  
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+   
+    let selectedDate: Date | null = null;
+    if (formData.dueDate) {
+      const [year, month, day] = formData.dueDate.split("-").map(Number);
+      selectedDate = new Date(year, month - 1, day);
+    }
 
     const newErrors = {
       title: !formData.title.trim() ? "Add title for title" : "",
@@ -89,7 +96,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
       priority: !formData.priority ? "Add priority for priority" : "",
       dueDate: !formData.dueDate 
         ? "Add due date for due date" 
-        : (selectedDate < today ? "Due date cannot be in the past" : ""),
+        : (selectedDate && selectedDate < today ? "Due date cannot be in the past" : ""),
     };
     setErrors(newErrors);
     return !Object.values(newErrors).some((err) => err !== "");
@@ -116,7 +123,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           <ModalTitle>{title}</ModalTitle>
           <CloseButton onClick={onClose}>✕</CloseButton>
         </ModalHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <ModalBody>
             <InputGroup>
               <Label>Title</Label>
