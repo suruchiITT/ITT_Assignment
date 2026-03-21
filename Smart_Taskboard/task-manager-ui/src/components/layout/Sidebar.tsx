@@ -27,7 +27,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         collapsed ? 'w-16' : 'w-64'
       )}
     >
-      {/* Logo — click to toggle */}
+      
       <button
         onClick={onToggle}
         className="flex h-16 w-full items-center gap-3 border-b border-slate-700/60 px-4 hover:bg-slate-800 transition-colors"
@@ -40,7 +40,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         )}
       </button>
 
-      {/* Nav */}
+     
       <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-4">
         {!collapsed && (
           <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
@@ -67,7 +67,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </NavLink>
       </nav>
 
-      {/* User section */}
+      
       <div className="border-t border-slate-700/60 px-2 py-4">
         {!collapsed && (
           <div className="flex items-center gap-3 rounded-lg px-2 py-2">

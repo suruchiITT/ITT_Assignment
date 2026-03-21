@@ -13,7 +13,6 @@ import { Modal } from '@/components/ui/Modal'
 import { Badge, RoleBadge } from '@/components/ui/Badge'
 import { formatRelativeTime } from '@/lib/utils'
 
-// ── Send Invitation Modal ─────────────────────────────────────────────────
 
 const schema = z.object({
   email: z.string().email('Invalid email address'),
@@ -86,7 +85,7 @@ export function InviteModal({ open, onClose, projectId }: InviteModalProps) {
   )
 }
 
-// ── Invitation List ───────────────────────────────────────────────────────
+
 
 interface InvitationPanelProps {
   projectId: string

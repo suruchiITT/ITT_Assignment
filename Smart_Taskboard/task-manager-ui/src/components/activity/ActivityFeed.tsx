@@ -77,7 +77,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
     <div className="space-y-6 max-w-2xl animate-fade-in">
       {groups.map((group) => (
         <div key={group.label}>
-          {/* Date section header */}
+         
           <div className="flex items-center gap-3 mb-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               {group.label}
@@ -85,7 +85,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
-          {/* Events in this group */}
+         
           <div className="space-y-1">
             {group.events.map((event) => {
               const cfg = ACTION_CONFIG[event.action] ?? {
@@ -110,7 +110,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
                     isDimmed ? 'opacity-40 blur-[0.5px] scale-[0.99]' : '',
                   ].join(' ')}
                 >
-                  {/* Actor avatar */}
+                 
                   <div className="shrink-0">
                     {event.actor ? (
                       <Avatar name={event.actor.name} avatarUrl={event.actor.avatarUrl} size={isFocused ? 'md' : 'sm'} />
@@ -121,12 +121,12 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
                     )}
                   </div>
 
-                  {/* Action icon badge */}
+                  
                   <div className={`shrink-0 flex items-center justify-center rounded-full transition-all duration-200 ${cfg.color} ${isFocused ? 'h-8 w-8' : 'h-6 w-6'}`}>
                     {cfg.icon}
                   </div>
 
-                  {/* Text */}
+                 
                   <div className="flex-1 min-w-0">
                     <p className={`text-slate-700 truncate transition-all duration-200 ${isFocused ? 'text-base' : 'text-sm'}`}>
                       <span className="font-semibold text-slate-900">
@@ -141,7 +141,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
                     )}
                   </div>
 
-                  {/* Relative time (non-focused) */}
+                  
                   {!isFocused && (
                     <span className="shrink-0 text-xs text-slate-400">
                       {formatRelativeTime(event.createdAt)}
