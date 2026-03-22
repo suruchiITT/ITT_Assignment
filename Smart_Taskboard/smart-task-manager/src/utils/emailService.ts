@@ -1,10 +1,12 @@
-import nodemailer from 'nodemailer';
-import env from '../config/env';
+import nodemailer from "nodemailer";
+import env from "../config/env";
 
 const transporter = nodemailer.createTransport({
   host: env.smtp.host,
   port: env.smtp.port,
-  auth: env.smtp.user ? { user: env.smtp.user, pass: env.smtp.pass } : undefined,
+  auth: env.smtp.user
+    ? { user: env.smtp.user, pass: env.smtp.pass }
+    : undefined,
 });
 
 export function sendInvitationEmail(
@@ -12,7 +14,7 @@ export function sendInvitationEmail(
   projectName: string,
   inviterName: string,
   role: string,
-  token: string
+  token: string,
 ): void {
   const link = `${env.frontendUrl}/invitations/accept?token=${token}`;
   const subject = `[SmartTask] ${inviterName} invited you to join '${projectName}'`;
@@ -20,22 +22,35 @@ export function sendInvitationEmail(
 
   setImmediate(async () => {
     try {
-      await transporter.sendMail({ from: env.smtp.from, to: toEmail, subject, text });
+      await transporter.sendMail({
+        from: env.smtp.from,
+        to: toEmail,
+        subject,
+        text,
+      });
     } catch (err) {
-      console.error('[Email] Invitation email failed:', (err as Error).message);
+      console.error("[Email] Invitation email failed:", (err as Error).message);
     }
   });
 }
 
-export function sendRemovalNotificationEmail(toEmail: string, projectName: string): void {
+export function sendRemovalNotificationEmail(
+  toEmail: string,
+  projectName: string,
+): void {
   const subject = `[SmartTask] You have been removed from '${projectName}'`;
   const text = `Hi,\n\nYou have been removed from '${projectName}' by a project admin.\n\n— SmartTask`;
 
   setImmediate(async () => {
     try {
-      await transporter.sendMail({ from: env.smtp.from, to: toEmail, subject, text });
+      await transporter.sendMail({
+        from: env.smtp.from,
+        to: toEmail,
+        subject,
+        text,
+      });
     } catch (err) {
-      console.error('[Email] Removal email failed:', (err as Error).message);
+      console.error("[Email] Removal email failed:", (err as Error).message);
     }
   });
 }

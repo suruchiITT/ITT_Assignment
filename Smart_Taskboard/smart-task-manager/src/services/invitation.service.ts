@@ -21,18 +21,18 @@ export async function sendInvitation(
 ): Promise<any> {
   const normalEmail = data.email.toLowerCase().trim();
 
-  // No ADMIN invitations
+ 
   if (data.role === 'ADMIN' as any) {
     throw AppError.badRequest('Cannot invite a user as ADMIN. Promote an existing member instead.');
   }
 
-  // No duplicate PENDING invitation
+  
   const dup = await Invitation.findOne({ projectId, email: normalEmail, status: 'PENDING' });
   if (dup) {
     throw AppError.conflict('A pending invitation already exists for this email');
   }
 
-  // Not already an active member
+ 
   const existingUser = await User.findOne({ email: normalEmail });
   if (existingUser) {
     const alreadyMember = await ProjectMember.findOne({
@@ -91,7 +91,6 @@ export async function acceptInvitation(token: string): Promise<string> {
     throw AppError.notFound('No account found with this email. Please register first.');
   }
 
-  // Upsert member record
   await ProjectMember.findOneAndUpdate(
     { projectId: invitation.projectId, userId: user._id },
     { role: invitation.role, status: 'ACTIVE', joinedAt: new Date(), invitedBy: invitation.invitedBy },

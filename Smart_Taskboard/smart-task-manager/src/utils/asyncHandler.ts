@@ -6,9 +6,6 @@ type AsyncHandler = (
   next: NextFunction
 ) => Promise<void> | Promise<any>;
 
-/**
- * Wraps an async route handler and forwards any errors to Express error handler.
- */
 export const asyncHandler = (fn: AsyncHandler) => (
   req: Request,
   res: Response,

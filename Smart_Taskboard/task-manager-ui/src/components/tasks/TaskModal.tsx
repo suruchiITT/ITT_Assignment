@@ -67,7 +67,7 @@ export function TaskModal({
     }
   }, [task, initialStatus, reset, open])
 
-  // Convert "YYYY-MM-DD" from the date input to "YYYY-MM-DDT00:00:00Z" for the backend
+  
   const toISODate = (d?: string) => (d ? `${d}T00:00:00Z` : undefined)
 
   const createMutation = useMutation({
@@ -224,7 +224,7 @@ export function TaskModal({
 
         <Input label="Due Date" type="date" {...register('dueDate')} />
 
-        {/* Assignees (edit mode only) */}
+        
         {isEdit && canAssign && (
           <div>
             <p className="mb-2 text-sm font-medium text-slate-700">Assignees</p>

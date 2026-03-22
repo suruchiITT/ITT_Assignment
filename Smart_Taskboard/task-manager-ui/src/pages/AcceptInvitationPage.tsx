@@ -40,7 +40,7 @@ export function AcceptInvitationPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-6">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm text-center">
-        {/* Logo */}
+        
         <div className="mb-6 flex justify-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-600">
             <CheckSquare className="h-7 w-7 text-white" />

@@ -1,9 +1,5 @@
 import ActivityLog from '../models/ActivityLog';
 
-/**
- * Fire-and-forget async activity log writer.
- * Mirrors Spring @Async ActivityService.log() — never blocks the HTTP response.
- */
 export function logActivity(
   projectId: string,
   actorId: string,

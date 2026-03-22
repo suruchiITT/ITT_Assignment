@@ -1,27 +1,36 @@
-import { Router } from 'express';
-import * as ctrl from '../controllers/task.controller';
-import authenticate from '../middleware/authenticate';
-import requireRole from '../middleware/requireRole';
-import validate from '../middleware/validate';
+import { Router } from 'express'
+import {
+  create,
+  list,
+  getOne,
+  update,
+  destroy,
+  changeStatus,
+  assignUsers,
+  unassignUser
+} from '../controllers/task.controller'
+import authenticate from '../middleware/authenticate'
+import requireRole from '../middleware/requireRole'
+import validate from '../middleware/validate'
 import {
   createTaskValidators,
   updateTaskValidators,
   changeStatusValidators,
-  assignUsersValidators,
-} from '../validators/task.validators';
+  assignUsersValidators
+} from '../validators/task.validators'
 
-const router = Router({ mergeParams: true });
+const router = Router({ mergeParams: true })
 
-const ALL = requireRole('ADMIN', 'REPORTER', 'REPORTEE');
-const MGMT = requireRole('ADMIN', 'REPORTER');
+const ALL = requireRole('ADMIN', 'REPORTER', 'REPORTEE')
+const MGMT = requireRole('ADMIN', 'REPORTER')
 
-router.post('/', authenticate, MGMT, validate(createTaskValidators), ctrl.create);
-router.get('/', authenticate, ALL, ctrl.list);
-router.get('/:taskId', authenticate, ALL, ctrl.getOne);
-router.patch('/:taskId', authenticate, MGMT, validate(updateTaskValidators), ctrl.update);
-router.delete('/:taskId', authenticate, MGMT, ctrl.destroy);
-router.patch('/:taskId/status', authenticate, ALL, validate(changeStatusValidators), ctrl.changeStatus);
-router.post('/:taskId/assignees', authenticate, MGMT, validate(assignUsersValidators), ctrl.assignUsers);
-router.delete('/:taskId/assignees/:assigneeId', authenticate, MGMT, ctrl.unassignUser);
+router.post('/', authenticate, MGMT, validate(createTaskValidators), create)
+router.get('/', authenticate, ALL, list)
+router.get('/:taskId', authenticate, ALL, getOne)
+router.patch('/:taskId', authenticate, MGMT, validate(updateTaskValidators), update)
+router.delete('/:taskId', authenticate, MGMT, destroy)
+router.patch('/:taskId/status', authenticate, ALL, validate(changeStatusValidators), changeStatus)
+router.post('/:taskId/assignees', authenticate, MGMT, validate(assignUsersValidators), assignUsers)
+router.delete('/:taskId/assignees/:assigneeId', authenticate, MGMT, unassignUser)
 
-export default router;
+export default router

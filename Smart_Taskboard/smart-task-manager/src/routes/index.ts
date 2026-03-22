@@ -1,22 +1,32 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import * as invitationCtrl from '../controllers/invitation.controller';
-import AppError from '../utils/AppError';
+import { Router, Request, Response, NextFunction } from 'express'
+import { accept } from '../controllers/invitation.controller'
+import { badRequest } from '../utils/AppError'
 
-const router = Router();
+import authRoutes from './auth.routes'
+import projectRoutes from './project.routes'
+import taskRoutes from './task.routes'
+import memberRoutes from './member.routes'
+import invitationRoutes from './invitation.routes'
+import activityRoutes from './activity.routes'
 
-router.use('/auth', require('./auth.routes').default);
-router.use('/projects', require('./project.routes').default);
-router.use('/projects/:projectId/tasks', require('./task.routes').default);
-router.use('/projects/:projectId/members', require('./member.routes').default);
-router.use('/projects/:projectId/invitations', require('./invitation.routes').default);
-router.use('/projects/:projectId/activity', require('./activity.routes').default);
+const router = Router()
 
-// Public invitation accept — no project scope, no auth
-router.get('/invitations/accept', (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.query.token) {
-    return next(AppError.badRequest('token query param is required'));
-  }
-  next();
-}, invitationCtrl.accept);
+router.use('/auth', authRoutes)
+router.use('/projects', projectRoutes)
+router.use('/projects/:projectId/tasks', taskRoutes)
+router.use('/projects/:projectId/members', memberRoutes)
+router.use('/projects/:projectId/invitations', invitationRoutes)
+router.use('/projects/:projectId/activity', activityRoutes)
 
-export default router;
+router.get(
+  '/invitations/accept',
+  (req: Request, res: Response, next: NextFunction): void => {
+    if (!req.query.token) {
+      return next(badRequest('token query param is required'))
+    }
+    next()
+  },
+  accept
+)
+
+export default router

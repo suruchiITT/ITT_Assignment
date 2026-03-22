@@ -23,22 +23,22 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          {/* Public-only routes — authenticated users bounced to dashboard */}
+         
           <Route element={<PublicRoute />}>
             <Route path="/login"    element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
 
-          {/* Always-public (no auth required or redirect) */}
+          
           <Route path="/invitations/accept" element={<AcceptInvitationPage />} />
 
-          {/* Protected routes (require JWT) */}
+         
           <Route element={<ProtectedRoute />}>
             <Route path="/"                          element={<DashboardPage />} />
             <Route path="/projects/:projectId"       element={<ProjectPage />} />
           </Route>
 
-          {/* Fallback */}
+         
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

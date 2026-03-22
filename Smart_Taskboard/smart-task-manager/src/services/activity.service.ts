@@ -46,8 +46,7 @@ export async function getActivity(
 
   const logs = await ActivityLog.find(filter).sort({ createdAt: -1 }).skip(skip).limit(safeSize);
 
-  // Batch-load actors
-  const actorIds = [...new Set(logs.map((l) => l.actorId.toString()))];
+    const actorIds = [...new Set(logs.map((l) => l.actorId.toString()))];
   const actors = await User.find({ _id: { $in: actorIds } });
   const actorMap = new Map(actors.map((u) => [u._id.toString(), u]));
 

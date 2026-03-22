@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import * as ctrl from '../controllers/activity.controller';
-import authenticate from '../middleware/authenticate';
-import requireRole from '../middleware/requireRole';
+import { Router } from 'express'
+import { getActivity } from '../controllers/activity.controller'
+import authenticate from '../middleware/authenticate'
+import requireRole from '../middleware/requireRole'
 
-const router = Router({ mergeParams: true });
+const router = Router({ mergeParams: true })
 
-router.get('/', authenticate, requireRole('ADMIN', 'REPORTER', 'REPORTEE'), ctrl.getActivity);
+router.get('/', authenticate, requireRole('ADMIN', 'REPORTER', 'REPORTEE'), getActivity)
 
-export default router;
+export default router

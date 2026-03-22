@@ -26,9 +26,6 @@ export interface TaskResponse {
   updatedAt: Date;
 }
 
-/**
- * Hydrate assignee sub-docs into flat User[] matching frontend Task type
- */
 async function buildAssigneeResponses(assignees: any[]): Promise<AssigneeResponse[]> {
   if (!assignees || assignees.length === 0) {
     return [];

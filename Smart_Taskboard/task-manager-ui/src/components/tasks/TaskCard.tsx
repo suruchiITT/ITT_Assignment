@@ -80,12 +80,12 @@ export function TaskCard({ task, myRole, onClick, onDelete, onEdit }: TaskCardPr
         )}
       </div>
 
-      {/* Description preview */}
+     
       {task.description && (
         <p className="mt-1.5 text-xs text-slate-400 line-clamp-2">{task.description}</p>
       )}
 
-      {/* Footer */}
+     
       <div className="mt-3 flex items-center justify-between gap-2">
         <PriorityBadge priority={task.priority} />
 

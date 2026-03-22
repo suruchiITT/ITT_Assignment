@@ -12,12 +12,6 @@ declare global {
   }
 }
 
-/**
- * Factory that returns an Express middleware enforcing per-project RBAC.
- * Mirrors Spring's ProjectRoleAspect / @RequireRole annotation.
- *
- * After this runs: req.membership = ProjectMember document
- */
 export const requireRole = (...allowedRoles: MemberRole[]) => {
   return async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {

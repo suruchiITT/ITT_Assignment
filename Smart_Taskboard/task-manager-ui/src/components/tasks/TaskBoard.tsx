@@ -31,7 +31,6 @@ interface TaskBoardProps {
   members: { userId: string; user: { id: string; name: string } }[]
 }
 
-// Droppable column wrapper
 function DroppableColumn({ status, children }: { status: TaskStatus; children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id: status })
   return (
@@ -44,7 +43,6 @@ function DroppableColumn({ status, children }: { status: TaskStatus; children: R
   )
 }
 
-// Draggable task card wrapper
 function DraggableCard({
   task,
   myRole,
@@ -110,7 +108,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
     },
   })
 
-  // Keep open modals in sync when the tasks list re-fetches (e.g. after assign/unassign)
+  
   useEffect(() => {
     if (editTask) {
       const fresh = tasks.find((t) => t.id === editTask.id)
@@ -127,11 +125,11 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
   const canManage = myRole === 'ADMIN' || myRole === 'REPORTER'
 
-  // A task can be dragged if: ADMIN/REPORTER (any task), or REPORTEE (only their assigned tasks)
+  
   const canDragTask = (task: Task) => {
     if (canManage) return true
-    // REPORTEE: only assigned tasks
-    const userId = members.find(() => true) // we don't have currentUser here, allow drag and let backend reject
+    
+    const userId = members.find(() => true) 
     return task.assignees?.some(() => true) ?? false
   }
 
@@ -155,7 +153,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
   return (
     <>
-      {/* Reportee empty state */}
+      
       {!canManage && tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 py-16 text-center">
           <ClipboardList className="mb-3 h-10 w-10 text-slate-300" />
@@ -176,7 +174,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
             return (
               <div key={status} className="flex flex-1 min-w-0 flex-col rounded-xl bg-slate-100/80 p-3">
-                {/* Column header */}
+               
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className={`h-2 w-2 rounded-full ${COLUMN_DOT[status]}`} />
@@ -197,7 +195,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
                   )}
                 </div>
 
-                {/* Droppable cards area */}
+                
                 <DroppableColumn status={status}>
                   {col.map((task) => (
                     <DraggableCard
@@ -212,7 +210,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
                   ))}
                 </DroppableColumn>
 
-                {/* Add task button */}
+                
                 {canManage && (
                   <button
                     onClick={() => setCreateStatus(status)}
@@ -226,7 +224,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
           })}
         </div>
 
-        {/* Drag overlay — ghost card while dragging */}
+       
         <DragOverlay>
           {activeTask ? (
             <div className="rotate-2 opacity-90">
@@ -242,7 +240,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         </DragOverlay>
       </DndContext>
 
-      {/* Create Task Modal */}
+      
       <TaskModal
         open={createStatus !== null}
         onClose={() => setCreateStatus(null)}
@@ -252,7 +250,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         myRole={myRole}
       />
 
-      {/* Edit Task Modal */}
+      
       <TaskModal
         open={editTask !== null}
         onClose={() => setEditTask(null)}
@@ -262,7 +260,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         myRole={myRole}
       />
 
-      {/* View Task Modal */}
+     
       {viewTask && (
         <TaskModal
           open={true}
@@ -275,7 +273,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         />
       )}
 
-      {/* Delete Confirm */}
+      
       <ConfirmModal
         open={deleteTask !== null}
         onClose={() => setDeleteTask(null)}

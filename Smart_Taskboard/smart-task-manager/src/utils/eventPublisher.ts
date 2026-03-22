@@ -22,7 +22,6 @@ export function publishTaskEvent(projectId: string, eventType: string, payload: 
       ts: new Date().toISOString(),
     });
   } catch {
-    // Socket.IO not yet initialised — ignore
   }
 }
 
@@ -34,6 +33,6 @@ export function publishMemberEvent(projectId: string, eventType: string, payload
       ts: new Date().toISOString(),
     });
   } catch {
-    // Socket.IO not yet initialised — ignore
+   
   }
 }

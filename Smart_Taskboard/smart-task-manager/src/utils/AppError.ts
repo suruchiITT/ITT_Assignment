@@ -1,40 +1,31 @@
-export interface AppErrorOptions {
+export interface AppErrorType {
   statusCode: number;
   message: string;
 }
 
-export class AppError extends Error implements AppErrorOptions {
-  statusCode: number;
+const createAppError = (statusCode: number, message: string): AppErrorType => ({
+  statusCode,
+  message,
+});
 
-  constructor(statusCode: number, message: string) {
-    super(message);
-    this.statusCode = statusCode;
-    Object.setPrototypeOf(this, AppError.prototype);
-  }
+export const badRequest = (msg: string): AppErrorType =>
+  createAppError(400, msg);
+export const unauthorized = (msg: string = "Unauthorized"): AppErrorType =>
+  createAppError(401, msg);
+export const forbidden = (msg: string = "Forbidden"): AppErrorType =>
+  createAppError(403, msg);
+export const notFound = (msg: string = "Not found"): AppErrorType =>
+  createAppError(404, msg);
+export const conflict = (msg: string): AppErrorType => createAppError(409, msg);
+export const gone = (msg: string): AppErrorType => createAppError(410, msg);
 
-  static badRequest(msg: string): AppError {
-    return new AppError(400, msg);
-  }
-
-  static unauthorized(msg: string = 'Unauthorized'): AppError {
-    return new AppError(401, msg);
-  }
-
-  static forbidden(msg: string = 'Forbidden'): AppError {
-    return new AppError(403, msg);
-  }
-
-  static notFound(msg: string = 'Not found'): AppError {
-    return new AppError(404, msg);
-  }
-
-  static conflict(msg: string): AppError {
-    return new AppError(409, msg);
-  }
-
-  static gone(msg: string): AppError {
-    return new AppError(410, msg);
-  }
-}
+const AppError = {
+  badRequest,
+  unauthorized,
+  forbidden,
+  notFound,
+  conflict,
+  gone,
+};
 
 export default AppError;

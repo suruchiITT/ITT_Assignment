@@ -1,15 +1,15 @@
-import { Router } from 'express';
-import * as ctrl from '../controllers/project.controller';
-import authenticate from '../middleware/authenticate';
-import requireRole from '../middleware/requireRole';
-import validate from '../middleware/validate';
-import { createProjectValidators } from '../validators/project.validators';
+import { Router } from 'express'
+import { list, create, getOne, destroy } from '../controllers/project.controller'
+import authenticate from '../middleware/authenticate'
+import requireRole from '../middleware/requireRole'
+import validate from '../middleware/validate'
+import { createProjectValidators } from '../validators/project.validators'
 
-const router = Router();
+const router = Router()
 
-router.get('/', authenticate, ctrl.list);
-router.post('/', authenticate, validate(createProjectValidators), ctrl.create);
-router.get('/:projectId', authenticate, requireRole('ADMIN', 'REPORTER', 'REPORTEE'), ctrl.getOne);
-router.delete('/:projectId', authenticate, requireRole('ADMIN'), ctrl.destroy);
+router.get('/', authenticate, list)
+router.post('/', authenticate, validate(createProjectValidators), create)
+router.get('/:projectId', authenticate, requireRole('ADMIN', 'REPORTER', 'REPORTEE'), getOne)
+router.delete('/:projectId', authenticate, requireRole('ADMIN'), destroy)
 
-export default router;
+export default router
