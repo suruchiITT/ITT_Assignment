@@ -119,9 +119,9 @@ export function DashboardPage() {
   const [sortBy, setSortBy]             = useState('date-desc')
 
   const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['projects'],
+    queryKey: ['projects', user?.id],
     queryFn:  projectsApi.list,
-  })
+  }) 
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => projectsApi.delete(id),
