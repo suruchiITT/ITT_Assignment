@@ -31,6 +31,9 @@ export function LoginPage() {
       toast.success(`Welcome back, ${data.user.name.split(' ')[0]}!`)
       navigate('/')
     },
+    onError: () => {
+      toast.error('Incorrect email or password')
+    },
   })
 
   return (

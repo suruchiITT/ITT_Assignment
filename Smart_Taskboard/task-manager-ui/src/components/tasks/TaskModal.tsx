@@ -19,7 +19,9 @@ const schema = z.object({
   description: z.string().optional(),
   priority:    z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
   status:      z.enum(['TODO', 'IN_PROGRESS', 'DONE']),
-  dueDate:     z.string().optional(),
+  dueDate:     z.string().optional().refine((val) => !val || new Date(val) >= new Date(new Date().toDateString()), {
+    message: 'Due date cannot be in the past',
+  }),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -40,7 +42,7 @@ export function TaskModal({
 }: TaskModalProps) {
   const qc = useQueryClient()
   const isEdit = !!task
-
+  const today = new Date().toISOString().split('T')[0]
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {

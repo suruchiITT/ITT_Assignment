@@ -11,7 +11,7 @@ import { projectsApi } from '@/api/projects'
 import { useAuthStore } from '@/store/authStore'
 import { PageHeader } from '@/components/layout/Layout'
 import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { Input, Select } from '@/components/ui/Input'
 import { Modal, ConfirmModal } from '@/components/ui/Modal'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { RoleBadge } from '@/components/ui/Badge'
@@ -63,10 +63,10 @@ function ProjectCard({ project, index, onDelete }: { project: Project; index: nu
       className="animate-slide-up group relative flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-     
+    
       <div className={`h-1.5 w-full bg-gradient-to-r ${accent}`} />
 
-      
+     
       {project.myRole === 'ADMIN' && (
         <div className="absolute right-4 top-5">
           <button
@@ -89,7 +89,7 @@ function ProjectCard({ project, index, onDelete }: { project: Project; index: nu
       )}
 
       <Link to={`/projects/${project.id}`} className="flex-1 flex flex-col p-5">
-        
+       
         <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${accent} shadow-sm`}>
           <FolderOpen className="h-5 w-5 text-white" />
         </div>
@@ -116,6 +116,7 @@ export function DashboardPage() {
   const [createOpen, setCreateOpen]     = useState(false)
   const [deleteProject, setDeleteProject] = useState<Project | null>(null)
   const [search, setSearch]             = useState('')
+  const [sortBy, setSortBy]             = useState('date-desc')
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
@@ -134,6 +135,21 @@ export function DashboardPage() {
   const filtered   = projects.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()))
   const totalTasks = projects.reduce((s, p) => s + (p.taskCount ?? 0), 0)
 
+  const sortedProjects = [...filtered].sort((a, b) => {
+    switch (sortBy) {
+      case 'date-desc':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      case 'date-asc':
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      case 'name-asc':
+        return a.name.localeCompare(b.name)
+      case 'name-desc':
+        return b.name.localeCompare(a.name)
+      default:
+        return 0
+    }
+  })
+
   if (isLoading) return <div className="p-8"><PageSpinner label="Loading projects…" /></div>
 
   return (
@@ -148,7 +164,7 @@ export function DashboardPage() {
         }
       />
 
-     
+      
       {projects.length > 0 && (
         <div className="flex gap-4">
           <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -172,14 +188,22 @@ export function DashboardPage() {
         </div>
       )}
 
-      
+     
       {projects.length > 0 && (
-        <Input placeholder="Search projects…" icon={<Search className="h-4 w-4" />}
-          value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-xs" />
+        <div className="flex items-center gap-4">
+          <Input placeholder="Search projects…" icon={<Search className="h-4 w-4" />}
+            value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-xs" />
+          <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-48">
+            <option value="date-desc">Date: Latest first</option>
+            <option value="date-asc">Date: Oldest first</option>
+            <option value="name-asc">Name: A-Z</option>
+            <option value="name-desc">Name: Z-A</option>
+          </Select>
+        </div>
       )}
 
-      
-      {filtered.length === 0 ? (
+    
+      {sortedProjects.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 py-20 text-center animate-fade-in">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
             <FolderOpen className="h-8 w-8 text-slate-300" />
@@ -196,7 +220,7 @@ export function DashboardPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((project, i) => (
+          {sortedProjects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} onDelete={() => setDeleteProject(project)} />
           ))}
         </div>
