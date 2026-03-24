@@ -64,10 +64,10 @@ function ProjectCard({ project, index, onDelete }: { project: Project; index: nu
       className="animate-slide-up group relative flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      {/* Gradient accent top bar */}
+     
       <div className={`h-1.5 w-full bg-gradient-to-r ${accent}`} />
 
-      {/* Menu */}
+     
       {project.myRole === 'ADMIN' && (
         <div className="absolute right-4 top-5">
           <button
@@ -90,7 +90,7 @@ function ProjectCard({ project, index, onDelete }: { project: Project; index: nu
       )}
 
       <Link to={`/projects/${project.id}`} className="flex-1 flex flex-col p-5">
-        {/* Gradient icon */}
+        
         <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${accent} shadow-sm`}>
           <FolderOpen className="h-5 w-5 text-white" />
         </div>
@@ -165,7 +165,7 @@ export function DashboardPage() {
         }
       />
 
-      {/* Stats */}
+     
       {projects.length > 0 && (
         <div className="flex gap-4">
           <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -189,7 +189,7 @@ export function DashboardPage() {
         </div>
       )}
 
-      {/* Search and Sort */}
+      
       {projects.length > 0 && (
         <div className="flex items-center gap-4">
           <Input placeholder="Search projects…" icon={<Search className="h-4 w-4" />}
@@ -203,7 +203,7 @@ export function DashboardPage() {
         </div>
       )}
 
-      {/* Grid */}
+      
       {sortedProjects.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 py-20 text-center animate-fade-in">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">

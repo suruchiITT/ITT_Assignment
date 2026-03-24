@@ -20,7 +20,7 @@ const sizeClasses = {
 }
 
 export function Modal({ open, onClose, title, description, children, size = 'md', footer }: ModalProps) {
-  // Close on Escape
+  
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -29,7 +29,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
     return () => document.removeEventListener('keydown', handler)
   }, [open, onClose])
 
-  // Lock body scroll
+ 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden'
     else document.body.style.overflow = ''
@@ -40,13 +40,13 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
 
-      {/* Panel */}
+     
       <div
         className={cn(
           'relative w-full bg-white rounded-2xl shadow-2xl animate-slide-up',
@@ -54,7 +54,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+       
         <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-slate-100">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
@@ -70,10 +70,10 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
           </button>
         </div>
 
-        {/* Body */}
+        
         <div className="px-6 py-5">{children}</div>
 
-        {/* Footer */}
+       
         {footer && (
           <div className="px-6 py-4 bg-slate-50 rounded-b-2xl border-t border-slate-100 flex justify-end gap-3">
             {footer}

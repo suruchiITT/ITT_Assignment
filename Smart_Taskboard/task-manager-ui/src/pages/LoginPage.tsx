@@ -83,7 +83,7 @@ export function LoginPage() {
           <form className="mt-8 space-y-5" onSubmit={handleSubmit((v) => mutation.mutate(v))}>
             <Input
               label="Email"
-              type="email"
+              type="text"
               autoComplete="email"
               placeholder="you@example.com"
               icon={<Mail className="h-4 w-4" />}

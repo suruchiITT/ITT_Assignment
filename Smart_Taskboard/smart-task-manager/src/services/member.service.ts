@@ -54,7 +54,7 @@ interface ChangeMemberRoleInput {
   role: MemberRole;
 }
 
-export async function changeMemberRole(
+export async function   changeMemberRole(
   projectId: string,
   targetUserId: string,
   actorId: string,
