@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -43,6 +43,7 @@ export function TaskModal({
   const qc = useQueryClient()
   const isEdit = !!task
   const today = new Date().toISOString().split('T')[0]
+  const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<string[]>([])
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -58,6 +59,7 @@ export function TaskModal({
 
   useEffect(() => {
     if (task) {
+      setSelectedAssigneeIds(task.assignees?.map((assignee) => assignee.id) ?? [])
       reset({
         title:       task.title,
         description: task.description ?? '',
@@ -66,6 +68,7 @@ export function TaskModal({
         dueDate:     task.dueDate ? task.dueDate.substring(0, 10) : '',
       })
     } else {
+      setSelectedAssigneeIds([])
       reset({ title: '', description: '', priority: 'MEDIUM', status: initialStatus ?? 'TODO', dueDate: '' })
     }
   }, [task, initialStatus, reset, open])
@@ -74,17 +77,25 @@ export function TaskModal({
   const toISODate = (d?: string) => (d ? `${d}T00:00:00Z` : undefined)
 
   const createMutation = useMutation({
-    mutationFn: (values: FormValues) =>
-      tasksApi.create(projectId, {
+    mutationFn: async (values: FormValues) => {
+      const createdTask = await tasksApi.create(projectId, {
         title: values.title,
         description: values.description || undefined,
         priority: values.priority as TaskPriority,
         status: values.status as TaskStatus,
         dueDate: toISODate(values.dueDate || undefined),
-      }),
+      })
+
+      if (selectedAssigneeIds.length > 0) {
+        await tasksApi.assign(projectId, createdTask.id, { userIds: selectedAssigneeIds })
+      }
+
+      return createdTask
+    },
     onSuccess: () => {
       toast.success('Task created')
       qc.invalidateQueries({ queryKey: ['tasks', projectId] })
+      setSelectedAssigneeIds([])
       onClose()
     },
   })
@@ -128,6 +139,14 @@ export function TaskModal({
 
   const assigneeIds = new Set(task?.assignees?.map((a) => a.id) ?? [])
   const canAssign = myRole === 'ADMIN' || myRole === 'REPORTER'
+
+  const toggleCreateAssignee = (userId: string) => {
+    setSelectedAssigneeIds((current) =>
+      current.includes(userId)
+        ? current.filter((id) => id !== userId)
+        : [...current, userId]
+    )
+  }
 
   const statusMutation = useMutation({
     mutationFn: (status: TaskStatus) =>
@@ -201,7 +220,12 @@ export function TaskModal({
       }
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <Input label="Title" error={errors.title?.message} {...register('title')} placeholder="What needs to be done?" />
+        <Input
+          label={<><span>Title</span> <span className="text-red-500">*</span></>}
+          error={errors.title?.message}
+          {...register('title')}
+          placeholder="What needs to be done?"
+        />
 
         <TextArea
           label="Description"
@@ -226,6 +250,46 @@ export function TaskModal({
         </div>
 
         <Input label="Due Date" type="date" min={today} {...register('dueDate')} />
+
+        {!isEdit && canAssign && (
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-700">Assignees</p>
+              {selectedAssigneeIds.length > 0 && (
+                <span className="text-xs text-slate-500">
+                  {selectedAssigneeIds.length} selected
+                </span>
+              )}
+            </div>
+            <div className="space-y-2 max-h-40 overflow-y-auto rounded-lg border border-slate-200 p-2">
+              {members.map((m) => {
+                const assigned = selectedAssigneeIds.includes(m.userId)
+                return (
+                  <div key={m.userId} className="flex items-center justify-between rounded-lg px-2 py-1.5 hover:bg-slate-50">
+                    <div className="flex items-center gap-2">
+                      <Avatar name={m.user.name} size="xs" />
+                      <span className="text-sm text-slate-700">{m.user.name}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => toggleCreateAssignee(m.userId)}
+                      className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                        assigned
+                          ? 'text-red-600 hover:bg-red-50'
+                          : 'text-primary-600 hover:bg-primary-50'
+                      }`}
+                    >
+                      {assigned
+                        ? <><UserMinus className="h-3 w-3" /> Remove</>
+                        : <><UserPlus className="h-3 w-3" /> Assign</>
+                      }
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         
         {isEdit && canAssign && (
