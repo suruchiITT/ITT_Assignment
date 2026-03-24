@@ -43,6 +43,7 @@ export function TaskModal({
   const qc = useQueryClient()
   const isEdit = !!task
   const today = new Date().toISOString().split('T')[0]
+
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -224,7 +225,7 @@ export function TaskModal({
           </Select>
         </div>
 
-        <Input label="Due Date" type="date" {...register('dueDate')} />
+        <Input label="Due Date" type="date" min={today} {...register('dueDate')} />
 
         
         {isEdit && canAssign && (

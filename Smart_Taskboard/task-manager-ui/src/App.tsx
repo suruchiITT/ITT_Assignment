@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Provider } from 'react-redux'
 import { Toaster } from 'react-hot-toast'
+import { store } from '@/store/authStore'
 import { ProtectedRoute, PublicRoute } from '@/components/auth/ProtectedRoute'
 import { LoginPage }             from '@/pages/LoginPage'
 import { RegisterPage }          from '@/pages/RegisterPage'
@@ -20,37 +22,39 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-         
-          <Route element={<PublicRoute />}>
-            <Route path="/login"    element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
-
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
           
-          <Route path="/invitations/accept" element={<AcceptInvitationPage />} />
+            <Route element={<PublicRoute />}>
+              <Route path="/login"    element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Route>
 
-         
-          <Route element={<ProtectedRoute />}>
-            <Route path="/"                          element={<DashboardPage />} />
-            <Route path="/projects/:projectId"       element={<ProjectPage />} />
-          </Route>
+           
+            <Route path="/invitations/accept" element={<AcceptInvitationPage />} />
 
-         
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+           
+            <Route element={<ProtectedRoute />}>
+              <Route path="/"                          element={<DashboardPage />} />
+              <Route path="/projects/:projectId"       element={<ProjectPage />} />
+            </Route>
 
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          className: 'text-sm font-medium',
-          success: { iconTheme: { primary: '#6366f1', secondary: '#fff' } },
-          duration: 3500,
-        }}
-      />
-    </QueryClientProvider>
+           
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            className: 'text-sm font-medium',
+            success: { iconTheme: { primary: '#6366f1', secondary: '#fff' } },
+            duration: 3500,
+          }}
+        />
+      </QueryClientProvider>
+    </Provider>
   )
 }

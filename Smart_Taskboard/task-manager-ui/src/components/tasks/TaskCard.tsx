@@ -46,7 +46,7 @@ export function TaskCard({ task, myRole, onClick, onDelete, onEdit }: TaskCardPr
         borderColor
       )}
     >
-      {/* Top row */}
+    
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-medium text-slate-800 leading-snug line-clamp-2 flex-1">
           {task.title}
@@ -80,12 +80,12 @@ export function TaskCard({ task, myRole, onClick, onDelete, onEdit }: TaskCardPr
         )}
       </div>
 
-     
+      
       {task.description && (
         <p className="mt-1.5 text-xs text-slate-400 line-clamp-2">{task.description}</p>
       )}
 
-     
+      
       <div className="mt-3 flex items-center justify-between gap-2">
         <PriorityBadge priority={task.priority} />
 

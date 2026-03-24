@@ -125,7 +125,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
   const canManage = myRole === 'ADMIN' || myRole === 'REPORTER'
 
-  
+ 
   const canDragTask = (task: Task) => {
     if (canManage) return true
     
@@ -153,7 +153,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
   return (
     <>
-      
+     
       {!canManage && tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 py-16 text-center">
           <ClipboardList className="mb-3 h-10 w-10 text-slate-300" />
@@ -174,7 +174,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
 
             return (
               <div key={status} className="flex flex-1 min-w-0 flex-col rounded-xl bg-slate-100/80 p-3">
-               
+              
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className={`h-2 w-2 rounded-full ${COLUMN_DOT[status]}`} />
@@ -210,7 +210,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
                   ))}
                 </DroppableColumn>
 
-                
+               
                 {canManage && (
                   <button
                     onClick={() => setCreateStatus(status)}
@@ -224,7 +224,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
           })}
         </div>
 
-       
+      
         <DragOverlay>
           {activeTask ? (
             <div className="rotate-2 opacity-90">
@@ -240,7 +240,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         </DragOverlay>
       </DndContext>
 
-      
+     
       <TaskModal
         open={createStatus !== null}
         onClose={() => setCreateStatus(null)}
@@ -250,7 +250,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         myRole={myRole}
       />
 
-      
+    
       <TaskModal
         open={editTask !== null}
         onClose={() => setEditTask(null)}
@@ -273,7 +273,7 @@ export function TaskBoard({ projectId, tasks, myRole, members }: TaskBoardProps)
         />
       )}
 
-      
+     
       <ConfirmModal
         open={deleteTask !== null}
         onClose={() => setDeleteTask(null)}

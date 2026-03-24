@@ -38,7 +38,7 @@ export function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      
+     
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between bg-gradient-to-br from-primary-900 via-primary-800 to-primary-600 p-12">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20">
@@ -64,7 +64,7 @@ export function LoginPage() {
         </div>
       </div>
 
-      
+     
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 bg-white">
         <div className="w-full max-w-sm">
           <div className="lg:hidden flex items-center gap-2 mb-8">

@@ -7,13 +7,11 @@ import {
   Mail, MailX, ShieldCheck, Clock, Pencil, Trash2,
   ArrowRightLeft, UserCheck,
 } from 'lucide-react'
-
 const STATUS_LABELS: Record<string, string> = {
   TODO:        'To Do',
   IN_PROGRESS: 'In Progress',
   DONE:        'Done',
 }
-
 const ACTION_CONFIG: Record<string, { icon: React.ReactNode; color: string; label: (m: Record<string, string>) => string }> = {
   PROJECT_CREATED:     { icon: <FolderOpen className="h-3.5 w-3.5" />,      color: 'bg-primary-100 text-primary-600', label: () => 'created the project' },
   PROJECT_DELETED:     { icon: <Trash2 className="h-3.5 w-3.5" />,          color: 'bg-red-100 text-red-600',         label: (m) => `deleted project "${m.name}"` },
@@ -25,7 +23,7 @@ const ACTION_CONFIG: Record<string, { icon: React.ReactNode; color: string; labe
   TASK_CREATED:        { icon: <CheckSquare className="h-3.5 w-3.5" />,     color: 'bg-primary-100 text-primary-600', label: (m) => `created task "${m.title}"` },
   TASK_UPDATED:        { icon: <Pencil className="h-3.5 w-3.5" />,          color: 'bg-amber-100 text-amber-600',     label: (m) => `updated task "${m.title}"` },
   TASK_DELETED:        { icon: <Trash2 className="h-3.5 w-3.5" />,          color: 'bg-red-100 text-red-500',         label: (m) => `deleted task "${m.title}"` },
-  TASK_STATUS_CHANGED: { icon: <ArrowRightLeft className="h-3.5 w-3.5" />,  color: 'bg-purple-100 text-purple-600',   label: (m) => `moved task from ${STATUS_LABELS[m.before] ?? m.before} to ${STATUS_LABELS[m.after] ?? m.after}` },
+  TASK_STATUS_CHANGED: { icon: <ArrowRightLeft className="h-3.5 w-3.5" />,  color: 'bg-purple-100 text-purple-600',   label: (m) => `changed the status of the task ${m.title}` },
   TASK_ASSIGNED:       { icon: <UserCheck className="h-3.5 w-3.5" />,       color: 'bg-teal-100 text-teal-600',       label: () => 'assigned a user to a task' },
   TASK_UNASSIGNED:     { icon: <UserMinus className="h-3.5 w-3.5" />,       color: 'bg-slate-100 text-slate-500',     label: () => 'unassigned a user from a task' },
 }
