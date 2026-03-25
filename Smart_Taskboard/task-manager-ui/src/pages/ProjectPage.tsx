@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronLeft, Kanban, Users, Mail, Activity, CheckSquare,
 } from 'lucide-react'
@@ -16,6 +16,7 @@ import { TaskBoard }    from '@/components/tasks/TaskBoard'
 import { MemberList }   from '@/components/members/MemberList'
 import { InvitationPanel, InviteModal } from '@/components/invitations/InvitationPanel'
 import { ActivityFeed } from '@/components/activity/ActivityFeed'
+import { getProjectSocket, type ProjectSocketMessage } from '@/lib/socket'
 import { cn }           from '@/lib/utils'
 import type { Role }    from '@/types'
 
@@ -31,9 +32,55 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
 export function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>()
   const navigate      = useNavigate()
-  const currentUser   = useAuthStore((s) => s.user)
+  const qc            = useQueryClient()
+  const token         = useAuthStore((s) => s.token)
   const [tab, setTab] = useState<Tab>('tasks')
   const [inviteOpen, setInviteOpen] = useState(false)
+
+  useEffect(() => {
+    if (!projectId || !token) return
+
+    const socket = getProjectSocket()
+
+    const refreshProjectData = () => {
+      qc.invalidateQueries({ queryKey: ['project', projectId] })
+      qc.invalidateQueries({ queryKey: ['tasks', projectId] })
+      qc.invalidateQueries({ queryKey: ['members', projectId] })
+      qc.invalidateQueries({ queryKey: ['invitations', projectId] })
+      qc.invalidateQueries({ queryKey: ['activity', projectId] })
+    }
+
+    const handleMessage = (message: ProjectSocketMessage) => {
+      switch (message.event) {
+        case 'task.created':
+        case 'task.updated':
+        case 'task.deleted':
+        case 'task.status_changed':
+        case 'task.assigned':
+        case 'task.unassigned':
+        case 'member.joined':
+        case 'member.removed':
+        case 'member.role_changed':
+          refreshProjectData()
+          break
+        default:
+          break
+      }
+    }
+
+    if (!socket.connected) {
+      socket.connect()
+    }
+
+    socket.emit('join', { projectId, token })
+    socket.on('message', handleMessage)
+
+    return () => {
+      socket.emit('leave', { projectId })
+      socket.off('message', handleMessage)
+      socket.disconnect()
+    }
+  }, [projectId, token, qc])
 
   
   const { data: project, isLoading: loadingProject } = useQuery({
