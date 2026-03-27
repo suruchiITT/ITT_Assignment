@@ -162,11 +162,6 @@ export function MemberList({ projectId, members, myRole, onInvite }: MemberListP
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500">{members.length} member{members.length !== 1 ? 's' : ''}</p>
-        {isAdmin && (
-          <Button size="sm" icon={<UserPlus className="h-3.5 w-3.5" />} onClick={onInvite}>
-            Invite Member
-          </Button>
-        )}
       </div>
 
       <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
