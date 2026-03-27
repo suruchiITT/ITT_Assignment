@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Employee Gallery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+  <h2 class="user" id="welcomeUser"></h2>
+
+  <div class="gallery">
+    <button onclick="prev()">&#10094;</button>
+
+    <div class="card">
+      <img id="empImg">
+      <h3 id="empName"></h3>
+      <p><b>Designation:</b> <span id="empDes"></span></p>
+      <p><b>Project:</b> <span id="empProj"></span></p>
+      <p><b>Experience:</b> <span id="empExp"></span></p>
+    </div>
+
+    <button onclick="next()">&#10095;</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
