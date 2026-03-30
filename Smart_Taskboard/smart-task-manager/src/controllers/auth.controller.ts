@@ -15,6 +15,15 @@ interface LoginBody {
   password: string;
 }
 
+interface ForgotPasswordBody {
+  email: string;
+}
+
+interface ResetPasswordBody {
+  token: string;
+  password: string;
+}
+
 export const register = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
   const data = await authService.register(req.body as RegisterBody);
   sendCreated(res, data);
@@ -22,6 +31,16 @@ export const register = asyncHandler(async (req: AuthRequest, res: Response): Pr
 
 export const login = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
   const data = await authService.login(req.body as LoginBody);
+  sendOk(res, data);
+});
+
+export const forgotPassword = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+  const data = await authService.forgotPassword(req.body as ForgotPasswordBody);
+  sendOk(res, data);
+});
+
+export const resetPassword = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+  const data = await authService.resetPassword(req.body as ResetPasswordBody);
   sendOk(res, data);
 });
 

@@ -54,3 +54,25 @@ export function sendRemovalNotificationEmail(
     }
   });
 }
+
+export function sendPasswordResetEmail(
+  toEmail: string,
+  resetToken: string,
+): void {
+  const link = `${env.frontendUrl}/reset-password?token=${resetToken}`;
+  const subject = `[SmartTask] Reset your password`;
+  const text = `Hi,\n\nWe received a request to reset your SmartTask password.\n\nReset password: ${link}\n\nThis link expires in ${env.passwordResetExpiryMinutes} minutes.\n\nIf you did not request this, you can ignore this email.\n\n- SmartTask`;
+
+  setImmediate(async () => {
+    try {
+      await transporter.sendMail({
+        from: env.smtp.from,
+        to: toEmail,
+        subject,
+        text,
+      });
+    } catch (err) {
+      console.error("[Email] Password reset email failed:", (err as Error).message);
+    }
+  });
+}

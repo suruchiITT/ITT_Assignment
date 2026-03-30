@@ -15,6 +15,7 @@ interface EnvConfig {
   jwtSecret: string;
   jwtExpirationMs: number;
   invitationExpiryDays: number;
+  passwordResetExpiryMinutes: number;
   smtp: SmtpConfig;
   frontendUrl: string;
   corsOrigin: string;
@@ -40,6 +41,7 @@ function validateEnv(): EnvConfig {
     jwtSecret,
     jwtExpirationMs: parseInt(process.env.JWT_EXPIRATION_MS!, 10),
     invitationExpiryDays: parseInt(process.env.INVITATION_EXPIRY_DAYS || '7', 10),
+    passwordResetExpiryMinutes: parseInt(process.env.PASSWORD_RESET_EXPIRY_MINUTES || '30', 10),
     smtp: {
       host: process.env.SMTP_HOST || 'localhost',
       port: parseInt(process.env.SMTP_PORT || '1025', 10),

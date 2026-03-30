@@ -10,10 +10,17 @@ import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
+const passwordSchema = z
+  .string()
+  .regex(
+    /^(?=.*[A-Za-z])(?=.*[^A-Za-z0-9\s])\S{6,10}$/,
+    'Password must be 6-10 characters and include at least 1 letter and 1 special character'
+  )
+
 const schema = z.object({
-  name:     z.string().min(2, 'Name must be at least 2 characters'),
+  name:     z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),
   email:    z.string().email('Enter a valid email'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: passwordSchema,
 })
 type FormValues = z.infer<typeof schema>
 
@@ -90,6 +97,7 @@ export function RegisterPage() {
               type="text"
               autoComplete="name"
               placeholder="Alice Smith"
+              maxLength={100}
               icon={<User className="h-4 w-4" />}
               error={errors.name?.message}
               {...register('name')}
@@ -107,7 +115,7 @@ export function RegisterPage() {
               label="Password"
               type="password"
               autoComplete="new-password"
-              placeholder="At least 8 characters"
+              placeholder="6-10 chars, 1 letter, 1 special"
               icon={<Lock className="h-4 w-4" />}
               error={errors.password?.message}
               {...register('password')}

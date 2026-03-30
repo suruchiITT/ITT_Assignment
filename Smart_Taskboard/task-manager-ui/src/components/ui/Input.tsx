@@ -10,6 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, icon, id, ...props }, ref) => {
     const inputId = id ?? (typeof label === 'string' ? label.toLowerCase().replace(/\s+/g, '-') : undefined)
+    const errorId = inputId ? `${inputId}-error` : undefined
     return (
       <div className="space-y-1.5">
         {label && (
@@ -26,6 +27,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             ref={ref}
+            aria-invalid={error ? 'true' : 'false'}
+            aria-describedby={errorId}
             className={cn(
               'block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm',
               'placeholder:text-slate-400 text-slate-900',
@@ -39,7 +42,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
         </div>
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        <p id={errorId} className={cn('min-h-[1rem] text-xs', error ? 'text-red-600' : 'text-transparent')} aria-live="polite">
+          {error ?? ' '}
+        </p>
       </div>
     )
   }

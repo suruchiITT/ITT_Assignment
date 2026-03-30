@@ -99,6 +99,11 @@ export function LoginPage() {
               error={errors.password?.message}
               {...register('password')}
             />
+            <div className="-mt-2 text-right">
+              <Link to="/forgot-password" className="text-sm font-medium text-primary-600 hover:text-primary-700">
+                Forgot password?
+              </Link>
+            </div>
             <Button type="submit" className="w-full" size="lg" loading={mutation.isPending}>
               Sign in
             </Button>

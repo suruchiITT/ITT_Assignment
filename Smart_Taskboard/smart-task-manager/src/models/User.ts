@@ -20,7 +20,7 @@ const userSchema = new Schema<IUser>(
       unique: true,
     },
     passwordHash: { type: String, required: true, select: false },
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true, maxlength: 100 },
     avatarUrl: { type: String, default: null },
   },
   { timestamps: { createdAt: "createdAt", updatedAt: false } },

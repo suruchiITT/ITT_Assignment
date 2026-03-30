@@ -20,14 +20,32 @@ export async function sendInvitation(
   data: SendInvitationInput
 ): Promise<any> {
   const normalEmail = data.email.toLowerCase().trim();
+  const now = new Date();
 
  
   if (data.role === 'ADMIN' as any) {
     throw AppError.badRequest('Cannot invite a user as ADMIN. Promote an existing member instead.');
   }
 
+  await Invitation.updateMany(
+    {
+      projectId,
+      email: normalEmail,
+      status: 'PENDING',
+      expiresAt: { $lt: now },
+    },
+    {
+      status: 'EXPIRED',
+    }
+  );
+
   
-  const dup = await Invitation.findOne({ projectId, email: normalEmail, status: 'PENDING' });
+  const dup = await Invitation.findOne({
+    projectId,
+    email: normalEmail,
+    status: 'PENDING',
+    expiresAt: { $gt: now },
+  });
   if (dup) {
     throw AppError.conflict('A pending invitation already exists for this email');
   }
@@ -50,6 +68,8 @@ export async function sendInvitation(
 
   const token = uuidv4();
   const expiresAt = new Date(Date.now() + env.invitationExpiryDays * 24 * 60 * 60 * 1000);
+  // const expiresAt = new Date(Date.now() + 5 * 1000);
+
 
   const invitation = await Invitation.create({
     projectId,
@@ -70,7 +90,22 @@ export async function sendInvitation(
 }
 
 export async function listPendingInvitations(projectId: string): Promise<IInvitation[]> {
-  return Invitation.find({ projectId, status: 'PENDING' }).sort({ createdAt: -1 });
+  await Invitation.updateMany(
+    {
+      projectId,
+      status: 'PENDING',
+      expiresAt: { $lt: new Date() },
+    },
+    {
+      status: 'EXPIRED',
+    }
+  );
+
+  return Invitation.find({
+    projectId,
+    status: 'PENDING',
+    expiresAt: { $gte: new Date() },
+  }).sort({ createdAt: -1 });
 }
 
 export async function acceptInvitation(token: string): Promise<string> {
@@ -79,7 +114,13 @@ export async function acceptInvitation(token: string): Promise<string> {
     throw AppError.notFound('Invitation not found');
   }
 
-  if (invitation.status !== 'PENDING' || invitation.expiresAt < new Date()) {
+  if (invitation.expiresAt < new Date()) {
+    invitation.status = 'EXPIRED';
+    await invitation.save();
+    throw AppError.gone('This invitation has expired or has already been used');
+  }
+
+  if (invitation.status !== 'PENDING') {
     throw AppError.gone('This invitation has expired or has already been used');
   }
 
