@@ -72,7 +72,10 @@ export function sendPasswordResetEmail(
         text,
       });
     } catch (err) {
-      console.error("[Email] Password reset email failed:", (err as Error).message);
+      console.error(
+        "[Email] Password reset email failed:",
+        (err as Error).message,
+      );
     }
   });
 }
